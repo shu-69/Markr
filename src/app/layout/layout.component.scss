@@ -1,0 +1,18 @@
+.parent {
+
+    display: flex;
+    height: 100vh;
+
+    app-sidenav {
+        overflow: hidden;
+        border-right: 2px solid #e1e1e1;
+        width: 20%;
+    }
+
+    .body {
+
+        width: 80%;
+
+    }
+
+}

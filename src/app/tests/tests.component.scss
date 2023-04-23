@@ -1,0 +1,221 @@
+
+.header {
+
+    width: 100%;
+    height: fit-content;
+    padding: 15px 20px 15px 20px;
+    margin-bottom: 40px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    //background-image: linear-gradient(-20deg, #e9defa 0%, #dce4f5 100%);
+
+    background-image: linear-gradient(-20deg, #e9defaba 0%, #dce4f599 100%);
+
+    .headerTitle {
+
+        font-size: 22px;
+        color: black;
+        //font-family: Oswald;
+        font-family: 'Poppins-Light', sans-serif;
+
+    }
+
+    .seperator {
+        width: 1px;
+        height: 20px;
+        background: gray;
+    }
+
+    .searchContainer {
+
+        display: flex;
+        gap: 5px;
+        background: #ffffff78;
+        backdrop-filter: blur(4px);
+        padding: 10px 15px 10px 15px;
+        border-radius: 20px;
+
+        img {
+            width: 20px;
+            height: 20px;
+        }
+
+        input {
+            border: none;
+            background: transparent;
+            width: 100px;
+            height: 20px;
+            font-family: 'Poppins-regular', sans-serif;
+            outline: none;
+            display: none;
+        }
+
+        input:focus{
+            display: block;
+        }
+
+    }
+
+    .searchContainer:hover{
+        input{
+            display: block;
+        }
+    }
+
+    
+
+}
+
+.loaderContainer {
+
+    position: absolute;
+    width: fit-content;
+    height: fit-content;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+
+    background: #ffffffd4;
+    border-radius: 100px;
+    box-shadow: 0 0 40px #a7a7a7;
+    backdrop-filter: blur(2px);
+
+}
+
+.testsContainer {
+
+    display: flex;
+    flex-flow: wrap;
+    gap: 40px;
+
+    .testDetailsContainer {
+
+        width: 240px;
+        height: fit-content;
+        border: 1.5px solid gray;
+        border-radius: 10px;
+        padding: 10px 15px 10px 15px;
+        cursor: pointer;
+
+        .containerHeader {
+
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: space-between;
+
+            .title {
+                font-family: 'Poppins-SemiBold', sans-serif;
+                font-size: 18px;
+            }
+
+            .completed {
+                background: #44e444;
+                padding: 5px 10px 5px 10px;
+                border-radius: 6px;
+                font-size: 10px;
+                color: black;
+                font-family: 'Poppins-Regular', sans-serif;
+            }
+
+        }
+
+        .content {
+
+            margin-top: 10px;
+
+            .labels {
+
+                display: flex;
+                flex-flow: column;
+                gap: 5px;
+
+                i {
+                    font-size: 12px;
+                    width: 12px;
+                }
+
+                label {
+
+                    font-family: 'Poppins-Regular', sans-serif;
+                    font-size: 12px;
+                    padding-left: 8px;
+
+                }
+
+            }
+
+            .next {
+                //position: relative;
+                display: flex;
+                float: right;
+            }
+
+        }
+
+    }
+
+    .testDetailsContainer:hover {
+        box-shadow: 0px 0px 20px 1px #c87e353f;
+        border: 1.5px solid black;
+    }
+}
+
+/* The switch - the box around the slider */
+.switch {
+    font-size: 17px;
+    position: relative;
+    display: inline-block;
+    width: 3em;
+    height: 1.6em;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    box-shadow: inset 2px 5px 10px rgba(0, 0, 0, 0.3);
+    transition: .4s;
+    border-radius: 5px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 1em;
+    width: 0.1em;
+    border-radius: 0px;
+    left: 0.3em;
+    bottom: 0.3em;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: #171717;
+    box-shadow: inset 2px 5px 10px rgb(0, 0, 0);
+}
+
+input:checked+.slider:before {
+    transform: translateX(2.3em) rotate(360deg);
+}

@@ -1,0 +1,359 @@
+<section class="parent">
+
+    <div class="loaderContainer" *ngIf="isLoading">
+        <app-pencil-loader></app-pencil-loader>
+    </div>
+
+    <section class="instructionsContainer" *ngIf="toShowInstructions">
+
+        <div class="testDetailsTable">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Candidate name: <span class="bold">{{userDetails.name}}</span></td>
+                        <td>Candidate email: <span class="bold">{{userDetails.email}}</span></td>
+                        <td>Date: <span class="bold">{{getTodayDate()}}</span></td>
+                        <td>Time: <span class="bold">{{ rxTime | date: 'hh:mm:ss a' }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Paper title: <span class="bold" *ngIf="paperDetails">{{paperDetails.title}}</span></td>
+                        <td>Paper type: <span class="bold">{{examDetails.examType}}</span></td>
+                        <td>Timing: <span class="bold" *ngIf="paperDetails">{{getExamTime(paperDetails.is_without_time,
+                                paperDetails.time)}}</span></td>
+                        <td>Marks: <span class="bold" *ngIf="paperDetails">{{paperDetails.marks}}</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="instructions">
+            <span class="title">Instructions</span>
+            <div class="body">{{instructions}}</div>
+        </div>
+
+        <div class="bottomContainer">
+            <label class="checkbox">
+                <input type="checkbox" [(ngModel)]="isInsctructionCheck">&nbsp;&nbsp;I have read the Instructions
+            </label>
+            <button class="startpaper" [disabled]="!isInsctructionCheck" (click)="startExam()">
+                <div>
+                    <div class="pencil"></div>
+                    <div class="folder">
+                        <div class="top">
+                            <svg viewBox="0 0 24 27">
+                                <path
+                                    d="M1,0 L23,0 C23.5522847,-1.01453063e-16 24,0.44771525 24,1 L24,8.17157288 C24,8.70200585 23.7892863,9.21071368 23.4142136,9.58578644 L20.5857864,12.4142136 C20.2107137,12.7892863 20,13.2979941 20,13.8284271 L20,26 C20,26.5522847 19.5522847,27 19,27 L1,27 C0.44771525,27 6.76353751e-17,26.5522847 0,26 L0,1 C-6.76353751e-17,0.44771525 0.44771525,1.01453063e-16 1,0 Z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="paper"></div>
+                    </div>
+                </div>
+                Start Paper
+            </button>
+        </div>
+
+    </section>
+
+    <section class="examParentContainer" *ngIf="isExaminationStarted">
+
+        <div class="header">
+            <div class="start">
+                <div class="logoContainer">
+                    <img src="../../assets/logo/logo_black_large.svg" alt="">
+                    &nbsp;&nbsp;<span>EXAMINATION PANEL</span>
+                </div>
+            </div>
+            <div class="end">
+                <div class="timer timerProgressBar" #timerProgressBar *ngIf="!paperDetails!.is_without_time">
+                    <span class="lbl">TIME<br>LEFT</span>
+                    <ng-lottie width="25px" height="25px" [options]="hourGlassAnimOptions"></ng-lottie>
+                    <span>{{ examTimer }}</span>
+                </div>
+                <div class="currentTime">
+                    <i class="fa fa-clock-o"></i>
+                    <span>{{ rxTime | date: 'hh:mm a' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <section class="questionsParentContainer"
+                [ngStyle]="{'font-size': questionContainerUI['font-size'], 'font-family' : questionContainerUI['font-family']}">
+
+                <div class="que-details-header">
+
+                    <div>
+
+                        <span class="question-no">
+                            Question No. {{selectedQuestionIndex + 1}}
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <div class="question-marks">
+                            <span>Marks: </span>
+                            <span class="positive">+
+                                {{paperDetails!.questions[selectedQuestionIndex].marks.positive}}</span>
+                            <span class="negative"
+                                *ngIf="paperDetails!.questions[selectedQuestionIndex].marks.negative  && paperDetails!.questions[selectedQuestionIndex].marks.negative != 0">
+                                {{paperDetails!.questions[selectedQuestionIndex].marks.negative}}</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <mat-tab-group class="questionTabGroup" [selectedIndex]="selectedQuestionIndex"
+                    (selectedIndexChange)="selectedQuestionIndex = $event">
+
+                    <mat-tab [label]="'Q ' + (i + 1)" *ngFor="let question of paperDetails!.questions; let i = index;">
+
+                        <div class="questionBody">
+                            {{question.body}}
+                        </div>
+
+                        <div class="question-images-container" *ngIf="question.images.length != 0"
+                            [ngStyle]="{'grid-template-columns': 'repeat(' + (question.images.length.toString() === '1' ? 1 + ', 45%' : 2 + ', 1fr') + ')'}">
+
+                            <div class="image-container" *ngFor="let image of question.images">
+
+                                <i class="fa fa-arrows-alt expand" (click)="expandQuestionImage(image.src)"></i>
+
+                                <img [src]="image.src">
+
+                                <label>{{image.label}}</label>
+
+                            </div>
+
+                        </div>
+
+                        <container-element class="answer-container" [ngSwitch]="question.answer_type">
+
+                            <div class="options" *ngSwitchCase="'options'">
+
+                                <label class="option" [for]="'option' + i + j"
+                                    *ngFor="let option of question.answer_content.options; let j = index;">
+
+                                    <input type="radio" [id]="'option' + i + j" [name]="'question' + i + 'option'"
+                                        [value]="j + 1" (change)="setUserAnswer(question, $event)">
+
+                                    <span>{{option.value}}</span>
+
+                                </label>
+
+                            </div>
+
+                            <div class="options boolean" *ngSwitchCase="'boolean'">
+
+                                <label class="option" [for]="'option' + i + 'true'">
+
+                                    <input type="radio" [id]="'option' + i + 'true'" [name]="'question' + i + 'option'"
+                                        value="true" (change)="setUserAnswer(question, $event)">
+
+                                    <span>True</span>
+
+                                </label>
+
+                                <label class="option" [for]="'option' + i + 'false'">
+
+                                    <input type="radio" [id]="'option' + i + 'false'" [name]="'question' + i + 'option'"
+                                        value="false" (change)="setUserAnswer(question, $event)">
+
+                                    <span>False</span>
+
+                                </label>
+
+                            </div>
+
+                            <div class="oneword" *ngSwitchCase="'oneword'">
+
+                                <input type="text" [id]="'answer' + i" placeholder="Enter your answer in oneword"
+                                    (change)="setUserAnswer(question, $event)">
+
+                            </div>
+
+                        </container-element>
+
+                    </mat-tab>
+
+                </mat-tab-group>
+
+                <div class="footer">
+
+                    <button class="prev-ques-button" (click)="goPrevQuestion()"
+                        [disabled]="selectedQuestionIndex == 0"><img
+                            src="../../assets/iconspichon/icons8_back_100px.png" />Previous</button>
+
+                    <button (click)="goNextQuestion()"
+                        [disabled]="selectedQuestionIndex == (paperDetails!.questions.length - 1)">
+                        <img src="../../assets/iconspichon/icons8_skip_100px.png" />Skip and Next</button>
+
+                    <button class="save-and-next-button" (click)="saveAnswer()">{{ selectedQuestionIndex ==
+                        (paperDetails!.questions.length - 1) ? 'Save' : 'Save and Next' }}<img
+                            src="../../assets/iconspichon/icons8_forward_100px.png" /></button>
+
+                    <button class="mark-question-button"
+                        (click)="toogleMarkQuestion(paperDetails!.questions[selectedQuestionIndex])"><img
+                            src="../../assets/iconspichon/icons8_bookmark_100px.png" />
+                        {{paperDetails!.questions[selectedQuestionIndex].isMarked ? 'Unmark Question' : 'Mark Question'}}</button>
+
+                </div>
+
+            </section>
+
+            <section class="rightPanelContainer">
+
+                <div class="controls">
+
+                    <div class="font-size-changer-container">
+
+                        <img src="../../assets/iconspichon/icons8-increase-font-96.png" alt=""
+                            (click)="changeQuestionsContainerFontSize('increase')">
+
+                        <span class="seprator"></span>
+
+                        <img src="../../assets/iconspichon/icons8-decrease-font-96.png" alt=""
+                            (click)="changeQuestionsContainerFontSize('decrease')">
+
+                    </div>
+
+                </div>
+
+                <div class="chipTypes">
+                    <div>
+                        <span class="color" style="background: #e5e5e5;"> </span>
+                        Not attempted
+                    </div>
+                    <div>
+                        <span class="color" style="background: #e98415;"> </span>
+                        Attempted
+                    </div>
+                    <div>
+                        <span class="selected"> </span>
+                        Selected
+                    </div>
+                    <div>
+                        <span class="marked">
+                            <img src="../../assets/iconspichon/icons8_bookmark_100px_4.png" />
+                        </span>
+                        Marked
+                    </div>
+                </div>
+
+                <div class="questionsStatusChipContainer">
+                    <span class="chip tooltip-chip" *ngFor="let question of paperDetails!.questions; let i = index;"
+                        (click)="goToQuestion(i)"
+                        [ngClass]="{'active': selectedQuestionIndex == i, 'marked': question.isMarked, 'attempted' : answers[i]}">
+                        {{i + 1}}
+                        <img src="../../assets/iconspichon/icons8_bookmark_100px_4.png" alt=""
+                            *ngIf="question.isMarked">
+                        <span class="tooltip">
+                            Open Question no. {{i + 1}}
+                        </span>
+                    </span>
+                </div>
+
+                <div class="footer">
+
+                    <button class="submitButton" (click)="openSubmitDialog()">
+                        <div class="svg-wrapper-1">
+                            <div class="svg-wrapper">
+                                <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 0h24v24H0z" fill="none"></path>
+                                    <path
+                                        d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"
+                                        fill="currentColor"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <span>Submit</span>
+                    </button>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </section>
+
+    <section class="submitExamContainer" *ngIf="isSubmitting || isSubmitted || isSubmitFailed">
+
+        <div class="submittingContainer" *ngIf="isSubmitting">
+
+            <div class="loader">
+                <span class="loader-text">submitting</span>
+                <span class="load"></span>
+            </div>
+
+            <div class="message">
+                <span>Hold on submitting your answers...</span>
+            </div>
+
+        </div>
+
+        <div class="submissionFailed" *ngIf="isSubmitFailed">
+
+            <img style="margin-bottom: -14px;" src="assets/iconspichon/icons8_error_100px.png" alt="">
+
+            <span class="message">Sumbittion failed, please try again...</span>
+
+            <span style="font-family: 'Poppins-Regular'; font-size: 12px; margin-top: -16px;">
+                Do not close the browser window, unless you want to loose your progress.</span>
+            
+            <div class="buttons"> 
+
+                <button class="tryAgain" (click)="submitExam()">Try again!</button>
+                
+            </div>
+
+        </div>
+
+        <div class="submittedContainer" *ngIf="isSubmitted">
+
+            <div class="svgDesign">
+
+                <svg id="sw-js-blob-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"> <defs> <linearGradient id="sw-gradient" x1="0" x2="1" y1="1" y2="0"> <stop id="stop1" stop-color="rgba(248, 117, 55, 1)" offset="0%"></stop>                            <stop id="stop2" stop-color="rgba(251, 168, 31, 1)" offset="100%"></stop>                        </linearGradient>                    </defs>                <path fill="url(#sw-gradient)" d="M24.7,-28.6C28.5,-26.2,25.6,-15.1,26.4,-5.4C27.3,4.3,31.8,12.6,30.7,20.7C29.6,28.8,22.9,36.6,15.6,36.5C8.4,36.3,0.5,28.2,-8,24.1C-16.5,20.1,-25.7,20.1,-31.3,15.6C-36.8,11.1,-38.6,2,-36.5,-5.9C-34.5,-13.8,-28.6,-20.5,-21.9,-22.3C-15.2,-24.2,-7.6,-21.3,1.4,-23C10.4,-24.7,20.9,-31,24.7,-28.6Z" width="100%" height="100%" transform="translate(50 50)" stroke-width="0" style="transition: all 0.3s ease 0s;"></path>              </svg>
+
+                <img src="assets/imgs/subSuccessfull.png" alt="">
+                
+            </div>
+
+            <div style="position: absolute; left: 60px; top: 60px; gap: 60px; display: flex; flex-flow: column; width: 50%;">
+
+                <span class="successfullMessage">Submittion<br>successfull!</span>
+
+                <span style="font-family: 'Poppins-Medium'; font-size: 20px;">Your submission was submitted successfull. You can now leave this page, your progress
+                    will be shown to your <a href="/">dashboard.</a>
+                </span>
+            
+                <div class="options">
+
+                    <button type="button" class="viewResults">
+                        <strong>VIEW RESULT</strong>
+                        <div id="container-stars">
+                        <div id="stars"></div>
+                        </div>
+                    
+                        <div id="glow">
+                        <div class="circle"></div>
+                        <div class="circle"></div>
+                        </div>
+                    </button>
+
+                    <a href="/home" class="goToHome"><i class="fa fa-home"></i>Go to Home</a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+</section>

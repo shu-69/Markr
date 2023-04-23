@@ -1,8 +1,116 @@
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import url('https://fonts.googleapis.com/css2?family=Krona+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Titan+One&display=swap');
 
 
 body {
   margin: 0;
 }
+
+* {
+  box-sizing: border-box;
+}
+
+.parent {
+
+  width: 100%;
+  height: 100%;
+  background: white;
+
+}
+
+.parent.scrollable {
+  overflow: auto;
+}
+
+.parent.padded {
+  padding: 40px;
+}
+
+.parent.padded-top {
+  padding-top: 40px;
+}
+
+.parent.padded-left {
+  padding-left: 40px;
+}
+
+.parent.padded-right {
+  padding-right: 40px;
+}
+
+.parent.padded-bottom {
+  padding-bottom: 40px;
+}
+
+// ::ng-deep.dialog{
+//   background: red;
+//   border-radius: 20px;
+
+//   mat-dialog-container{
+//     border-radius: 20px !important;
+//   }
+
+// }
+
+.dialog>mat-dialog-container {
+
+  .mdc-dialog__container .mdc-dialog__surface {
+    background-color: white;
+    border-radius: 20px;
+  }
+
+}
+
+.contact_dialog>mat-dialog-container {
+
+  .mdc-dialog__container .mdc-dialog__surface {
+    background-color: black;
+    border-radius: 20px;
+  }
+
+}
+
+.question_image_preview>mat-dialog-container {
+
+  .mdc-dialog__container .mdc-dialog__surface {
+    background: transparent;
+    overflow: hidden;
+    background: white;
+  }
+
+}
+
+.submit-paper-dialog>mat-dialog-container {
+
+  .mdc-dialog__container .mdc-dialog__surface {
+    overflow: hidden;
+    background: white;
+  }
+
+}
+
+.registration_error_dialog>mat-dialog-container {
+
+  .mdc-dialog__container .mdc-dialog__surface {
+    background-color: #d02222;
+    border-radius: 20px;
+  }
+
+}
+
+.registration_success_dialog>mat-dialog-container {
+
+  .mdc-dialog__container .mdc-dialog__surface {
+    background-color: white;
+    border-radius: 20px;
+  }
+
+}
+
+
+
 
 // Custom fonts >>>>
 
@@ -12,7 +120,21 @@ body {
 }
 
 @font-face {
-    font-family: Poppins-Light;
-    src: url(./assets/fonts/Poppins/Poppins-Light.ttf);
+  font-family: Poppins-Medium;
+  src: url(./assets/fonts/Poppins/Poppins-Medium.ttf);
 }
 
+@font-face {
+  font-family: Poppins-SemiBold;
+  src: url(./assets/fonts/Poppins/Poppins-SemiBold.ttf);
+}
+
+@font-face {
+  font-family: Poppins-Bold;
+  src: url(./assets/fonts/Poppins/Poppins-Bold.ttf);
+}
+
+@font-face {
+  font-family: Poppins-Light;
+  src: url(./assets/fonts/Poppins/Poppins-Light.ttf);
+}

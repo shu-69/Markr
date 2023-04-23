@@ -2,14 +2,14 @@
 <html lang="en">
 
 <head>
-	<title>Crecom - Login</title>
+	<title>CrecomOnline - Login</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<!-- 
+	<!-- 
 	<link rel="stylesheet" href="../css/login/login.css">
 	<link rel="stylesheet" href="../css/global.css"> -->
 
@@ -20,44 +20,58 @@
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col-md-6 text-center mb-5">
-					<h2 class="heading-section">Login</h2>
+					<h2 class="heading-section" style="display: flex; justify-content: center;">
+						<!-- <img src="../../assets/logo/logo_white_small.svg" style="height: 40px; width: 20%;"/> -->
+						<a href="/">
+						<img src="../../assets/logo/logo_white_large.svg" style="height: 40px; width: 180px;"/>
+					</a>
+					</h2>
 				</div>
 			</div>
 			<div class="row justify-content-center">
 				<div class="col-md-6 col-lg-4">
 					<div class="login-wrap p-0">
-						<h3 class="mb-4 text-center">Have an account?</h3>
-						<form action="#" class="signin-form">
+						<h3 class="mb-4 text-center" style="font-size: 22px">Have an account ? Login</h3>
+						<form [formGroup]="formData" action="#" class="signin-form">
 							<div class="form-group">
-								<input type="text" class="form-control" placeholder="Username" style="font-family: Poppins-Regular;" required>
+								<input [id]="usernameInputFieldId" type="text" class="form-control" placeholder="Username or email"
+									style="font-family: Poppins-Regular;" formControlName="username" required>
 							</div>
 							<div class="form-group">
-								<input [id]="passwordInputFieldId" type="password" class="form-control" placeholder="Password" style="font-family: Poppins-Regular;"
-									required>
+								<input [id]="passwordInputFieldId" type="password" class="form-control"
+									placeholder="Password" style="font-family: Poppins-Regular;" formControlName="password" required>
 								<span toggle="#password-field" (click)="tooglePasswordType()"
-									[ngClass]="passwordEyeIcon == 'on' ? 'fa-eye' : 'fa-eye-slash'" class="fa fa-fw field-icon toggle-password"></span>
+									[ngClass]="passwordEyeIcon == 'on' ? 'fa-eye' : 'fa-eye-slash'"
+									class="fa fa-fw field-icon toggle-password"></span>
 							</div>
 							<div class="form-group">
-								<button (click)="doLogin()"
-									class="form-control btn btn-primary submit px-3">
-									<div *ngIf="!isLoading"
-										style="height: 100%; align-content: center; display: grid;">Sign In</div>
-									<div *ngIf="isLoading" style="top: -100%; position: relative;">
+								<button (click)="doLogin()" class="form-control btn btn-primary submit px-3">
+									<div *ngIf="!isLoading" style="height: 100%; align-content: center; display: grid;">
+										Sign In</div>
+									<div *ngIf="isLoading" style="">
 										<div class="loader"></div>
 									</div>
 								</button>
 
 							</div>
-							<div class="form-group d-md-flex" style="display: flex;">
+							<div class="form-group d-md-flex" style="display: flex; margin-bottom: 0px;">
 								<div class="w-50">
-									<label class="checkbox-wrap checkbox-primary" style="font-family: Poppins-Light;">Remember Me
-										<input type="checkbox" checked>
+									<label class="checkbox-wrap checkbox-primary"
+										style="font-family: Poppins-Light;">Remember Me
+										<input type="checkbox" checked formControlName="rememberMe" >
 										<span class="checkmark"></span>
 									</label>
 								</div>
 								<div class="w-50 text-md-right" style="text-align: end">
-									<a href="#" style="color: #fff; font-family: Poppins-Light; font-size: small;">Forgot Password ?</a>
+									<a href="#"
+										style="color: #fff; font-family: Poppins-Light; font-size: small;">Forgot
+										Password ?</a>
 								</div>
+							</div>
+							<div style="text-align: center;">
+								<p style="font-family: 'Poppins-Light'; text-transform: uppercase; font-size: 14px;">
+									Don't have an account ?
+									<a href="/register">Sign Up.</a>
 							</div>
 						</form>
 						<!-- <p class="w-100 text-center">&mdash; Or Sign In With &mdash;</p>

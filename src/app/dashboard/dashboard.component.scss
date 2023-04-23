@@ -1,0 +1,189 @@
+.parent {
+    width: 100%;
+    height: 100%;
+}
+
+.topSection {
+
+    background: rgb(11, 17, 32);
+    height: 40%;
+
+    .header {
+
+        display: flex;
+        justify-content: space-between;
+        height: 80px;
+        align-items: center;
+        border-bottom: 1px solid white;
+        padding: 0 40px 0 40px;
+
+
+        .headerSubContainerStart {
+
+
+            .searchContainer {
+
+                display: flex;
+                align-items: center;
+                gap: 20px;
+
+                img {
+                    filter: brightness(0) saturate(100%) invert(92%) sepia(0%) saturate(1%) hue-rotate(332deg) brightness(109%) contrast(101%);
+                }
+
+                input {
+                    background: transparent;
+                    border: none;
+                    font-family: 'Poppins-Regular', sans-serif;
+                    width: fit-content;
+                    width: 35vw;
+                    color: white;
+                    font-size: 16px;
+                }
+
+                input:focus {
+                    outline: none;
+                }
+
+            }
+
+
+        }
+
+        .headerSubContainerEnd {
+            display: flex;
+            flex-flow: wrap;
+            gap: 20px;
+            flex-direction: row;
+            justify-content: flex-end;
+            margin-right: 15px;
+            align-items: center;
+
+            .profileDetailsContainer {
+
+                display: flex;
+                gap: 5px;
+
+                .profileAvatarContainer {
+                    display: flex;
+                    flex-flow: nowrap;
+                    align-items: center;
+                    width: fit-content;
+                    align-self: end;
+                    //background: #d9d9d975;
+                    background: white;
+                    padding: 10px 15px 10px 15px;
+                    border-radius: 40px;
+                    // height: 25px;
+                    // width: 25px;
+                    padding: 10px;
+                }
+
+            }
+
+            .headerOptionsIconContainer {
+                padding: 10px;
+                // width: 20px;
+                // height: 20px;
+                border-radius: 30px;
+                align-items: center;
+                display: flex;
+                justify-content: center;
+                //color: #323232;
+                border: 1.5px solid #939699;
+                color: #939699;
+            }
+
+
+        }
+
+    }
+
+    .welcomeContainer {
+
+        margin: 40px;
+        color: white;
+        font-size: 1.5vw;
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+
+        .welcomeMessage {
+
+            width: fit-content;
+            white-space: pre;
+
+            :first-child {
+                font-family: 'Poppins-Light', sans-serif;
+            }
+
+            :nth-child(2) {
+                font-family: 'Poppins-Regular', sans-serif;
+            }
+
+            :last-child {
+                font-family: 'Poppins-Light', sans-serif;
+                display: block;
+                color: darkgray;
+                font-size: 12px;
+                margin-top: 5px;
+            }
+
+        }
+
+        .reportsContainer {
+
+            display: flex;
+            flex-direction: row;
+            width: 70%;
+            justify-content: space-around;
+
+            .report {
+                display: flex;
+                gap: 15px;
+
+                .icon {
+
+                    width: 60px;
+                    height: 60px;
+                    padding: 14px;
+                    display: flex;
+                    border-radius: 18px;
+                    background: #ffffff17;
+
+                    img {
+
+                        border-radius: 18px;
+                        
+                    }
+
+                }
+
+                .labels {
+
+                    display: grid;
+
+                    :first-child {
+                        font-family: 'Poppins-Regular';
+                        font-size: 10px;
+                        color: darkgray;
+                    }
+
+                    :last-child {
+                        font-family: 'Poppins-Medium';
+                        font-size: 36px;
+                    }
+
+                }
+            }
+
+
+        }
+
+    }
+
+
+
+
+
+}

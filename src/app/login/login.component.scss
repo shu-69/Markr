@@ -78,6 +78,10 @@
   [tabindex="-1"]:focus {
     outline: 0 !important;
   }
+
+  .fieldError{
+    background: #d24e4e !important;
+  }
   
   .loader {
     width: 28px;
