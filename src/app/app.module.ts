@@ -1,4 +1,4 @@
-import { NgModule, inject, provideAppInitializer } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, inject, provideAppInitializer } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
@@ -29,7 +29,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 
-import { LottieModule } from 'ngx-lottie';
+import { provideLottieOptions } from 'ngx-lottie';
 import player from 'lottie-web';
 import { DatePipe } from '@angular/common';
 import { AuthService } from './services/auth.service';
@@ -77,10 +77,15 @@ export function appInitializer(authenticationService: AuthService): () => Promis
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
         FormsModule, MatDialogModule, MatBadgeModule, NgpImagePickerModule, FontAwesomeModule, MatDatepickerModule, MatNativeDateModule,
-        BrowserAnimationsModule, MatFormFieldModule, ReactiveFormsModule, LottieModule.forRoot({ player: playerFactory }),
+        BrowserAnimationsModule, MatFormFieldModule, ReactiveFormsModule,
         MatSidenavModule, MatTabsModule, MatIconModule], providers: [GlobalVar, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, DatePipe, AuthService,
+        provideLottieOptions({ player: () => player }),
         provideAppInitializer(() => {
         const initializerFn = ((service: AuthService) => async function () { return service.autoAuthUser(); })(inject(AuthService));
         return initializerFn();
-      }), provideHttpClient(withInterceptorsFromDi())] })
+      }), provideHttpClient(withInterceptorsFromDi())],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  })
 export class AppModule { }
+
+ 
