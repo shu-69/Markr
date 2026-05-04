@@ -5,10 +5,11 @@ import { UserDetails } from '../UserDetails';
 
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class HomeComponent {
 

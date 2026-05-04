@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, HostListener, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, CanDeactivate, NavigationExtras, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, NavigationExtras, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
@@ -18,12 +18,13 @@ export interface ImageDialogData {
 }
 
 @Component({
-  selector: 'app-exam-page',
-  templateUrl: './exam-page.component.html',
-  styleUrls: ['./exam-page.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'app-exam-page',
+    templateUrl: './exam-page.component.html',
+    styleUrls: ['./exam-page.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
-export class ExamPageComponent implements AfterViewInit, CanDeactivate<ExamPageComponent> {
+export class ExamPageComponent  implements AfterViewInit {
 
   @ViewChild('timerProgressBar', { static: false }) timerProgressBar!: ElementRef;
 

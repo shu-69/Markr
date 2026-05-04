@@ -9,9 +9,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-contact-us',
-  templateUrl: './contact-us.component.html',
-  styleUrls: ['./contact-us.component.scss']
+    selector: 'app-contact-us',
+    templateUrl: './contact-us.component.html',
+    styleUrls: ['./contact-us.component.scss'],
+    standalone: false
 })
 export class ContactUsComponent {
 
@@ -111,8 +112,8 @@ export class ContactUsComponent {
 }
 
 @Component({
-  selector: 'dialog-animations-example-dialog',
-  template: ` <h1 mat-dialog-title title style="text-align: center; font-family: 'Poppins-Bold'; font-size: x-large; color: white; font-weight: normal;
+    selector: 'dialog-animations-example-dialog',
+    template: ` <h1 mat-dialog-title title style="text-align: center; font-family: 'Poppins-Bold'; font-size: x-large; color: white; font-weight: normal;
               padding-left: 20px; padding-right: 20px;"> {{data.title}} </h1>
               <div style="text-align: center; font-family: 'Poppins-Regular'; font-size: medium; color: white; font-weight: normal;
               padding-left: 20px; padding-right: 20px;" > {{data.message}} </div>
@@ -122,6 +123,7 @@ export class ContactUsComponent {
                           margin-top: 25px;
                           font-family: Poppins-Regular; color: white;" (click)="close()" >Okay!</div>
               `,
+    standalone: false
 })
 
 export class DialogAnimationsExampleDialog {

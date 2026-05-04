@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { AnimationOptions } from 'ngx-lottie';
 
 @Component({
-  selector: 'app-courses',
-  templateUrl: './courses.component.html',
-  styleUrls: ['./courses.component.scss']
+    selector: 'app-courses',
+    templateUrl: './courses.component.html',
+    styleUrls: ['./courses.component.scss'],
+    standalone: false
 })
 export class CoursesComponent {
 

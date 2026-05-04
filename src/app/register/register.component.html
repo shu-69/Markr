@@ -1,123 +1,129 @@
 <body>
-    <header
-        style="height: 80px; align-items: center; justify-items: center; display: flex; padding-left: 40px; padding-right: 40px">
-        <a href="/" class="logo" style="display: flex;"><img src="../../assets/logo/logo_white_large.svg" /></a>
+  <header
+    style="height: 80px; align-items: center; justify-items: center; display: flex; padding-left: 40px; padding-right: 40px">
+    <a href="/" class="logo" style="display: flex;"><img src="../../assets/logo/logo_white_large.svg" /></a>
         <label style="font-size: 1.9vw; color: #dcdcdc; font-family: Poppins-Light; font-family: 'Krona One', 'Poppins-Light';
         text-transform: uppercase;">&nbsp;Registration</label>
-    </header>
-    <div class="container">
+  </header>
+  <div class="container">
 
-        <form [formGroup]="formData" class="formContainer">
-            <div class="column1">
-                <div class="row">
-                    <div class="item form-group">
-                        <label>Full name *</label>
-                        <input class="form-control" placeholder="Enter full name" name="fullname" required
-                            formControlName="fullname">
+    <form [formGroup]="formData" class="formContainer">
+      <div class="column1">
+        <div class="row">
+          <div class="item form-group">
+            <label>Full name *</label>
+            <input class="form-control" placeholder="Enter full name" name="fullname" required
+              formControlName="fullname">
                         <!-- <span class="validation-error" *ngIf="
                         formData.controls.fullname.errors?.['required'] ">Name is required</span> -->
-                    </div>
-                    <div class="item form-group">
-                        <label>Father's name *</label>
-                        <input class="form-control" placeholder="Enter father's name" name="fathername"
-                            formControlName="fathername">
-                    </div>
-                    <div class="item form-group">
-                        <label>Mother's name</label>
-                        <input class="form-control" placeholder="Enter mother's name" name="mothername"
-                            formControlName="mothername">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="item">
-                        <label>Date of birth *</label>
-                        <input placeholder="DD/MM/YYYY" matInput [matDatepicker]="picker" (click)="picker.open()"
-                            formControlName="dob" readonly>
-                        <mat-datepicker-toggle class="matCalendar" matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                    </div>
-                    <div class="item">
-                        <label>Contact number *</label>
-                        <input type="tel" placeholder="Enter contact number" formControlName="contactnumber">
-                    </div>
-                    <div class="item">
-                        <label>Email address *</label>
-                        <input type="email" placeholder="Enter email address" formControlName="emailaddress">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="item">
-                        <label>Aadhar number</label>
-                        <input placeholder="Enter aadhar number" formControlName="aadhar">
-                    </div>
-                    <div class="item">
-                        <label>Gender *</label>
+        </div>
+        <div class="item form-group">
+          <label>Father's name *</label>
+          <input class="form-control" placeholder="Enter father's name" name="fathername"
+            formControlName="fathername">
+        </div>
+        <div class="item form-group">
+          <label>Mother's name</label>
+          <input class="form-control" placeholder="Enter mother's name" name="mothername"
+            formControlName="mothername">
+        </div>
+      </div>
+      <div class="row">
+        <div class="item">
+          <label>Date of birth *</label>
+          <input placeholder="DD/MM/YYYY" matInput [matDatepicker]="picker" (click)="picker.open()"
+            formControlName="dob" readonly>
+          <mat-datepicker-toggle class="matCalendar" matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </div>
+        <div class="item">
+          <label>Contact number *</label>
+          <input type="tel" placeholder="Enter contact number" formControlName="contactnumber">
+        </div>
+        <div class="item">
+          <label>Email address *</label>
+          <input type="email" placeholder="Enter email address" formControlName="emailaddress">
+        </div>
+      </div>
+      <div class="row">
+        <div class="item">
+          <label>Aadhar number</label>
+          <input placeholder="Enter aadhar number" formControlName="aadhar">
+        </div>
+        <div class="item">
+          <label>Gender *</label>
 
                         <div style="align-self: end; flex-flow: nowrap; display: flex; background: white; height: 55px;
                         border-radius: 10px; justify-content: center; padding: 10px; gap: 15px;">
 
-                            <span style="display: flex; align-items: center;">
+            <span style="display: flex; align-items: center;">
                                 <input id="radio1" type="radio" name="gender" style="margin: 0px;
                                 margin-right: 10px;
                                 height: 20px;
                                 width: 20px; accent-color: black;" value="Male" formControlName="gender">
-                                <label for="radio1" style="color: black;">Male</label>
-                            </span>
+              <label for="radio1" style="color: black;">Male</label>
+            </span>
 
-                            <span style="display: flex; align-items: center;">
+            <span style="display: flex; align-items: center;">
                                 <input id="radio2" type="radio" name="gender" style="margin: 0px;
                                 margin-right: 10px;
                                 height: 20px;
                                 width: 20px; accent-color: black;" value="Female" formControlName="gender">
-                                <label for="radio2" style="color: black;">Female</label>
-                            </span>
+              <label for="radio2" style="color: black;">Female</label>
+            </span>
 
-                        </div>
+          </div>
 
-                    </div>
-                </div>
-                <div class="row row4">
-                    <div class="item">
-                        <label>Address</label>
-                        <textarea placeholder="Enter address" style="height: 14vh;"
-                            formControlName="address"></textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="column2">
-                <div class="item">
-                    <label>Profile Image</label>
-                    <div class="imagePickerContainer">
-                        <ngp-image-picker [_config]="imagePickerConf"
-                            ($imageChanged)="onImageChange($event)"></ngp-image-picker>
-                    </div>
-                    <label *ngIf="showProfileImageError"
-                        style="color: #ff5252; font-size: 12px; margin-top: 5px;">{{imageErrorMessage}}</label>
-                </div>
-                <div class="submitContainer">
+        </div>
+      </div>
+      <div class="row row4">
+        <div class="item">
+          <label>Address</label>
+          <textarea placeholder="Enter address" style="height: 14vh;"
+          formControlName="address"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="column2">
+      <div class="item">
+        <label>Profile Image</label>
+        <div class="imagePickerContainer">
+          <ngp-image-picker [_config]="imagePickerConf"
+          ($imageChanged)="onImageChange($event)"></ngp-image-picker>
+        </div>
+        @if (showProfileImageError) {
+          <label
+          style="color: #ff5252; font-size: 12px; margin-top: 5px;">{{imageErrorMessage}}</label>
+        }
+      </div>
+      <div class="submitContainer">
                     <span style="height: fit-content; display: flex; align-items: center; margin-bottom: 10px; padding-left: 5px;
                     padding-right: 5px; font-size: 14px; font-family: 'Poppins-Light';">
-                        <input type="checkbox" style="width: 18px; height: 18px; margin: 0px; accent-color: white;"
-                            formControlName="termsnconditions">
-                        <label style="margin-left: 10px; color: #f3f3f3;">I agree to the&nbsp;<a
-                                style="font-family: 'Poppins-Regular'; color: white;">terms & conditions</a></label>
-                    </span>
-                    <button class="submitButton" type="submit" (click)="submit()">
-                        <i *ngIf="!isSubmitting" class="fa fa-cloud-upload" aria-hidden="true"
-                            style="font-size: 18px; margin-right: 8px;"></i>
-                        <div *ngIf="isSubmitting" class="loader"></div>
-                        {{submitButtonText}}
-                    </button>
+          <input type="checkbox" style="width: 18px; height: 18px; margin: 0px; accent-color: white;"
+            formControlName="termsnconditions">
+          <label style="margin-left: 10px; color: #f3f3f3;">I agree to the&nbsp;<a
+          style="font-family: 'Poppins-Regular'; color: white;">terms & conditions</a></label>
+        </span>
+        <button class="submitButton" type="submit" (click)="submit()">
+          @if (!isSubmitting) {
+            <i class="fa fa-cloud-upload" aria-hidden="true"
+            style="font-size: 18px; margin-right: 8px;"></i>
+          }
+          @if (isSubmitting) {
+            <div class="loader"></div>
+          }
+          {{submitButtonText}}
+        </button>
                     <span style="color: white; width: 100%; display: flex; justify-content: center; font-family: 'Poppins-Light';
                     font-size: 14px; margin-top: 10px;">
-                        Have an account ?&nbsp;
-                        <a href="/login" style="color: white;">Login</a>
-                        &nbsp;instead
-                    </span>
-                </div>
+          Have an account ?&nbsp;
+          <a href="/login" style="color: white;">Login</a>
+          &nbsp;instead
+        </span>
+      </div>
 
-            </div>
-        </form>
-        <!-- type="submit" -->
     </div>
+  </form>
+  <!-- type="submit" -->
+</div>
 </body>

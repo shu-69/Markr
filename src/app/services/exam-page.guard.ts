@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanDeactivate, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ExamPageComponent } from '../exam-page/exam-page.component';
 import { SharedServiceService } from './shared-service.service';
@@ -7,7 +7,7 @@ import { SharedServiceService } from './shared-service.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ExamPageGuard implements CanDeactivate<ExamPageComponent> {
+export class ExamPageGuard  {
 
   constructor(private sharedService: SharedServiceService){ }
 

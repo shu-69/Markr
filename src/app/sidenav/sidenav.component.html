@@ -1,22 +1,26 @@
 <div class="sidenav" [ngClass]="collapsed ? 'sidenav-collapsed' : ''">
-    <div class="logo-container">
-        <!-- <button class="logo" (click)="toogleCollapse()">A</button>
-        <div class="logo-text" *ngIf="!collapsed">Angular</div>
-        <button class="btn-close" *ngIf="!collapsed" (click)="closeSideNav()">
-            <i class="fa fa-times close-icon"></i>
-        </button> -->
-        <img src="../../assets/logo/logo_black_small.svg" style="width: 40px; height: 40px;">
-        <!-- margin: auto; height: 11px; -->
-        <img src="../../assets/logo/logo_black_large.svg" style="height: 1vw; margin: auto;">
-    </div>
-    <ul class="sidenav-nav">
-        <li class="sidenav-nav-item" *ngFor="let data of navData" >
-            <a class="sidenav-nav-link" [routerLink]="[data.routerLink]"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{exact: true}">
-                <i class="sidenav-link-icon" [classList]="data.icon" style="font-size: 20px;"></i>
-                <span class="sidenav-link-text" *ngIf="!collapsed">{{data.label}}</span>
-            </a>
-        </li>
-    </ul>
+  <div class="logo-container">
+    <!-- <button class="logo" (click)="toogleCollapse()">A</button>
+    <div class="logo-text" *ngIf="!collapsed">Angular</div>
+    <button class="btn-close" *ngIf="!collapsed" (click)="closeSideNav()">
+      <i class="fa fa-times close-icon"></i>
+    </button> -->
+    <img src="../../assets/logo/logo_black_small.svg" style="width: 40px; height: 40px;">
+    <!-- margin: auto; height: 11px; -->
+    <img src="../../assets/logo/logo_black_large.svg" style="height: 1vw; margin: auto;">
+  </div>
+  <ul class="sidenav-nav">
+    @for (data of navData; track data) {
+      <li class="sidenav-nav-item" >
+        <a class="sidenav-nav-link" [routerLink]="[data.routerLink]"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact: true}">
+          <i class="sidenav-link-icon" [classList]="data.icon" style="font-size: 20px;"></i>
+          @if (!collapsed) {
+            <span class="sidenav-link-text">{{data.label}}</span>
+          }
+        </a>
+      </li>
+    }
+  </ul>
 </div>

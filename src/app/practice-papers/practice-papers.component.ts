@@ -11,9 +11,10 @@ export interface DialogData {
   test: any
 }
 @Component({
-  selector: 'app-practice-papers',
-  templateUrl: './practice-papers.component.html',
-  styleUrls: ['./practice-papers.component.scss']
+    selector: 'app-practice-papers',
+    templateUrl: './practice-papers.component.html',
+    styleUrls: ['./practice-papers.component.scss'],
+    standalone: false
 })
 export class PracticePapersComponent {
 

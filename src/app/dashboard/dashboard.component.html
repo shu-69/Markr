@@ -1,214 +1,199 @@
 <div class="parent">
 
-    <section class="topSection">
+  <section class="topSection">
 
-        <header class="header">
-            <div class="headerSubContainerStart">
-                <div class="searchContainer">
+    <header class="header">
+      <div class="headerSubContainerStart">
+        <div class="searchContainer">
 
-                    <img src="../../assets/iconsaxicons/linear/search-normal-1.svg">
-                    <input type="text" placeholder="Search for course, tests etc.">
-
-                </div>
-            </div>
-            <div class="headerSubContainerEnd">
-
-                <div class="headerOptionsIconContainer">
-                    <!-- matBadge="8" matBadgePosition="after" matBadgeOverlap="true" -->
-                    <i class="fa fa-solid fa-envelope"></i>
-                </div>
-
-                <div class="headerOptionsIconContainer">
-                    <!-- matBadge="8" matBadgePosition="after" matBadgeOverlap="true" -->
-                    <i class="fa fa-solid fa-bell"></i>
-                </div>
-
-                <div class="profileDetailsContainer">
-                    <div class="profileAvatarContainer" style="">
-                        <img style="width: 25px; height: 25px; border-radius: 30px;"
-                            src="../../assets/imgs/default_profile_img.png" />
-                    </div>
-                    <div style="display: flex; flex-direction: column; justify-content: center;">
-                        <label
-                            style="margin-left: 8px; font-family: 'Poppins-Medium'; font-size: 14px; color: white;">{{sharedService.getName(true)}}</label>
-                        <label
-                            style="margin-left: 8px; font-family: 'Poppins-Regular'; font-size: 14px; color: gray;">{{sharedService.getUserName()}}</label>
-                    </div>
-                </div>
-
-
-
-            </div>
-        </header>
-
-        <div class="welcomeContainer">
-            <div class="welcomeMessage">
-                <span>Welcome back,&nbsp;</span>
-                <span>{{sharedService.getName(true)}}!</span>
-                <span>Here's your study overview</span>
-            </div>
-            <div class="reportsContainer">
-                <div class="report">
-                    <div class="icon">
-                        <img src="../../assets/iconsaxicons/bold/book-saved.svg" alt=""
-                            style="filter: brightness(0) saturate(100%) invert(42%) sepia(20%) saturate(2748%) hue-rotate(120deg) brightness(88%) contrast(91%);">
-                    </div>
-                    <div class="labels">
-                        <label>Completed Courses</label>
-                        <label>0</label>
-                    </div>
-                </div>
-                <div class="report">
-                    <div class="icon">
-                        <img src="../../assets/iconsaxicons/bold/note-21.svg" alt=""
-                            style="filter: brightness(0) saturate(100%) invert(43%) sepia(97%) saturate(1262%) hue-rotate(25deg) brightness(96%) contrast(94%);">
-                    </div>
-                    <div class="labels">
-                        <label>Completed tests</label>
-                        <label>0</label>
-                    </div>
-                </div>
-                <div class="report">
-                    <div class="icon">
-                        <img src="../../assets/iconsaxicons/bold/medal-star.svg" alt=""
-                            style="filter: brightness(0) saturate(100%) invert(45%) sepia(4%) saturate(6713%) hue-rotate(197deg) brightness(83%) contrast(85%);">
-                    </div>
-                    <div class="labels">
-                        <label>Student Score</label>
-                        <label>0</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </section>
-
-    <section class="cardsContainer" hidden>
-
-        <div class="card">
-
-            <div class="header">
-
-                <div class="icon">
-                    <img src="../../assets/iconsaxicons/bold/star.svg" alt=""
-                        style="filter: brightness(0) saturate(100%) invert(43%) sepia(97%) saturate(1262%) hue-rotate(25deg) brightness(96%) contrast(94%);">
-                </div>
-
-                <span class="title">Your Progress</span>
-
-            </div>
+          <img src="../../assets/iconsaxicons/linear/search-normal-1.svg">
+          <input type="text" placeholder="Search for course, tests etc.">
 
         </div>
+      </div>
+      <div class="headerSubContainerEnd">
 
-    </section>
-
-    <section class="contentSection examsTabsSection">
-
-        <div class="sectionHeader">
-
-            <span class="sectionLabel">Your Submissions</span>
-
-            <mat-icon class="toogleIcon"
-                (click)="toogleSection(examContentMatTabGroup._elementRef.nativeElement.classList, $event)">keyboard_arrow_up</mat-icon>
-
+        <div class="headerOptionsIconContainer">
+          <!-- matBadge="8" matBadgePosition="after" matBadgeOverlap="true" -->
+          <i class="fa fa-solid fa-envelope"></i>
         </div>
 
-        <mat-tab-group animationDuration="0ms" #examContentMatTabGroup>
+        <div class="headerOptionsIconContainer">
+          <!-- matBadge="8" matBadgePosition="after" matBadgeOverlap="true" -->
+          <i class="fa fa-solid fa-bell"></i>
+        </div>
 
-            <mat-tab label="All">
+        <div class="profileDetailsContainer">
+          <div class="profileAvatarContainer" style="">
+            <img style="width: 25px; height: 25px; border-radius: 30px;"
+              src="../../assets/imgs/default_profile_img.png" />
+          </div>
+          <div style="display: flex; flex-direction: column; justify-content: center;">
+            <label
+            style="margin-left: 8px; font-family: 'Poppins-Medium'; font-size: 14px; color: white;">{{sharedService.getName(true)}}</label>
+            <label
+            style="margin-left: 8px; font-family: 'Poppins-Regular'; font-size: 14px; color: gray;">{{sharedService.getUserName()}}</label>
+          </div>
+        </div>
 
-                <div class="submission" *ngFor="let submission of sharedService.getUsersSubmissions()">
 
-                    <span class="examTitle">{{submission.examDetails.title}}</span>
 
-                    <div class="examDescriptionContainer">
+      </div>
+    </header>
 
-                        <div class="desDiv">
-                            <span>Date : <span
-                                    class="bold">{{getExamDateStr(submission.submittionDetails.date)}}</span></span>
-                            <span>Time : <span
-                                    class="bold">{{getExamTimeStr(submission.submittionDetails.date)}}</span></span>
-                        </div>
+    <div class="welcomeContainer">
+      <div class="welcomeMessage">
+        <span>Welcome back,&nbsp;</span>
+        <span>{{sharedService.getName(true)}}!</span>
+        <span>Here's your study overview</span>
+      </div>
+      <div class="reportsContainer">
+        <div class="report">
+          <div class="icon">
+            <img src="../../assets/iconsaxicons/bold/book-saved.svg" alt=""
+              style="filter: brightness(0) saturate(100%) invert(42%) sepia(20%) saturate(2748%) hue-rotate(120deg) brightness(88%) contrast(91%);">
+          </div>
+          <div class="labels">
+            <label>Completed Courses</label>
+            <label>0</label>
+          </div>
+        </div>
+        <div class="report">
+          <div class="icon">
+            <img src="../../assets/iconsaxicons/bold/note-21.svg" alt=""
+              style="filter: brightness(0) saturate(100%) invert(43%) sepia(97%) saturate(1262%) hue-rotate(25deg) brightness(96%) contrast(94%);">
+          </div>
+          <div class="labels">
+            <label>Completed tests</label>
+            <label>0</label>
+          </div>
+        </div>
+        <div class="report">
+          <div class="icon">
+            <img src="../../assets/iconsaxicons/bold/medal-star.svg" alt=""
+              style="filter: brightness(0) saturate(100%) invert(45%) sepia(4%) saturate(6713%) hue-rotate(197deg) brightness(83%) contrast(85%);">
+          </div>
+          <div class="labels">
+            <label>Student Score</label>
+            <label>0</label>
+          </div>
+        </div>
+      </div>
+    </div>
 
-                        <div class="desDiv">
-                            <span>Paper type : <span
-                                    class="bold capitalize">{{submission.examDetails.examType}}</span></span>
-                        </div>
+  </section>
 
-                        <button class="viewResult"
-                            (click)="viewResult(submission.examDetails.examType, submission.examDetails.examId, submission.idStr)">View
-                            Result</button>
+  <section class="cardsContainer" hidden>
 
-                    </div>
+    <div class="card">
 
-                </div>
+      <div class="header">
 
-            </mat-tab>
+        <div class="icon">
+          <img src="../../assets/iconsaxicons/bold/star.svg" alt=""
+            style="filter: brightness(0) saturate(100%) invert(43%) sepia(97%) saturate(1262%) hue-rotate(25deg) brightness(96%) contrast(94%);">
+        </div>
 
-            <mat-tab label="Tests">
+        <span class="title">Your Progress</span>
 
-                <div class="submission"
-                    *ngFor="let submission of sharedService.getUsersSubmissionsForParticularExam('test')">
+      </div>
 
-                    <span class="examTitle">{{submission.examDetails.title}}</span>
+    </div>
 
-                    <div class="examDescriptionContainer">
+  </section>
 
-                        <div class="desDiv">
-                            <span>Date : <span
-                                    class="bold">{{getExamDateStr(submission.submittionDetails.date)}}</span></span>
-                            <span>Time : <span
-                                    class="bold">{{getExamTimeStr(submission.submittionDetails.date)}}</span></span>
-                        </div>
+  <section class="contentSection examsTabsSection">
 
-                        <div class="desDiv">
-                            <span>Paper type : <span
-                                    class="bold capitalize">{{submission.examDetails.examType}}</span></span>
-                        </div>
+    <div class="sectionHeader">
 
-                        <button class="viewResult"
-                            (click)="viewResult(submission.examDetails.examType, submission.examDetails.examId, submission.idStr)">View
-                            Result</button>
+      <span class="sectionLabel">Your Submissions</span>
 
-                    </div>
+      <mat-icon class="toogleIcon"
+      (click)="toogleSection(examContentMatTabGroup._elementRef.nativeElement.classList, $event)">keyboard_arrow_up</mat-icon>
 
-                </div>
+    </div>
 
-            </mat-tab>
+    <mat-tab-group animationDuration="0ms" #examContentMatTabGroup>
 
-            <mat-tab label="Practice Papers">
+      <mat-tab label="All">
 
-                <div class="submission"
-                    *ngFor="let submission of sharedService.getUsersSubmissionsForParticularExam('practice_paper')">
+        @for (submission of sharedService.getUsersSubmissions(); track submission) {
+          <div class="submission">
+            <span class="examTitle">{{submission.examDetails.title}}</span>
+            <div class="examDescriptionContainer">
+              <div class="desDiv">
+                <span>Date : <span
+                class="bold">{{getExamDateStr(submission.submittionDetails.date)}}</span></span>
+                <span>Time : <span
+                class="bold">{{getExamTimeStr(submission.submittionDetails.date)}}</span></span>
+              </div>
+              <div class="desDiv">
+                <span>Paper type : <span
+                class="bold capitalize">{{submission.examDetails.examType}}</span></span>
+              </div>
+              <button class="viewResult"
+                (click)="viewResult(submission.examDetails.examType, submission.examDetails.examId, submission.idStr)">View
+              Result</button>
+            </div>
+          </div>
+        }
 
-                    <span class="examTitle">{{submission.examDetails.title}}</span>
+      </mat-tab>
 
-                    <div class="examDescriptionContainer">
+      <mat-tab label="Tests">
 
-                        <div class="desDiv">
-                            <span>Date : <span
-                                    class="bold">{{getExamDateStr(submission.submittionDetails.date)}}</span></span>
-                            <span>Time : <span
-                                    class="bold">{{getExamTimeStr(submission.submittionDetails.date)}}</span></span>
-                        </div>
+        @for (submission of sharedService.getUsersSubmissionsForParticularExam('test'); track submission) {
+          <div class="submission"
+            >
+            <span class="examTitle">{{submission.examDetails.title}}</span>
+            <div class="examDescriptionContainer">
+              <div class="desDiv">
+                <span>Date : <span
+                class="bold">{{getExamDateStr(submission.submittionDetails.date)}}</span></span>
+                <span>Time : <span
+                class="bold">{{getExamTimeStr(submission.submittionDetails.date)}}</span></span>
+              </div>
+              <div class="desDiv">
+                <span>Paper type : <span
+                class="bold capitalize">{{submission.examDetails.examType}}</span></span>
+              </div>
+              <button class="viewResult"
+                (click)="viewResult(submission.examDetails.examType, submission.examDetails.examId, submission.idStr)">View
+              Result</button>
+            </div>
+          </div>
+        }
 
-                        <div class="desDiv">
-                            <span>Paper type : <span
-                                    class="bold capitalize">{{submission.examDetails.examType}}</span></span>
-                        </div>
+      </mat-tab>
 
-                        <button class="viewResult"
-                            (click)="viewResult(submission.examDetails.examType, submission.examDetails.examId, submission.idStr)">View
-                            Result</button>
+      <mat-tab label="Practice Papers">
 
-                    </div>
+        @for (submission of sharedService.getUsersSubmissionsForParticularExam('practice_paper'); track submission) {
+          <div class="submission"
+            >
+            <span class="examTitle">{{submission.examDetails.title}}</span>
+            <div class="examDescriptionContainer">
+              <div class="desDiv">
+                <span>Date : <span
+                class="bold">{{getExamDateStr(submission.submittionDetails.date)}}</span></span>
+                <span>Time : <span
+                class="bold">{{getExamTimeStr(submission.submittionDetails.date)}}</span></span>
+              </div>
+              <div class="desDiv">
+                <span>Paper type : <span
+                class="bold capitalize">{{submission.examDetails.examType}}</span></span>
+              </div>
+              <button class="viewResult"
+                (click)="viewResult(submission.examDetails.examType, submission.examDetails.examId, submission.idStr)">View
+              Result</button>
+            </div>
+          </div>
+        }
 
-                </div>
+      </mat-tab>
 
-            </mat-tab>
+    </mat-tab-group>
 
-        </mat-tab-group>
-
-    </section>
+  </section>
 
 </div>

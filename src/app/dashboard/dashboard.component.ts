@@ -6,10 +6,11 @@ import { NavigationExtras, Router } from '@angular/router';
 import ObjectID from 'bson-objectid';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class DashboardComponent {
 

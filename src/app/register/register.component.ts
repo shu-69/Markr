@@ -19,9 +19,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+    selector: 'app-register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.scss'],
+    standalone: false
 })
 
 export class RegisterComponent implements OnInit {
@@ -358,8 +359,8 @@ export class RegisterComponent implements OnInit {
 }
 
 @Component({
-  selector: 'error-dialog',
-  template: ` <h1 mat-dialog-title title style="text-align: center; font-family: 'Poppins-Bold'; font-size: x-large; color: white; font-weight: normal;
+    selector: 'error-dialog',
+    template: ` <h1 mat-dialog-title title style="text-align: center; font-family: 'Poppins-Bold'; font-size: x-large; color: white; font-weight: normal;
               padding-left: 20px; padding-right: 20px;"> {{data.title}} </h1>
               <div style="text-align: start; font-family: 'Poppins-Regular'; font-size: medium; color: white; font-weight: normal;
               padding-left: 20px; padding-right: 20px; white-space: pre-line; display: flex; justify-content: center;" > {{data.message}} </div>
@@ -369,6 +370,7 @@ export class RegisterComponent implements OnInit {
                           margin-top: 25px;
                           font-family: Poppins-Regular; color: black; " (click)="close()" >Okay!</div>
               `,
+    standalone: false
 })
 
 export class ErrorDialog {
@@ -381,8 +383,8 @@ export class ErrorDialog {
 }
 
 @Component({
-  selector: 'success-dialog',
-  template: ` <div style="margin-top: 40px; margin-bottom: 40px;">
+    selector: 'success-dialog',
+    template: ` <div style="margin-top: 40px; margin-bottom: 40px;">
               <ng-lottie width="100%" height="30vh" [options]="options" ></ng-lottie>
               </div>
               <div style="text-align: center; font-family: 'Poppins-Regular'; font-size: medium; color: black; font-weight: normal;
@@ -403,8 +405,7 @@ export class ErrorDialog {
                           margin-top: 25px;
                           font-family: Poppins-Regular; color: white; " (click)="close()" >Okay!</div>
               `,
-  standalone: true,
-  imports: [LottieComponent],
+    imports: [LottieComponent]
 })
 
 export class SuccessDialog {

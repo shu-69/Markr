@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { NgModule, inject, provideAppInitializer } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
@@ -24,7 +24,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MAT_DATE_LOCALE } from '@angular/material/core'
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
@@ -55,42 +55,32 @@ export function appInitializer(authenticationService: AuthService): () => Promis
       );
 }
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    LayoutComponent,
-    HomeComponent,
-    IndexPageComponent,
-    ContactUsComponent,
-    PageNotFoundComponent,
-    DashboardComponent,
-    RegisterComponent,
-    SidenavComponent,
-    AnnouncementComponent,
-    CoursesComponent,
-    TestsComponent,
-    PracticePapersComponent,
-    PencilLoaderComponent,
-    ExamPageComponent,
-    ViewresultComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule, MatDialogModule, MatBadgeModule, NgpImagePickerModule, FontAwesomeModule, MatDatepickerModule, MatNativeDateModule,
-    BrowserAnimationsModule, MatFormFieldModule, ReactiveFormsModule, LottieModule.forRoot({ player: playerFactory }), HttpClientModule,
-    MatSidenavModule, MatTabsModule, MatIconModule
-  ],
-  providers: [GlobalVar, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, DatePipe, AuthService,
-    {
-      //With this your app will wait to resolve the promise of init() of your UserAuthService.
-      provide: APP_INITIALIZER,
-      useFactory: (service: AuthService) => async function () { return service.autoAuthUser(); },
-      //useFactory: appInitializer,
-      deps: [AuthService],
-      multi: true
-    }],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        LoginComponent,
+        LayoutComponent,
+        HomeComponent,
+        IndexPageComponent,
+        ContactUsComponent,
+        PageNotFoundComponent,
+        DashboardComponent,
+        RegisterComponent,
+        SidenavComponent,
+        AnnouncementComponent,
+        CoursesComponent,
+        TestsComponent,
+        PracticePapersComponent,
+        PencilLoaderComponent,
+        ExamPageComponent,
+        ViewresultComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        FormsModule, MatDialogModule, MatBadgeModule, NgpImagePickerModule, FontAwesomeModule, MatDatepickerModule, MatNativeDateModule,
+        BrowserAnimationsModule, MatFormFieldModule, ReactiveFormsModule, LottieModule.forRoot({ player: playerFactory }),
+        MatSidenavModule, MatTabsModule, MatIconModule], providers: [GlobalVar, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, DatePipe, AuthService,
+        provideAppInitializer(() => {
+        const initializerFn = ((service: AuthService) => async function () { return service.autoAuthUser(); })(inject(AuthService));
+        return initializerFn();
+      }), provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
