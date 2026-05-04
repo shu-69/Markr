@@ -30,9 +30,9 @@
                     </div>
                     <div style="display: flex; flex-direction: column; justify-content: center;">
                         <label
-                            style="margin-left: 8px; font-family: 'Poppins-Medium'; font-size: 14px; color: white;">Shubham</label>
+                            style="margin-left: 8px; font-family: 'Poppins-Medium'; font-size: 14px; color: white;">{{sharedService.getName(true)}}</label>
                         <label
-                            style="margin-left: 8px; font-family: 'Poppins-Regular'; font-size: 14px; color: gray;">#username</label>
+                            style="margin-left: 8px; font-family: 'Poppins-Regular'; font-size: 14px; color: gray;">{{sharedService.getUserName()}}</label>
                     </div>
                 </div>
 
@@ -44,14 +44,14 @@
         <div class="welcomeContainer">
             <div class="welcomeMessage">
                 <span>Welcome back,&nbsp;</span>
-                <span>Shubham!</span>
+                <span>{{sharedService.getName(true)}}!</span>
                 <span>Here's your study overview</span>
             </div>
             <div class="reportsContainer">
                 <div class="report">
                     <div class="icon">
                         <img src="../../assets/iconsaxicons/bold/book-saved.svg" alt=""
-                        style="filter: brightness(0) saturate(100%) invert(42%) sepia(20%) saturate(2748%) hue-rotate(120deg) brightness(88%) contrast(91%);">
+                            style="filter: brightness(0) saturate(100%) invert(42%) sepia(20%) saturate(2748%) hue-rotate(120deg) brightness(88%) contrast(91%);">
                     </div>
                     <div class="labels">
                         <label>Completed Courses</label>
@@ -60,8 +60,8 @@
                 </div>
                 <div class="report">
                     <div class="icon">
-                        <img src="../../assets/iconsaxicons/bold/note-21.svg" alt="" 
-                        style="filter: brightness(0) saturate(100%) invert(43%) sepia(97%) saturate(1262%) hue-rotate(25deg) brightness(96%) contrast(94%);">
+                        <img src="../../assets/iconsaxicons/bold/note-21.svg" alt=""
+                            style="filter: brightness(0) saturate(100%) invert(43%) sepia(97%) saturate(1262%) hue-rotate(25deg) brightness(96%) contrast(94%);">
                     </div>
                     <div class="labels">
                         <label>Completed tests</label>
@@ -71,7 +71,7 @@
                 <div class="report">
                     <div class="icon">
                         <img src="../../assets/iconsaxicons/bold/medal-star.svg" alt=""
-                        style="filter: brightness(0) saturate(100%) invert(45%) sepia(4%) saturate(6713%) hue-rotate(197deg) brightness(83%) contrast(85%);">
+                            style="filter: brightness(0) saturate(100%) invert(45%) sepia(4%) saturate(6713%) hue-rotate(197deg) brightness(83%) contrast(85%);">
                     </div>
                     <div class="labels">
                         <label>Student Score</label>
@@ -83,9 +83,131 @@
 
     </section>
 
-    <section>
+    <section class="cardsContainer" hidden>
 
+        <div class="card">
 
+            <div class="header">
+
+                <div class="icon">
+                    <img src="../../assets/iconsaxicons/bold/star.svg" alt=""
+                        style="filter: brightness(0) saturate(100%) invert(43%) sepia(97%) saturate(1262%) hue-rotate(25deg) brightness(96%) contrast(94%);">
+                </div>
+
+                <span class="title">Your Progress</span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="contentSection examsTabsSection">
+
+        <div class="sectionHeader">
+
+            <span class="sectionLabel">Your Submissions</span>
+
+            <mat-icon class="toogleIcon"
+                (click)="toogleSection(examContentMatTabGroup._elementRef.nativeElement.classList, $event)">keyboard_arrow_up</mat-icon>
+
+        </div>
+
+        <mat-tab-group animationDuration="0ms" #examContentMatTabGroup>
+
+            <mat-tab label="All">
+
+                <div class="submission" *ngFor="let submission of sharedService.getUsersSubmissions()">
+
+                    <span class="examTitle">{{submission.examDetails.title}}</span>
+
+                    <div class="examDescriptionContainer">
+
+                        <div class="desDiv">
+                            <span>Date : <span
+                                    class="bold">{{getExamDateStr(submission.submittionDetails.date)}}</span></span>
+                            <span>Time : <span
+                                    class="bold">{{getExamTimeStr(submission.submittionDetails.date)}}</span></span>
+                        </div>
+
+                        <div class="desDiv">
+                            <span>Paper type : <span
+                                    class="bold capitalize">{{submission.examDetails.examType}}</span></span>
+                        </div>
+
+                        <button class="viewResult"
+                            (click)="viewResult(submission.examDetails.examType, submission.examDetails.examId, submission.idStr)">View
+                            Result</button>
+
+                    </div>
+
+                </div>
+
+            </mat-tab>
+
+            <mat-tab label="Tests">
+
+                <div class="submission"
+                    *ngFor="let submission of sharedService.getUsersSubmissionsForParticularExam('test')">
+
+                    <span class="examTitle">{{submission.examDetails.title}}</span>
+
+                    <div class="examDescriptionContainer">
+
+                        <div class="desDiv">
+                            <span>Date : <span
+                                    class="bold">{{getExamDateStr(submission.submittionDetails.date)}}</span></span>
+                            <span>Time : <span
+                                    class="bold">{{getExamTimeStr(submission.submittionDetails.date)}}</span></span>
+                        </div>
+
+                        <div class="desDiv">
+                            <span>Paper type : <span
+                                    class="bold capitalize">{{submission.examDetails.examType}}</span></span>
+                        </div>
+
+                        <button class="viewResult"
+                            (click)="viewResult(submission.examDetails.examType, submission.examDetails.examId, submission.idStr)">View
+                            Result</button>
+
+                    </div>
+
+                </div>
+
+            </mat-tab>
+
+            <mat-tab label="Practice Papers">
+
+                <div class="submission"
+                    *ngFor="let submission of sharedService.getUsersSubmissionsForParticularExam('practice_paper')">
+
+                    <span class="examTitle">{{submission.examDetails.title}}</span>
+
+                    <div class="examDescriptionContainer">
+
+                        <div class="desDiv">
+                            <span>Date : <span
+                                    class="bold">{{getExamDateStr(submission.submittionDetails.date)}}</span></span>
+                            <span>Time : <span
+                                    class="bold">{{getExamTimeStr(submission.submittionDetails.date)}}</span></span>
+                        </div>
+
+                        <div class="desDiv">
+                            <span>Paper type : <span
+                                    class="bold capitalize">{{submission.examDetails.examType}}</span></span>
+                        </div>
+
+                        <button class="viewResult"
+                            (click)="viewResult(submission.examDetails.examType, submission.examDetails.examId, submission.idStr)">View
+                            Result</button>
+
+                    </div>
+
+                </div>
+
+            </mat-tab>
+
+        </mat-tab-group>
 
     </section>
 

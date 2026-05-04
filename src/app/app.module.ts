@@ -41,6 +41,7 @@ import { TestsComponent } from './tests/tests.component';
 import { PracticePapersComponent } from './practice-papers/practice-papers.component';
 import { PencilLoaderComponent } from './components/pencil-loader/pencil-loader.component';
 import { ExamPageComponent } from './exam-page/exam-page.component';
+import { ViewresultComponent } from './viewresult/viewresult.component';
 
 export function playerFactory() {
   return player;
@@ -72,6 +73,7 @@ export function appInitializer(authenticationService: AuthService): () => Promis
     PracticePapersComponent,
     PencilLoaderComponent,
     ExamPageComponent,
+    ViewresultComponent,
   ],
   imports: [
     BrowserModule,

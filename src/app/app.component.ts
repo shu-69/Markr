@@ -13,19 +13,19 @@ export class AppComponent implements OnInit {
   
   title = 'CrecomStudents';
 
-  subscription: Subscription
+  //subscription: Subscription
 
     constructor(private router: Router, private auth: AuthService){
 
       // Listener for browser refreshed
 
-      this.subscription = router.events.subscribe((event) => {
-        if (event instanceof NavigationStart) {
-          //browserRefresh = !router.navigated;
+      // this.subscription = router.events.subscribe((event) => {
+      //   if (event instanceof NavigationStart) {
+      //     //browserRefresh = !router.navigated;
 
-          console.log("Browser refreshed")
-        }
-      });
+      //     console.log("Browser refreshed")
+      //   }
+      // });
  
 
     }

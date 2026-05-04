@@ -14,6 +14,8 @@ import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from './services/auth.guard';
 import { TestsComponent } from './tests/tests.component';
 import { ExamPageComponent } from './exam-page/exam-page.component';
+import { ViewresultComponent } from './viewresult/viewresult.component';
+import { ExamPageGuard } from './services/exam-page.guard';
 
 const routes: Routes = [
 
@@ -34,7 +36,7 @@ const routes: Routes = [
       {
         path: 'practice-papers', component: PracticePapersComponent
       },
-      
+
     ],
 
   },
@@ -48,7 +50,10 @@ const routes: Routes = [
     path: 'register', component: RegisterComponent
   },
   {
-    path: 'exam', component: ExamPageComponent
+    path: 'exam', component: ExamPageComponent, canDeactivate: [ExamPageGuard] //() => ExamPageComponent.canDeactivate()
+  },
+  {
+    path: 'viewresult', component: ViewresultComponent
   },
   {
     path: 'contact', component: ContactUsComponent

@@ -40,10 +40,12 @@ export interface Test {
     "_id": string,
     "title": string,
     "description": string,
+    'pass_marks': number,
     "time": number,
     "marks": number,
     "is_without_time": boolean,
     "isActive": boolean,
+    "negativeMarking": boolean,
     "details": {
         "added_by": string,
         "added_on": string

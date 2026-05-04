@@ -1,12 +1,14 @@
 .parent {
     width: 100%;
     height: 100%;
+    background: #f2f2f2a6;
+    overflow: auto;
 }
 
 .topSection {
 
     background: rgb(11, 17, 32);
-    height: 40%;
+    height: 320px;
 
     .header {
 
@@ -154,7 +156,7 @@
                     img {
 
                         border-radius: 18px;
-                        
+
                     }
 
                 }
@@ -183,7 +185,225 @@
     }
 
 
+}
+
+.cardsContainer {
+
+    padding: 0 40px;
+    margin-top: -80px;
+
+    .card {
+
+        height: 180px;
+        width: 320px;
+        background: white;
+        border-radius: 16px;
+
+        .header {
+
+            background: transparent;
+            padding: 10px 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            .icon {
+
+                width: 60px;
+                height: 60px;
+                padding: 14px;
+                display: flex;
+                border-radius: 18px;
+                background: #ffffff17;
+
+                img {
+
+                    border-radius: 18px;
+
+                }
+
+            }
+
+            .title {
+
+                font-family: 'Poppins-Medium';
+                font-size: 22px;
+
+            }
+
+        }
+
+    }
+
+}
+
+.contentSection {
+
+    .sectionHeader {
+
+        display: flex;
+        justify-content: space-between;
+
+        .sectionLabel {
+
+            font-family: "Poppins-Regular", sans-serif;
+            font-size: 18px;
+
+        }
+
+        .toogleIcon {
+
+            cursor: pointer;
+            font-size: 28px;
+
+        }
+
+    }
+
+}
+
+.examsTabsSection {
+
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    margin: 40px;
+
+    mat-tab-group {
+
+        background: white;
+        border-top: 1px solid gray;
+        margin-top: 20px;
+        padding-top: 20px;
+
+        mat-tab-header .mat-mdc-tab-label-container .mat-mdc-tab-list .mat-mdc-tab-labels {
+
+            .mdc-tab--active {
+
+                background: #e5e5e5;
+                border-radius: 16px;
+
+                .mdc-tab__content {
+
+                    font-family: 'Poppins-SemiBold' !important;
+
+                }
+
+            }
+
+            .mdc-tab {
+
+                .mdc-tab__content {
+
+                    font-family: 'Poppins-Regular';
+                    font-size: 16px;
+
+                    .mdc-tab__text-label {
+
+                        color: black;
+
+                    }
+
+                }
+
+                .mdc-tab-indicator {
+
+                    display: none;
+
+                }
+
+            }
 
 
+        }
+
+        .mat-mdc-tab-body-wrapper {
+
+            margin-top: 20px;
+
+            .mat-mdc-tab-body {
+
+                .mat-mdc-tab-body-content {
+
+                    max-height: 800px;
+                    gap: 20px;
+                    display: grid;
+
+                }
+
+            }
+
+        }
+
+    }
+
+    .submission {
+
+        background: #eeeeee;
+        padding: 20px;
+        border-radius: 20px;
+        display: flex;
+        flex-flow: column;
+        gap: 10px;
+
+        .examTitle {
+
+            font-family: 'Poppins-SemiBold';
+            font-size: 18px;
+
+        }
+
+        .examDescriptionContainer {
+
+            .desDiv {
+
+                display: flex;
+                gap: 20px;
+                font-family: 'Poppins-Regular', sans-serif;
+                font-size: 15px;
+
+                .bold {
+
+                    font-family: 'Poppins-Medium', sans-serif;
+
+                }
+
+                .capitalize {
+
+                    text-transform: capitalize;
+
+                }
+
+
+            }
+
+            .viewResult {
+
+                float: right;
+                padding: 10px 15px;
+                border-radius: 10px;
+                font-family: 'Poppins-Medium';
+                cursor: pointer;
+                margin-top: -30px;
+                background: white;
+                border: none;
+
+            }
+
+            .viewResult:hover {
+
+                box-shadow: 0 0 12px 6px white;
+
+            }
+
+        }
+
+    }
+
+}
+
+.inactive {
+
+    display: none !important;
 
 }

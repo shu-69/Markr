@@ -28,7 +28,7 @@
                 style="display: flex; align-items: center; gap: 10px; font-family: 'Poppins-Regular', sans-serif; font-size: 14px;">
                 <label>Show Completed</label>
                 <label class="switch">
-                    <input type="checkbox" checked>
+                    <input type="checkbox" checked [(ngModel)]="showCompleted" (click)="showCompleted ? '' : filterIncompletedTests()">
                     <span class="slider"></span>
                 </label>
             </span>
@@ -38,8 +38,8 @@
 
     </div>
 
+    <div class="testsContainer" *ngIf="!isSearching && showCompleted">
 
-    <div class="testsContainer" *ngIf="!isSearching">
         <div class="testDetailsContainer" *ngFor="let test of tests" (click)="openTestDetails(test)">
 
             <div class="containerHeader">
@@ -48,7 +48,7 @@
                     {{test.title}}
                 </span>
 
-                <span class="completed">
+                <span *ngIf="checkIfTestCompleted(test._id)" class="completed">
                     Completed
                 </span>
 
@@ -73,7 +73,6 @@
                         <label>{{test.marks}}&nbsp;marks</label>
                     </div>
 
-
                 </div>
 
                 <span class="next">
@@ -83,9 +82,11 @@
             </div>
 
         </div>
+
     </div>
 
     <div class="testsContainer" *ngIf="isSearching">
+
         <div class="testDetailsContainer" *ngFor="let test of searchResult" (click)="openTestDetails(test)">
 
             <div class="containerHeader">
@@ -129,9 +130,59 @@
             </div>
 
         </div>
+
         <div style="text-align: center; width: 100%; font-family: 'Poppins-Regular';" *ngIf="searchResult.length == 0">
             0 Search Result
         </div>
+
+    </div>
+
+    <div class="testsContainer" *ngIf="!isSearching && !showCompleted">
+
+        <div class="testDetailsContainer" *ngFor="let test of incomletedTests" (click)="openTestDetails(test)">
+
+            <div class="containerHeader">
+
+                <span class="title">
+                    {{test.title}}
+                </span>
+
+                <span *ngIf="checkIfTestCompleted(test._id)" class="completed">
+                    Completed
+                </span>
+
+            </div>
+
+            <div class="content">
+
+                <div class="labels">
+
+                    <div>
+                        <i class="fa fa-list-ul"></i>
+                        <label>{{test.questions.length}}&nbsp;questions</label>
+                    </div>
+
+                    <div>
+                        <i class="fa fa-clock-o"></i>
+                        <label>{{getTestTime(test.is_without_time, test.time)}}</label>
+                    </div>
+
+                    <div>
+                        <i class="fa fa-graduation-cap"></i>
+                        <label>{{test.marks}}&nbsp;marks</label>
+                    </div>
+
+
+                </div>
+
+                <span class="next">
+                    <img src="../../assets/iconsaxicons/bulk/arrow-square-right.svg">
+                </span>
+
+            </div>
+
+        </div>
+
     </div>
 
 </section>

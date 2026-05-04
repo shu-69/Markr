@@ -55,7 +55,7 @@
 
     </section>
 
-    <section class="examParentContainer" *ngIf="isExaminationStarted">
+    <section class="examParentContainer" *ngIf="isExaminationRunning">
 
         <div class="header">
             <div class="start">
@@ -139,7 +139,7 @@
                                     *ngFor="let option of question.answer_content.options; let j = index;">
 
                                     <input type="radio" [id]="'option' + i + j" [name]="'question' + i + 'option'"
-                                        [value]="j + 1" (change)="setUserAnswer(question, $event)">
+                                        [value]="j" (change)="setUserAnswer(question, $event)">
 
                                     <span>{{option.value}}</span>
 
@@ -281,6 +281,14 @@
 
     </section>
 
+    <section class="timeOutContainer" *ngIf="timeOut && !isSubmitting && !isSubmitted && !isSubmitFailed">
+
+        <span class="labelText">TIMEOUT</span>
+
+        <span class="messageText">{{timeOutText}}</span>
+
+    </section>
+
     <section class="submitExamContainer" *ngIf="isSubmitting || isSubmitted || isSubmitFailed">
 
         <div class="submittingContainer" *ngIf="isSubmitting">
@@ -333,7 +341,7 @@
             
                 <div class="options">
 
-                    <button type="button" class="viewResults">
+                    <button type="button" class="viewResults" (click)="viewResult()">
                         <strong>VIEW RESULT</strong>
                         <div id="container-stars">
                         <div id="stars"></div>

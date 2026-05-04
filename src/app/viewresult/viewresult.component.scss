@@ -1,0 +1,404 @@
+.parent {
+
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-flow: column;
+
+    .header {
+
+        height: fit-content;
+        background: rgb(96 157 199);
+        display: flex;
+        align-items: center;
+        padding: 20px 40px;
+        border-radius: 30px;
+        margin: 20px;
+        margin-bottom: 0;
+        display: flex;
+        gap: 40px;
+
+        .title {
+            font-family: 'Bungee', cursive;
+            font-size: 70px;
+            letter-spacing: 10px;
+            color: white;
+            max-height: 140px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+        }
+
+        .resultDetails {
+
+            width: 100%;
+            height: 100%;
+
+            table {
+
+                width: 100%;
+                height: 100%;
+                border: 1px solid white;
+                border-radius: 26px;
+
+                tbody {
+
+                    height: calc(100% + 5px);
+                    margin: -2px -2px -2px -2px;
+                    display: block;
+
+                    tr {
+
+                        width: 100%;
+                        border-bottom: 1px solid white;
+                        display: flex;
+                        padding: 0 15px;
+                        height: calc(100% / 3);
+
+                        td {
+
+                            //width: calc(100% / 3);
+                            display: flex;
+                            align-items: center;
+                            padding: 5px;
+                            color: white;
+                            font-family: 'Poppins-Regular';
+                            font-size: 14px;
+                            border-right: 1px solid white;
+                            //white-space: nowrap;
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+
+                            .bold {
+                                font-family: 'Poppins-Medium';
+                            }
+
+                        }
+
+                    }
+
+                    tr.last {
+                        border-bottom: none;
+                    }
+
+                    tr td:last-child {
+
+                        border-right: none;
+
+                    }
+
+                }
+
+            }
+
+            table td {
+
+                width: calc(100% / 3);
+
+            }
+
+        }
+
+    }
+
+    .header.inactive {
+
+        display: none;
+
+    }
+
+    .body {
+
+        //height: calc(100% - 180px);
+        height: 100%;
+        overflow: hidden;
+        margin-top: 20px;
+
+        .container1 {
+
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, 70% 30%);
+
+            .seg1 {
+
+                overflow: hidden;
+
+                .questionsContainer {
+
+                    padding: 20px;
+                    padding-top: 0;
+                    display: flex;
+                    flex-flow: column;
+                    gap: 20px;
+                    overflow: auto;
+                    height: 100%;
+
+                    .question {
+
+                        border: 4px solid lightgray;
+                        border-radius: 20px;
+                        padding: 15px 20px;
+                        display: flex;
+                        flex-flow: column;
+                        gap: 15px;
+
+                        .body {
+
+                            display: flex;
+                            gap: 15px;
+                            font-family: 'Poppins-Regular', sans-serif;
+                            font-size: 18px;
+
+                        }
+
+                        .answers {
+
+                            padding-left: 30px;
+
+                            .options {
+
+                                display: flex;
+                                gap: 15px;
+
+                                .option {
+
+                                    padding: 5px 10px;
+                                    background: #d9e5ff;
+                                    border-radius: 10px;
+                                    font-family: "Poppins-Regular", sans-serif;
+                                    font-size: 14px;
+                                    display: flex;
+                                    align-items: center;
+                                }
+
+                            }
+
+                        }
+
+                        .details {
+
+                            display: flex;
+                            gap: 15px;
+                            padding-left: 30px;
+                            justify-content: space-between;
+
+                            .container {
+
+                                display: flex;
+                                gap: 15px;
+
+                                .notAttempted {
+
+                                    width: fit-content;
+                                    background: yellow;
+                                    padding: 5px 10px;
+                                    border-radius: 8px;
+                                    font-family: 'Poppins-Medium';
+                                    font-size: 13px;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 6px;
+
+                                    i {
+
+                                        font-size: 16px;
+
+                                    }
+
+                                }
+
+                                .correct {
+
+                                    width: fit-content;
+                                    background: #60ff60;
+                                    padding: 5px 10px;
+                                    border-radius: 8px;
+                                    font-family: 'Poppins-Medium';
+                                    font-size: 13px;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 6px;
+
+                                    i {
+
+                                        font-size: 16px;
+
+                                    }
+
+                                }
+
+                                .incorrect {
+
+                                    width: fit-content;
+                                    background: #ff6565;
+                                    padding: 5px 10px;
+                                    border-radius: 8px;
+                                    font-family: 'Poppins-Medium';
+                                    font-size: 13px;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 6px;
+
+                                    i {
+
+                                        font-size: 16px;
+
+                                    }
+
+                                }
+
+                                .correctAnswer {
+
+                                    width: fit-content;
+                                    background: #a0d8ff;
+                                    padding: 5px 10px;
+                                    border-radius: 8px;
+                                    font-family: 'Poppins-Regular';
+                                    font-size: 13px;
+
+                                }
+
+                                .userAnswer {
+
+                                    width: fit-content;
+                                    padding: 5px 10px;
+                                    border-radius: 8px;
+                                    font-family: 'Poppins-Regular';
+                                    font-size: 13px;
+
+                                }
+
+                                .marksObtained {
+
+                                    background: #ead8fe;
+                                    height: 30px;
+                                    display: flex;
+                                    align-items: center;
+                                    padding: 5px 10px;
+                                    border-radius: 8px;
+                                    font-family: 'Poppins-Regular', sans-serif;
+                                    font-size: 14px;
+
+                                }
+
+                                .marksObtained.positive {
+                                    background: #60ff60;
+                                }
+
+                                .marksObtained.negative {
+                                    background: #ff6565;
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                    .question:hover {
+
+                        box-shadow: 4px 5px 0px 0px black;
+
+                    }
+
+                    .question:focus {
+
+                        box-shadow: 4px 5px 0px 0px black;
+
+                    }
+
+                }
+
+            }
+
+            .seg2 {
+
+                display: flex;
+                flex-flow: column;
+                justify-content: space-between;
+                gap: 20px;
+                padding-left: 20px;
+                padding-right: 20px;
+                padding-bottom: 20px;
+
+                .answerShortcuts {
+
+                    border: 4px solid lightgray;
+                    border-radius: 20px;
+                    padding: 20px;
+                    display: flex;
+                    flex-flow: wrap;
+                    gap: 20px;
+                    max-height: -webkit-fill-available;
+
+                    .shortcut {
+
+                        width: 30px;
+                        height: 30px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 6px;
+                        font-family: 'Poppins-Regular', sans-serif;
+                        cursor: pointer;
+
+                    }
+
+                    .shortcut.correct {
+
+                        background: #60ff60;
+
+                    }
+
+                    .shortcut.incorrect {
+
+                        background: #ff6565;
+
+                    }
+
+                    .shortcut.notattempted {
+
+                        background: yellow;
+
+                    }
+
+                }
+
+                .footerContainer {
+
+                    border-radius: 18px;
+                    background: #bbb0f8bd;
+                    padding: 15px 20px;
+                    display: flex;
+                    gap: 15px;
+                    overflow: auto;
+
+                    .option {
+
+                        background: white;
+                        width: fit-content;
+                        height: fit-content;
+                        display: flex;
+                        padding: 7px;
+                        border-radius: 12px;
+                        cursor: pointer;
+
+                    }
+
+                    .text {
+
+                        padding: 7px 12px;
+                        font-family: 'Poppins-Regular', sans-serif;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+}

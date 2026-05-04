@@ -1,16 +1,16 @@
-import { AfterViewInit, Component, ElementRef, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { AfterViewInit, Component, ElementRef, HostListener, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute, ActivatedRouteSnapshot, CanDeactivate, NavigationExtras, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
 import { Params } from '../Params';
-import { Subscription, map, share, timer } from 'rxjs';
+import { Observable, Subscription, interval, map, share, timer } from 'rxjs';
 import { Question, Test } from '../TestsParams';
 import { UserDetails } from '../UserDetails';
 import { MatTabGroup } from '@angular/material/tabs';
 import { AnimationItem } from 'lottie-web';
 import { AnimationOptions } from 'ngx-lottie';
-
+import { SharedServiceService } from '../services/shared-service.service';
 export interface ImageDialogData {
 
   'src': string
@@ -23,16 +23,17 @@ export interface ImageDialogData {
   styleUrls: ['./exam-page.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ExamPageComponent implements AfterViewInit {
+export class ExamPageComponent implements AfterViewInit, CanDeactivate<ExamPageComponent> {
 
   @ViewChild('timerProgressBar', { static: false }) timerProgressBar!: ElementRef;
 
   isLoading: boolean = false;
   toShowInstructions = false;
-  isExaminationStarted = false;
+  isExaminationRunning = false;
   isSubmitting = false;
   isSubmitted = false;
   isSubmitFailed = false;
+  timeOut = false;
   examTimerSubscription: any;
   selectedQuestionIndex = 0;
 
@@ -40,6 +41,7 @@ export class ExamPageComponent implements AfterViewInit {
   timesubscription!: Subscription;
   examTimer = '';
   timePassed = '';
+  timeOutText = '';
 
   hourGlassAnimOptions: AnimationOptions = {
     path: '/assets/anims/sand-clock-timer.json',
@@ -50,6 +52,12 @@ export class ExamPageComponent implements AfterViewInit {
 
     'font-size': '18px',
     'font-family': 'Poppins-Regular',
+
+  }
+
+  submissionDetails = {
+
+    'id': ''
 
   }
 
@@ -75,12 +83,38 @@ export class ExamPageComponent implements AfterViewInit {
   paperDetails: Test | undefined = undefined
   answers: any[] = [];
 
-  constructor(private route: ActivatedRoute, private dialog: MatDialog, private http: HttpClient, private router: Router,
-    private location: Location) {
+  // @HostListener('window:beforeunload', ['$event'])
+  // canLeavePage($event: any){
+  //   if (this.isExaminationRunning && confirm('Exam is in progress. Leaving this page will result to loose your progress.')) {
+  //     $event.preventDefault();
+  //   }
+  // }
 
-
+  @HostListener('window:beforeunload', ['$event'])
+  showMessage($event: any) {
+    if (this.isExaminationRunning) {
+      $event.returnValue = 'Exam is in progress. Refreshing this page will result to loose your progress.';
+    }
 
   }
+
+  constructor(private route: ActivatedRoute, private dialog: MatDialog, private http: HttpClient, private router: Router,
+    private location: Location, private sharedService: SharedServiceService) {
+
+    this.sharedService.isExamRunning = this.isExaminationRunning;
+
+  }
+
+  canDeactivate(component: ExamPageComponent, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+
+    //return (this.isExaminationRunning && confirm('Exam is in progress. Leaving this page will result to loose your progress.'));
+
+    console.log('checking')
+
+    return !this.isExaminationRunning;
+
+  }
+
   ngAfterViewInit(): void {
 
 
@@ -102,13 +136,6 @@ export class ExamPageComponent implements AfterViewInit {
       // this.userDetails.email = data.user_email;
 
       this.authenticate(data.user_email, data.user_password)
-      this.loadExam(data.examType, data.id)   // TODO ::::
-      this.getInstructions(data.examType);
-
-
-      setTimeout(() => {
-        this.startExam();    // TODOD :::: REMOVE
-      }, 1000);
 
     });
 
@@ -119,7 +146,7 @@ export class ExamPageComponent implements AfterViewInit {
     if (!this.checkError())
       return
 
-    this.isExaminationStarted = true;
+    this.isExaminationRunning = true;
     this.toShowInstructions = false;
     if (!this.paperDetails!.is_without_time)
       this.startExamTimer(this.paperDetails!.time);
@@ -147,7 +174,7 @@ export class ExamPageComponent implements AfterViewInit {
 
   }
 
-  loadExam(examType: 'test' | 'practice_paper', examId: string) {
+  loadExam(examType: 'test' | 'practice_paper' | string, examId: string) {
 
     this.isLoading = true;
 
@@ -169,8 +196,6 @@ export class ExamPageComponent implements AfterViewInit {
 
         this.isLoading = false;
 
-        console.log(result)
-
         this.paperDetails = result.result
 
         this.answers.fill(undefined, 0, this.paperDetails!.questions.length)
@@ -179,7 +204,7 @@ export class ExamPageComponent implements AfterViewInit {
 
         this.isLoading = false;
 
-        console.log(error);
+        console.error(error);
         alert("Can't load tests, please try again after sometime.");
 
         this.location.back();
@@ -191,7 +216,7 @@ export class ExamPageComponent implements AfterViewInit {
 
   async authenticate(username: string, password: string) {
 
-    console.log(username, password)
+    this.isLoading = true;
 
     const headers = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
 
@@ -205,6 +230,8 @@ export class ExamPageComponent implements AfterViewInit {
     await this.http.get(Params.SERVICE_BASE_URL + Params.ACCOUNT_SERVICE_URL_SUFFIXS.LOGIN, options).subscribe({
       next: (result: any) => {
 
+        this.isLoading = false;
+
         if (result.success) {
 
           let response = result.result;
@@ -213,11 +240,72 @@ export class ExamPageComponent implements AfterViewInit {
           this.userDetails.username = response.username;
           this.userDetails.email = response.email;
 
+          this.isLoading = true;
+
+          if(this.examDetails.examType == 'test'){
+
+            this.http.get(Params.SERVICE_BASE_URL + Params.EXAM_SERVICE_URL_SUFFIXS.CHECK_SUBMISSION,
+              { headers: headers, params: { 'email': response.email, 'examId': this.examDetails.id } }).subscribe({
+  
+                next: (value: any) => {
+  
+                  this.isLoading = false;
+  
+                  if (value.success) {
+  
+                    if (value.result) {
+  
+                      alert("You have already attempted this exam, so you cannot attempt it again.")
+                      this.location.back()
+  
+                    } else {
+  
+                      this.getInstructions(this.examDetails.examType);
+                      this.loadExam(this.examDetails.examType, this.examDetails.id)   // TODO ::::
+  
+                    }
+  
+                  } else {
+  
+                    alert('An unknown error occured');
+                    this.location.back();
+  
+                  }
+  
+                }, error: (error) => {
+  
+                  this.isLoading = false;
+  
+                  console.error(error)
+                  alert('An unknown error occured');
+                  this.location.back();
+  
+                },
+  
+              })
+
+          }else{
+
+            this.getInstructions(this.examDetails.examType);
+            this.loadExam(this.examDetails.examType, this.examDetails.id)   // TODO ::::
+
+          }
+
+        } else {
+
+          this.isLoading = false;
+
+          alert("Authentication failed!")
+          this.location.back();
+
         }
 
       }, error: (error: any) => {
 
-        alert("Authentication failed!")
+        this.isLoading = false;
+
+        console.error(error)
+        alert("Authentication failed, due to an error!")
         this.location.back();
 
       }
@@ -279,7 +367,7 @@ export class ExamPageComponent implements AfterViewInit {
 
         this.instructions = "Can't load Instructions";
 
-        console.log(error);
+        console.error(error);
 
       }
     });
@@ -297,13 +385,14 @@ export class ExamPageComponent implements AfterViewInit {
 
   submitExam() {
 
-    this.isExaminationStarted = false;
+    this.isExaminationRunning = false;
     this.isSubmitting = true;
     this.isSubmitFailed = false;
+    this.sharedService.isExamRunning = this.isExaminationRunning;
 
     let options = {
 
-      headers : { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+      headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
       params: {
 
         "examType": this.examDetails.examType,
@@ -312,7 +401,7 @@ export class ExamPageComponent implements AfterViewInit {
       }
 
     }
- 
+
     let body = {
 
       "questions": this.getQuestionsWithAnswers(),
@@ -324,20 +413,37 @@ export class ExamPageComponent implements AfterViewInit {
       "submittionDetails": {
         "date": new Date(),
         "timeTaken": this.timePassed,
+      },
+      "examDetails": {
+        "examType": this.examDetails.examType,
+        "examId": this.examDetails.id,
+        "title": this.paperDetails?.title,
+        "totalMarks": this.paperDetails?.marks,
+        "passMarks": this.paperDetails?.pass_marks,
+        "negativeMarking": this.paperDetails?.negativeMarking
       }
 
     }
 
     console.log('sending data', body)
 
-    return
-
     this.http.post(Params.SERVICE_BASE_URL + Params.EXAM_SERVICE_URL_SUFFIXS.SUBMIT_EXAM, body, options).subscribe({
 
-      next: (data) => {
+      next: (data: any) => {
 
-        this.isSubmitting = false;
-        this.isSubmitted = true;
+        if (data.success) {
+
+          this.isSubmitting = false;
+          this.isSubmitted = true;
+
+          this.submissionDetails.id = data.submissionId;
+
+        } else {
+
+          this.isSubmitting = false;
+          this.isSubmitFailed = true;
+
+        }
 
         console.log(data)
 
@@ -384,7 +490,17 @@ export class ExamPageComponent implements AfterViewInit {
 
   viewResult() {
 
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
 
+        'examType': this.examDetails.examType,
+        'examId': this.examDetails.id,
+        'submissionId': this.submissionDetails.id
+
+      }
+    };
+
+    this.router.navigate([Params.PageNames.viewresult], navigationExtras);
 
   }
 
@@ -420,7 +536,7 @@ export class ExamPageComponent implements AfterViewInit {
     var s = Math.floor(seconds % 3600 % 60);
 
     var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours") : "0 hour, ";
-    var mDisplay = m > 0 ? m + (m == 1 ? ", minute, " : " minutes ") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " minute" : " minutes") : "";
     //var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
 
     return hDisplay + mDisplay;
@@ -524,11 +640,17 @@ export class ExamPageComponent implements AfterViewInit {
 
   }
 
-  startExamTimer(examTime: number) {
-    const source = timer(1000, 2000);
+  startExamTimer2(examTime: number) {         // Not using
+
+    const source = timer(0, 1000);
+
+    const timeStartedAt = new Date().getMilliseconds();
+
     this.examTimerSubscription = source.subscribe(val => {
 
-      this.timePassed = this.msToTime(val);
+      console.log('val', val, new Date().getMilliseconds())
+
+      this.timePassed = this.msToTime(val * 1000);
       let currentMs = (examTime - val) * 1000;
       this.examTimer = this.msToTime(currentMs);
 
@@ -542,6 +664,46 @@ export class ExamPageComponent implements AfterViewInit {
       }
 
     });
+  }
+
+  startExamTimer(examTime: number) {
+
+    const source = interval(1000);
+    const startTime = new Date().getTime();
+    const endTime = startTime + (examTime * 1000);
+
+    this.examTimerSubscription = source.subscribe(() => {
+      const currentTime = new Date().getTime();
+      const remainingTime = endTime - currentTime;
+
+      if (remainingTime <= 0) {
+        this.timeOut = true;
+        this.isExaminationRunning = false;
+        this.examTimerSubscription.unsubscribe();
+        console.log("Time Up!");
+
+        // Showing timeout animation >>
+
+        let progress = 10;
+        this.timeOutText = `Time up! Please wait submitting your progress in ${progress} seconds.`
+        const intervalId = setInterval(() => {
+          progress--;
+          this.timeOutText = `Time up! Please wait submitting your progress in ${progress} seconds.`
+        }, 1000);
+
+        setTimeout(() => {
+          clearInterval(intervalId);
+          this.submitExam();
+        }, 10000);
+
+        //return;
+      }
+
+      this.timePassed = this.msToTime((examTime * 1000) - remainingTime);
+      this.examTimer = this.msToTime(remainingTime);
+      this.setTimerProgress(((examTime * 1000) - remainingTime) * 100 / (examTime * 1000));
+    });
+
   }
 
   msToTime(timeInMiliseconds: number) {
@@ -566,6 +728,15 @@ export class ExamPageComponent implements AfterViewInit {
   setTimerProgress(value: number) {
 
     this.timerProgressBar.nativeElement.style.backgroundSize = value + "%"
+
+  }
+
+  getObjectIDAsString(objectId: any) {
+
+
+
+    //const objectId = new ObjectId(); // create a new ObjectID
+    return objectId.toString(); // convert to string
 
   }
 

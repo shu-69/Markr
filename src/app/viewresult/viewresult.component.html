@@ -1,0 +1,212 @@
+<section class="parent">
+
+    <div class="header" #header>
+
+        <span class="title">Result</span>
+
+        <div class="resultDetails">
+
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Candidate Name:&nbsp;&nbsp;<span class="bold">{{submission?.submittedBy.name}}</span></td>
+                        <td>Candidate Email:&nbsp;&nbsp;<span class="bold">{{submission?.submittedBy.email}}</span></td>
+                        <td>Date of Examination:&nbsp;&nbsp;<span class="bold">{{getExamDate()}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Paper title:&nbsp;&nbsp;<span class="bold">{{submission?.examDetails.title}}</span></td>
+                        <td>Paper type:&nbsp;&nbsp;<span class="bold">{{submission?.examDetails.examType}}</span></td>
+                        <td>Total Marks:&nbsp;&nbsp;<span class="bold">{{submission?.examDetails.totalMarks}}</span>
+                        </td>
+                    </tr>
+                    <tr class="last">
+                        <td>Pass Marks:&nbsp;&nbsp;<span class="bold">{{submission?.examDetails.passMarks}}</span></td>
+                        <td>Marks Obtained:&nbsp;&nbsp;<span class="bold">{{getMarksObtained()}}</span></td>
+                        <td>Result:&nbsp;&nbsp;<span class="bold" [ngStyle]="{'background': resultColor}" style="padding: 3px 10px; border-radius: 10px;">{{getResult()}}</span></td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <div class="body">
+
+        <section class="container1">
+
+            <section class="seg1" id="seg1">
+
+                <div class="questionsContainer">
+
+                    <div class="question" [id]="'question' + i" *ngFor="let question of submission?.questions; let i = index">
+
+                        <div class="body">
+                            <span>{{i+1}} .</span>
+                            <span>{{question.body}}</span>
+                        </div>
+
+                        <container-element class="answers" [ngSwitch]="question.answer_type">
+
+                            <div class="options" *ngSwitchCase="'options'">
+
+                                <div class="option" [ngStyle]="{'border' : question.user_ans == i ? '3px solid black' : 'none',
+                                    'background' : question.answer_content.correct_answer == i ? '#60ff60' : ''}"
+                                    *ngFor="let option of question.answer_content.options; let i = index">
+                                    <span>{{getAlphabet(i)}}.&nbsp;&nbsp;</span>
+                                    <span>{{option.value}}</span>
+                                </div>
+
+                            </div>
+
+                            <div class="options" *ngSwitchCase="'boolean'">
+
+                                <div class="option"
+                                    [ngStyle]="{'border' : question.user_ans && question.user_ans.toString().toLowerCase() == 'true' ? '3px solid black' : 'none',
+                                'background' : question.answer_content.correct_answer.toString() == 'true' ? '#60ff60' : ''}">
+                                    <span>{{getAlphabet(0)}}.&nbsp;&nbsp;</span>
+                                    <span>True</span>
+                                </div>
+
+                                <div class="option"
+                                    [ngStyle]="{'border' : question.user_ans && question.user_ans.toString().toLowerCase() == 'false' ? '3px solid black' : 'none',
+                                'background' : question.answer_content.correct_answer.toString() == 'false' ? '#60ff60' : ''}">
+                                    <span>{{getAlphabet(1)}}.&nbsp;&nbsp;</span>
+                                    <span>False</span>
+                                </div>
+
+                            </div>
+
+                            <div class="options" *ngSwitchCase="'oneword'">
+
+                                <div class="option" [ngStyle]="{'border' : question.user_ans && question.user_ans.toString().toLowerCase() == question.answer_content.correct_answer.toString().toLowerCase() ? '3px solid black' : 'none',
+                                'background' : '#60ff60'}">
+                                    <span>{{question.answer_content.correct_answer}}</span>
+                                </div>
+
+                            </div>
+
+                        </container-element>
+
+                        <div class="details">
+
+                            <div class="container">
+
+                                <div class="correctAnswer"
+                                    *ngIf="!question.user_ans || question.user_ans.toString() != question.answer_content.correct_answer.toString()">
+                                    <span>Correct answer is </span>
+                                    <span *ngIf="question.answer_type == 'options'">{{'(' +
+                                        getAlphabet(question.answer_content.correct_answer) + ') ' +
+                                        question.answer_content.options[question.answer_content.correct_answer].value}}</span>
+                                    <span
+                                        *ngIf="question.answer_type != 'options'">{{question.answer_content.correct_answer}}</span>
+                                </div>
+
+                                <div class="userAnswer" *ngIf="question.user_ans"
+                                    [ngStyle]="{'background' : question.user_ans.toString() == question.answer_content.correct_answer.toString() ? '#a0ffa0' : '#ff6565'}">
+                                    <span>Your answer is </span>
+                                    <span *ngIf="question.answer_type == 'options'">{{'(' +
+                                        getAlphabet(question.user_ans) + ') ' +
+                                        question.answer_content.options[question.user_ans].value}}</span>
+                                    <span *ngIf="question.answer_type != 'options'">{{question.user_ans}}</span>
+                                </div>
+
+                            </div>
+
+                            <div class="container">
+
+                                <div class="notAttempted" *ngIf="!question.user_ans">
+                                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                    <span>Not attempted</span>
+                                </div>
+
+                                <div style="display: flex; align-items: center; gap: 15px;"
+                                    *ngIf="question.user_ans && question.user_ans.toString() == question.answer_content.correct_answer.toString()">
+
+                                    <span class="marksObtained positive">+{{question.marks.positive}}</span>
+
+                                    <div class="correct">
+                                        <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                        <span>Correct</span>
+                                    </div>
+
+                                </div>
+
+                                <div style="display: flex; align-items: center; gap: 15px;"
+                                    *ngIf="question.user_ans && question.user_ans.toString() != question.answer_content.correct_answer.toString()">
+                                    
+                                    <span class="marksObtained negative" *ngIf="submission?.examDetails.negativeMarking && question.marks.negative">{{question.marks.negative}}</span>
+
+                                    <div class="incorrect">
+                                        <i class="fa fa-times-circle" aria-hidden="true"></i>
+                                        <span>In Correct</span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="seg2">
+
+                <div class="answerShortcuts">
+
+                    <div class="shortcut" [id]="'question' + i" *ngFor="let question of submission?.questions; let i = index" [ngClass]="{'correct' : question.user_ans && question.user_ans.toString().toLowerCase() == question.answer_content.correct_answer.toString().toLowerCase(),
+                    'incorrect' : question.user_ans && question.user_ans.toString().toLowerCase() != question.answer_content.correct_answer.toString().toLowerCase(),
+                    'notattempted' : !question.user_ans}" (click)="scrollToDiv('question' + i)">
+
+                        <span>{{i + 1}}</span>
+
+                    </div>
+
+                </div>
+
+                <div class="footerContainer">
+
+                    <div class="option" (click)="printResult()">
+
+                        <mat-icon>print</mat-icon>
+
+                    </div>
+
+                    <div class="option" (click)="share()">
+
+                        <mat-icon>share</mat-icon>
+
+                    </div>
+
+                    <div class="option" (click)="showInfo()">
+
+                        <mat-icon>info</mat-icon>
+
+                    </div>
+
+                    <div class="option" (click)="goHome()">
+
+                        <mat-icon>home</mat-icon>
+
+                    </div>
+
+                    <div class="option text" (click)="toogleHeader(header)">
+
+                        <span>{{header.classList.contains('inactive') ? 'Expand header' : 'Collapse header'}}</span>
+                        
+                    </div>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </div>
+
+</section>

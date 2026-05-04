@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { NavigationService } from '../services/navigation.service';
 import { Test } from '../TestsParams';
 import { Params } from '../Params';
-import { NavController } from '@ionic/angular';
 import { NavigationExtras, Router } from '@angular/router';
 import { UserDetails } from '../UserDetails';
 
@@ -23,7 +22,11 @@ export class TestsComponent {
 
   isSearching: boolean = false;
 
+  showCompleted = true
+
   tests: Test[] = []
+
+  incomletedTests: Test[] = []
 
   searchResult: Test[] = []
 
@@ -51,6 +54,8 @@ export class TestsComponent {
       next: (result: any) => {
 
         this.tests = result;
+
+        this.filterIncompletedTests();
 
         this.isLoading = false;
 
@@ -81,6 +86,30 @@ export class TestsComponent {
 
   }
 
+  filterIncompletedTests() {
+
+    this.incomletedTests = this.tests.filter((element: any) => this.checkIfTestCompleted(element._id) == false)
+    
+  }
+
+  checkIfTestCompleted(testId: string): Boolean {
+
+    let tests = UserDetails.Submission?.filter((element: any) => (element.examDetails.examType == 'test'));
+
+    for (let i = 0; i < tests?.length; i++) {
+
+      if (tests[i].examDetails.examId == testId) {
+
+        return true;
+
+      }
+
+    }
+
+    return false;
+
+  }
+
   getTestTime(withoutTime: Boolean, seconds: number): string {
 
     if (withoutTime || seconds == 0)
@@ -99,7 +128,7 @@ export class TestsComponent {
     var s = Math.floor(seconds % 3600 % 60);
 
     var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours") : "0 hour, ";
-    var mDisplay = m > 0 ? m + (m == 1 ? ", minute, " : " minutes ") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " minute" : " minutes") : "";
     //var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
 
     return hDisplay + mDisplay;
@@ -125,13 +154,13 @@ export class TestsComponent {
 
         let navigationExtras: NavigationExtras = {
           queryParams: {
-            
-              "examType": 'test',
-              "id": test._id, 
-              
-              'user_email': UserDetails.Email,
-              'user_password': UserDetails.Password,
-              
+
+            "examType": 'test',
+            "id": test._id,
+
+            'user_email': UserDetails.Email,
+            'user_password': UserDetails.Password,
+
           }
         };
 
@@ -206,13 +235,11 @@ export class TestDetailsDialog {
     var s = Math.floor(seconds % 3600 % 60);
 
     var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours") : "0 hour, ";
-    var mDisplay = m > 0 ? m + (m == 1 ? ", minute, " : " minutes ") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " minute" : " minutes") : "";
     //var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
 
     return hDisplay + mDisplay;
 
   }
-
-
 
 }

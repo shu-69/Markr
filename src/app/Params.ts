@@ -2,7 +2,7 @@ export class Params{
 
     public static MAX_PROFILE_IMAGE_SIZE_IN_KB = 120;
 
-    public static SERVICE_BASE_URL = "http://localhost:8081";
+    public static SERVICE_BASE_URL = "http://192.168.125.64:8081";
 
     public static ACCOUNT_SERVICE_URL_SUFFIXS = {
         "CHECK_EMAIL_EXISTS": "/accounts/checkEmailExists",
@@ -15,12 +15,19 @@ export class Params{
         "CREATE_PRACTICE_PAPER": "/exams/createPracticePaper",
         "GET_TESTS": "/exams/getTests",
         "GET_ACTIVE_TESTS": "/exams/getActiveTests",
+        "GET_ACTIVE_PRACTICE_PAPERS": "/exams/getActivePracticePapers",
         "TOGGLE_EXAM_STATUS": "/exams/toggleExamStatus",
         "GET_EXAM": "/exams/getExam",
         "UPDATE_EXAM": "/exams/updateExam",
         "DELETE_EXAM": "/exams/deleteExam",
         "GET_EXAM_INSTRUCTIONS": "/exams/getExamInstructions",
-        "SUBMIT_EXAM": "/exams/submitExam"
+        "SUBMIT_EXAM": "/exams/submitExam",
+        "GET_SUBMISSION": "/exams/getSubmission",
+        "CHECK_SUBMISSION": "/exams/checkSubmissionExists"
+    }
+
+    public static USER_SERVICE_URL_SUFFIXS = {
+        "GET_SUBMISSIONS" : "/users/getSubmissions"
     }
 
     public static PageTitles = {
@@ -34,7 +41,8 @@ export class Params{
         "courses": "courses",
         "tests": "tests",
         "practice_papers": "practice-papers",
-        "exam": "exam"
+        "exam": "exam",
+        "viewresult": "viewresult"
     }
 
 }

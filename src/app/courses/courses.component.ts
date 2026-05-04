@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AnimationOptions } from 'ngx-lottie';
 
 @Component({
   selector: 'app-courses',
@@ -6,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./courses.component.scss']
 })
 export class CoursesComponent {
+
+  comingSoonOptions: AnimationOptions = {
+    path: '/assets/anims/coming-soon.json',
+    loop: true
+  };
 
 }

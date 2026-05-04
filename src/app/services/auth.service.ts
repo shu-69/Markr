@@ -14,7 +14,7 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   async init() {
-    
+
   }
 
   async login(username: string, password: string): Promise<Observable<any>> { // : Observable<any>
@@ -38,7 +38,7 @@ export class AuthService {
 
         if (result.success) {
 
-          this.isAuthenticate = true 
+          this.isAuthenticate = true
 
           const responseResult = result.result;
 
@@ -46,12 +46,14 @@ export class AuthService {
           UserDetails.Username = responseResult.username;
           UserDetails.Email = responseResult.email;
           UserDetails.Password = password
- 
+
+          this.initSubmittions()
+
         }
 
       }, error: (error: any) => {
 
-        this.isAuthenticate = false 
+        this.isAuthenticate = false
 
       }
     });
@@ -74,11 +76,40 @@ export class AuthService {
       return await this.login(username, password);
 
     } else {
-      return of (false);
+      return of(false);
     }
 
   }
 
-  
+  async initSubmittions() {
+
+    let headers = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
+
+    const options: any = {
+
+      headers: headers,
+      params: { 'email': UserDetails.Email }
+
+    }
+
+    this.http.get(Params.SERVICE_BASE_URL + Params.USER_SERVICE_URL_SUFFIXS.GET_SUBMISSIONS, options).subscribe({
+
+      next: (value: any) => {
+
+        if(value && value.success){
+
+          UserDetails.Submission = value.result
+
+        }
+
+      },error : (error) => {
+          
+        console.error(error)
+
+      },
+
+    })
+
+  }
 
 }
