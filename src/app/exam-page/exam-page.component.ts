@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Inject, signal, Signal, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationExtras, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
@@ -28,7 +28,7 @@ export class ExamPageComponent  implements AfterViewInit {
 
   @ViewChild('timerProgressBar', { static: false }) timerProgressBar!: ElementRef;
 
-  isLoading: boolean = false;
+  isLoading = signal<boolean>(false);
   toShowInstructions = false;
   isExaminationRunning = false;
   isSubmitting = false;
@@ -177,7 +177,7 @@ export class ExamPageComponent  implements AfterViewInit {
 
   loadExam(examType: 'test' | 'practice_paper' | string, examId: string) {
 
-    this.isLoading = true;
+    this.isLoading.set(true);
 
     const headers = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
 
@@ -195,7 +195,7 @@ export class ExamPageComponent  implements AfterViewInit {
     this.http.get(Params.SERVICE_BASE_URL + Params.EXAM_SERVICE_URL_SUFFIXS.GET_EXAM, options).subscribe({
       next: (result: any) => {
 
-        this.isLoading = false;
+        this.isLoading.set(false);
 
         this.paperDetails = result.result
 
@@ -203,7 +203,7 @@ export class ExamPageComponent  implements AfterViewInit {
 
       }, error: (error: any) => {
 
-        this.isLoading = false;
+        this.isLoading.set(false);
 
         console.error(error);
         alert("Can't load tests, please try again after sometime.");
@@ -217,7 +217,7 @@ export class ExamPageComponent  implements AfterViewInit {
 
   async authenticate(username: string, password: string) {
 
-    this.isLoading = true;
+    this.isLoading.set(true);
 
     const headers = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
 
@@ -231,7 +231,7 @@ export class ExamPageComponent  implements AfterViewInit {
     await this.http.get(Params.SERVICE_BASE_URL + Params.ACCOUNT_SERVICE_URL_SUFFIXS.LOGIN, options).subscribe({
       next: (result: any) => {
 
-        this.isLoading = false;
+        this.isLoading.set(false);
 
         if (result.success) {
 
@@ -241,7 +241,7 @@ export class ExamPageComponent  implements AfterViewInit {
           this.userDetails.username = response.username;
           this.userDetails.email = response.email;
 
-          this.isLoading = true;
+          this.isLoading.set(true);
 
           if(this.examDetails.examType == 'test'){
 
@@ -250,7 +250,7 @@ export class ExamPageComponent  implements AfterViewInit {
   
                 next: (value: any) => {
   
-                  this.isLoading = false;
+                  this.isLoading.set(false);
   
                   if (value.success) {
   
@@ -275,7 +275,7 @@ export class ExamPageComponent  implements AfterViewInit {
   
                 }, error: (error) => {
   
-                  this.isLoading = false;
+                  this.isLoading.set(false);
   
                   console.error(error)
                   alert('An unknown error occured');
@@ -294,7 +294,7 @@ export class ExamPageComponent  implements AfterViewInit {
 
         } else {
 
-          this.isLoading = false;
+          this.isLoading.set(false);
 
           alert("Authentication failed!")
           this.location.back();
@@ -303,7 +303,7 @@ export class ExamPageComponent  implements AfterViewInit {
 
       }, error: (error: any) => {
 
-        this.isLoading = false;
+        this.isLoading.set(false);
 
         console.error(error)
         alert("Authentication failed, due to an error!")
@@ -335,7 +335,7 @@ export class ExamPageComponent  implements AfterViewInit {
 
   getInstructions(examType: string) {
 
-    this.isLoading = true;
+    this.isLoading.set(true);
 
     const headers = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
 
@@ -352,7 +352,7 @@ export class ExamPageComponent  implements AfterViewInit {
     this.http.get(Params.SERVICE_BASE_URL + Params.EXAM_SERVICE_URL_SUFFIXS.GET_EXAM_INSTRUCTIONS, options).subscribe({
       next: (result: any) => {
 
-        this.isLoading = false;
+        this.isLoading.set(false);
 
         console.log("Ins", result)
 
@@ -362,7 +362,7 @@ export class ExamPageComponent  implements AfterViewInit {
 
       }, error: (error: any) => {
 
-        this.isLoading = false;
+        this.isLoading.set(false);
 
         this.toShowInstructions = true;
 

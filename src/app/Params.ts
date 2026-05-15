@@ -2,7 +2,7 @@ export class Params{
 
     public static MAX_PROFILE_IMAGE_SIZE_IN_KB = 120;
 
-    public static SERVICE_BASE_URL = "http://192.168.125.64:8081";
+    public static SERVICE_BASE_URL = "https://markr-api.onrender.com";
 
     public static ACCOUNT_SERVICE_URL_SUFFIXS = {
         "CHECK_EMAIL_EXISTS": "/accounts/checkEmailExists",
