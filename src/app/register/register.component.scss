@@ -164,46 +164,46 @@ body {
     height: 180px;
     position: relative;
     cursor: pointer;
-    border-radius: 50%;
-    overflow: hidden;
     background: #f8fafc;
     display: flex;
     justify-content: center;
     align-items: center;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 50%; // Keep container circular but allow overflow
 
     .profile-preview {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        border-radius: 50%; // Rounded image
     }
 
     .remove-image-btn {
         position: absolute;
-        top: 15px;
+        top: 5px;
         right: 15px;
-        background: rgba(255, 82, 82, 1);
+        background: #ef4444;
         color: white;
         border: 2px solid white;
         border-radius: 50%;
-        width: 32px;
-        height: 32px;
+        width: 34px;
+        height: 34px;
         display: flex;
         justify-content: center;
         align-items: center;
         cursor: pointer;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 10;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        z-index: 15;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
 
         mat-icon {
-            font-size: 18px;
-            width: 18px;
-            height: 18px;
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
         }
 
         &:hover {
-            background: #ef4444;
+            background: #dc2626;
             transform: scale(1.1) rotate(90deg);
         }
     }
