@@ -1,7 +1,14 @@
 import { Component, HostListener, OnInit, ViewChild, ElementRef, signal } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { finalize } from 'rxjs/operators';
 import { UserDetails } from '../UserDetails';
 import { SharedServiceService } from '../services/shared-service.service';
@@ -11,7 +18,18 @@ import { Params } from '../Params';
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
-  standalone: false
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatIconModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule
+  ]
 })
 export class ProfileComponent implements OnInit {
   profileForm!: FormGroup;
@@ -28,7 +46,7 @@ export class ProfileComponent implements OnInit {
     public sharedService: SharedServiceService,
     private http: HttpClient,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.initForm();
@@ -37,7 +55,7 @@ export class ProfileComponent implements OnInit {
 
   parseDate(dateStr: string): Date | null {
     if (!dateStr) return null;
-    
+
     // Handle DD-MM-YYYY
     if (dateStr.includes('-')) {
       const parts = dateStr.split('-');
@@ -49,7 +67,7 @@ export class ProfileComponent implements OnInit {
         if (!isNaN(date.getTime())) return date;
       }
     }
-    
+
     const date = new Date(dateStr);
     return isNaN(date.getTime()) ? null : date;
   }
@@ -111,10 +129,24 @@ export class ProfileComponent implements OnInit {
     if (this.profileForm.valid) {
       this.isLoading.set(true);
       const val = this.profileForm.value;
-      
+
+      // Format dob as string without time for the payload
+      let dobStr = '';
+      if (val.dob instanceof Date) {
+        const d = val.dob;
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        dobStr = `${day}-${month}-${year}`;
+      } else {
+        dobStr = val.dob || '';
+      }
+
       const payload = {
+        _id: UserDetails._id,
         username: UserDetails.Username,
         ...val,
+        dob: dobStr,
         profile_img: this.tempImage()
       };
 
@@ -122,24 +154,14 @@ export class ProfileComponent implements OnInit {
         .pipe(finalize(() => this.isLoading.set(false)))
         .subscribe({
           next: (res: any) => {
-            if (res.success || true) { 
+            if (res.success) {
               UserDetails.Name = val.name;
               UserDetails.Email = val.email;
               UserDetails.ContactNo = val.contact_no;
-              
+
               // Store as DD-MM-YYYY string
-              let dobStr = '';
-              if (val.dob instanceof Date) {
-                const d = val.dob;
-                const day = String(d.getDate()).padStart(2, '0');
-                const month = String(d.getMonth() + 1).padStart(2, '0');
-                const year = d.getFullYear();
-                dobStr = `${day}-${month}-${year}`;
-              } else {
-                dobStr = val.dob || '';
-              }
               UserDetails.DOB = dobStr;
-              
+
               UserDetails.Address = val.address;
               UserDetails.FatherName = val.father_name;
               UserDetails.Gender = val.gender;
@@ -147,10 +169,13 @@ export class ProfileComponent implements OnInit {
 
               // Update Global Signals
               this.sharedService.updateUserData();
-              
+
               this.isEditing.set(false);
               this.profileForm.disable();
               this.showToast('Profile updated successfully!', 'success');
+            } else {
+              console.error('Update failed', res);
+              this.showToast('Failed to update profile. Please try again.', 'error');
             }
           },
           error: (err) => {

@@ -1,4 +1,5 @@
 export class UserDetails {
+  static _id = ''
   static Name = '';
   static Username = '';
   static Password = '';

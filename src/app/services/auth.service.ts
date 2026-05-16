@@ -46,6 +46,7 @@ export class AuthService {
 
           const responseResult = result.result;
 
+          UserDetails._id = responseResult._id;
           UserDetails.Name = responseResult.name;
           UserDetails.Username = responseResult.username;
           UserDetails.Email = responseResult.email;

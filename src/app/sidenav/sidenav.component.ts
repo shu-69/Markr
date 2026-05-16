@@ -7,6 +7,8 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { navData } from './nav-data';
 
 export interface SideNavToogle {
@@ -18,7 +20,11 @@ export interface SideNavToogle {
   selector: 'app-sidenav',
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.scss'],
-  standalone: false,
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule
+  ]
 })
 export class SidenavComponent implements OnInit {
   @Output() onToggleSideNav: EventEmitter<SideNavToogle> = new EventEmitter();
