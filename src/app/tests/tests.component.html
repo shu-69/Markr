@@ -30,7 +30,7 @@
         style="display: flex; align-items: center; gap: 10px; font-family: 'Poppins-Regular', sans-serif; font-size: 14px;">
         <label>Show Completed</label>
         <label class="switch">
-          <input type="checkbox" checked [(ngModel)]="showCompleted" (click)="showCompleted() ? '' : filterIncompletedTests()">
+          <input type="checkbox" [checked]="showCompleted()" (click)="showCompleted.set(!showCompleted()); showCompleted() ? null : filterIncompletedTests()">
           <span class="slider"></span>
         </label>
       </span>
