@@ -6,15 +6,17 @@
       <div class="logo-text" style="font-size: 18px;">M</div>
     }
   </div>
+
   <ul class="sidenav-nav">
-    @for (data of navData; track data) {
-      <li class="sidenav-nav-item" >
-        <a class="sidenav-nav-link" [routerLink]="[data.routerLink]"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{exact: true}">
+    @for (data of navData; track data.label) {
+      <li class="sidenav-nav-item">
+        <a class="sidenav-nav-link" 
+           [routerLink]="[data.routerLink]"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }">
           <i class="sidenav-link-icon" [classList]="data.icon"></i>
           @if (!collapsed()) {
-            <span class="sidenav-link-text">{{data.label}}</span>
+            <span class="sidenav-link-text">{{ data.label }}</span>
           }
         </a>
       </li>

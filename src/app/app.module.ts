@@ -75,7 +75,6 @@ import { TransactionsComponent } from './transactions/transactions.component';
     PencilLoaderComponent,
     ExamPageComponent,
     ViewresultComponent,
-    SideSheetComponent,
   ],
   imports: [
     BrowserModule,
@@ -102,6 +101,7 @@ import { TransactionsComponent } from './transactions/transactions.component';
     ProfileComponent,
     TransactionsComponent,
     SidenavComponent,
+    SideSheetComponent,
   ],
   providers: [
     GlobalVar,
