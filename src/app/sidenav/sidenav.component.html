@@ -1,13 +1,10 @@
 <div class="sidenav" [ngClass]="collapsed() ? 'sidenav-collapsed' : ''">
   <div class="logo-container">
-    <!-- <button class="logo" (click)="toogleCollapse()">A</button>
-    <div class="logo-text" *ngIf="!collapsed">Angular</div>
-    <button class="btn-close" *ngIf="!collapsed" (click)="closeSideNav()">
-      <i class="fa fa-times close-icon"></i>
-    </button> -->
-    <img src="../../assets/logo/logo_black_small.svg" style="width: 40px; height: 40px;">
-    <!-- margin: auto; height: 11px; -->
-    <img src="../../assets/logo/logo_black_large.svg" style="height: 1vw; margin: auto;">
+    @if (!collapsed()) {
+      <div class="logo-text">MARKR</div>
+    } @else {
+      <div class="logo-text" style="font-size: 18px;">M</div>
+    }
   </div>
   <ul class="sidenav-nav">
     @for (data of navData; track data) {
@@ -15,7 +12,7 @@
         <a class="sidenav-nav-link" [routerLink]="[data.routerLink]"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{exact: true}">
-          <i class="sidenav-link-icon" [classList]="data.icon" style="font-size: 20px;"></i>
+          <i class="sidenav-link-icon" [classList]="data.icon"></i>
           @if (!collapsed()) {
             <span class="sidenav-link-text">{{data.label}}</span>
           }
@@ -23,4 +20,10 @@
       </li>
     }
   </ul>
+
+  <div class="sidenav-footer">
+    <button class="toggle-btn" (click)="toogleCollapse()">
+      <i class="fa" [ngClass]="collapsed() ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
+    </button>
+  </div>
 </div>
