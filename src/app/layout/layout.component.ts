@@ -1,9 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, signal, WritableSignal } from '@angular/core';
+import { SideNavToogle } from '../sidenav/sidenav.component';
 
-interface SideNavToogle {
-  screenWidth: number;
-  collapsed: boolean;
-}
 @Component({
     selector: 'app-layout',
     templateUrl: './layout.component.html',
@@ -12,7 +9,7 @@ interface SideNavToogle {
 })
 export class LayoutComponent {
 
-  isSideNavCollapsed = false;
+  isSideNavCollapsed: WritableSignal<boolean> = signal(false);
   screenWidth = 0;
 
   onToggleSideNav(data: SideNavToogle) {

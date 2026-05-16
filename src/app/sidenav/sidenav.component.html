@@ -1,4 +1,4 @@
-<div class="sidenav" [ngClass]="collapsed ? 'sidenav-collapsed' : ''">
+<div class="sidenav" [ngClass]="collapsed() ? 'sidenav-collapsed' : ''">
   <div class="logo-container">
     <!-- <button class="logo" (click)="toogleCollapse()">A</button>
     <div class="logo-text" *ngIf="!collapsed">Angular</div>
@@ -16,7 +16,7 @@
           routerLinkActive="active"
           [routerLinkActiveOptions]="{exact: true}">
           <i class="sidenav-link-icon" [classList]="data.icon" style="font-size: 20px;"></i>
-          @if (!collapsed) {
+          @if (!collapsed()) {
             <span class="sidenav-link-text">{{data.label}}</span>
           }
         </a>

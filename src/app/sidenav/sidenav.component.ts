@@ -1,9 +1,9 @@
 import { Component, EventEmitter, HostListener, OnInit, Output, signal, WritableSignal } from '@angular/core';
 import { navData } from './nav-data';
 
-interface SideNavToogle {
+export interface SideNavToogle {
   screenWidth: number;
-  collapsed: boolean;
+  collapsed: WritableSignal<boolean>;
 }
 
 @Component({

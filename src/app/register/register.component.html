@@ -91,7 +91,7 @@
           <ngp-image-picker [_config]="imagePickerConf"
           ($imageChanged)="onImageChange($event)"></ngp-image-picker>
         </div>
-        @if (showProfileImageError) {
+        @if (showProfileImageError()) {
           <label
           style="color: #ff5252; font-size: 12px; margin-top: 5px;">{{imageErrorMessage}}</label>
         }
@@ -105,11 +105,11 @@
           style="font-family: 'Poppins-Regular'; color: white;">terms & conditions</a></label>
         </span>
         <button class="submitButton" type="submit" (click)="submit()">
-          @if (!isSubmitting) {
+          @if (!isSubmitting()) {
             <i class="fa fa-cloud-upload" aria-hidden="true"
             style="font-size: 18px; margin-right: 8px;"></i>
           }
-          @if (isSubmitting) {
+          @if (isSubmitting()) {
             <div class="loader"></div>
           }
           {{submitButtonText}}

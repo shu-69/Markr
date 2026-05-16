@@ -6,7 +6,7 @@
     </div>
   }
 
-  @if (toShowInstructions) {
+  @if (toShowInstructions()) {
     <section class="instructionsContainer">
       <div class="testDetailsTable">
         <table>
@@ -61,7 +61,7 @@
     </section>
   }
 
-  @if (isExaminationRunning) {
+  @if (isExaminationRunning()) {
     <section class="examParentContainer">
       <div class="header">
         <div class="start">
@@ -246,16 +246,16 @@
   </section>
 }
 
-@if (timeOut && !isSubmitting && !isSubmitted && !isSubmitFailed) {
+@if (timeOut() && !isSubmitting() && !isSubmitted() && !isSubmitFailed()) {
   <section class="timeOutContainer">
     <span class="labelText">TIMEOUT</span>
     <span class="messageText">{{timeOutText}}</span>
   </section>
 }
 
-@if (isSubmitting || isSubmitted || isSubmitFailed) {
+@if (isSubmitting() || isSubmitted() || isSubmitFailed()) {
   <section class="submitExamContainer">
-    @if (isSubmitting) {
+    @if (isSubmitting()) {
       <div class="submittingContainer">
         <div class="loader">
           <span class="loader-text">submitting</span>
@@ -266,7 +266,7 @@
         </div>
       </div>
     }
-    @if (isSubmitFailed) {
+    @if (isSubmitFailed()) {
       <div class="submissionFailed">
         <img style="margin-bottom: -14px;" src="assets/iconspichon/icons8_error_100px.png" alt="">
         <span class="message">Sumbittion failed, please try again...</span>
@@ -277,7 +277,7 @@
         </div>
       </div>
     }
-    @if (isSubmitted) {
+    @if (isSubmitted()) {
       <div class="submittedContainer">
         <div class="svgDesign">
           <svg id="sw-js-blob-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"> <defs> <linearGradient id="sw-gradient" x1="0" x2="1" y1="1" y2="0"> <stop id="stop1" stop-color="rgba(248, 117, 55, 1)" offset="0%"></stop>                            <stop id="stop2" stop-color="rgba(251, 168, 31, 1)" offset="100%"></stop>                        </linearGradient>                    </defs>                <path fill="url(#sw-gradient)" d="M24.7,-28.6C28.5,-26.2,25.6,-15.1,26.4,-5.4C27.3,4.3,31.8,12.6,30.7,20.7C29.6,28.8,22.9,36.6,15.6,36.5C8.4,36.3,0.5,28.2,-8,24.1C-16.5,20.1,-25.7,20.1,-31.3,15.6C-36.8,11.1,-38.6,2,-36.5,-5.9C-34.5,-13.8,-28.6,-20.5,-21.9,-22.3C-15.2,-24.2,-7.6,-21.3,1.4,-23C10.4,-24.7,20.9,-31,24.7,-28.6Z" width="100%" height="100%" transform="translate(50 50)" stroke-width="0" style="transition: all 0.3s ease 0s;"></path>              </svg>

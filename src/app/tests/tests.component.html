@@ -1,6 +1,6 @@
 <section class="parent scrollable padded">
 
-  @if (isLoading) {
+  @if (isLoading()) {
     <div class="loaderContainer">
       <app-pencil-loader></app-pencil-loader>
     </div>
@@ -30,7 +30,7 @@
         style="display: flex; align-items: center; gap: 10px; font-family: 'Poppins-Regular', sans-serif; font-size: 14px;">
         <label>Show Completed</label>
         <label class="switch">
-          <input type="checkbox" checked [(ngModel)]="showCompleted" (click)="showCompleted ? '' : filterIncompletedTests()">
+          <input type="checkbox" checked [(ngModel)]="showCompleted" (click)="showCompleted() ? '' : filterIncompletedTests()">
           <span class="slider"></span>
         </label>
       </span>
@@ -40,7 +40,7 @@
 
   </div>
 
-  @if (!isSearching && showCompleted) {
+  @if (!isSearching && showCompleted()) {
     <div class="testsContainer">
       @for (test of tests; track test) {
         <div class="testDetailsContainer" (click)="openTestDetails(test)">
@@ -78,7 +78,7 @@
     </div>
   }
 
-  @if (isSearching) {
+  @if (isSearching()) {
     <div class="testsContainer">
       @for (test of searchResult; track test) {
         <div class="testDetailsContainer" (click)="openTestDetails(test)">
