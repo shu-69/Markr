@@ -7,7 +7,7 @@ export const navData = [
     label: 'Dashboard',
   },
   {
-    routerLink: 'dasfhboard',
+    routerLink: 'announcement',
     icon: 'fa fa-bullhorn',
     label: 'Announcement',
   },

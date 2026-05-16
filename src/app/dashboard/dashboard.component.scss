@@ -403,7 +403,9 @@
 }
 
 .inactive {
-
     display: none !important;
+}
 
+::ng-deep .black-spinner circle {
+    stroke: black !important;
 }

@@ -16,6 +16,7 @@ import { TestsComponent } from './tests/tests.component';
 import { ExamPageComponent } from './exam-page/exam-page.component';
 import { ViewresultComponent } from './viewresult/viewresult.component';
 import { ExamPageGuard } from './services/exam-page.guard';
+import { AnnouncementComponent } from './tabs/announcement/announcement.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,10 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent,
+      },
+      {
+        path: 'announcement',
+        component: AnnouncementComponent,
       },
       {
         path: 'courses',
