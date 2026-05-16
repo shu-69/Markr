@@ -18,53 +18,64 @@ import { ViewresultComponent } from './viewresult/viewresult.component';
 import { ExamPageGuard } from './services/exam-page.guard';
 
 const routes: Routes = [
-
   {
-    path: 'home', component: LayoutComponent, canActivate: [AuthGuard], children: [
+    path: 'home',
+    component: LayoutComponent,
+    canActivate: [AuthGuard],
+    children: [
       {
-        path: '', component: HomeComponent
+        path: '',
+        component: HomeComponent,
       },
       {
-        path: 'dashboard', component: DashboardComponent
+        path: 'dashboard',
+        component: DashboardComponent,
       },
       {
-        path: 'courses', component: CoursesComponent
+        path: 'courses',
+        component: CoursesComponent,
       },
       {
-        path: 'tests', component: TestsComponent
+        path: 'tests',
+        component: TestsComponent,
       },
       {
-        path: 'practice-papers', component: PracticePapersComponent
+        path: 'practice-papers',
+        component: PracticePapersComponent,
       },
-
     ],
-
   },
   {
-    path: '', component: IndexPageComponent
+    path: '',
+    component: IndexPageComponent,
   },
   {
-    path: 'login', component: LoginComponent
+    path: 'login',
+    component: LoginComponent,
   },
   {
-    path: 'register', component: RegisterComponent
+    path: 'register',
+    component: RegisterComponent,
   },
   {
-    path: 'exam', component: ExamPageComponent, canDeactivate: [ExamPageGuard] //() => ExamPageComponent.canDeactivate()
+    path: 'exam',
+    component: ExamPageComponent,
+    canDeactivate: [ExamPageGuard], //() => ExamPageComponent.canDeactivate()
   },
   {
-    path: 'viewresult', component: ViewresultComponent
+    path: 'viewresult',
+    component: ViewresultComponent,
   },
   {
-    path: 'contact', component: ContactUsComponent
+    path: 'contact',
+    component: ContactUsComponent,
   },
   { path: '404', component: PageNotFoundComponent },
   { path: '**', redirectTo: '404' },
-
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

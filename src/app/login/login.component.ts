@@ -6,17 +6,16 @@ import { AuthService } from '../services/auth.service';
 import { NavigationService } from '../services/navigation.service';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
-    standalone: false
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
+  standalone: false,
 })
 export class LoginComponent {
-
   isLoading: WritableSignal<boolean> = signal(false);
-  passwordEyeIcon = "on";
-  usernameInputFieldId = "username_input"
-  passwordInputFieldId = "password_input"
+  passwordEyeIcon = 'on';
+  usernameInputFieldId = 'username_input';
+  passwordInputFieldId = 'password_input';
 
   formData = new FormGroup({
     username: new FormControl('', [Validators.required]),
@@ -24,95 +23,95 @@ export class LoginComponent {
     rememberMe: new FormControl(false),
   });
 
-  constructor(private navService: NavigationService, private http: HttpClient, private authService: AuthService) {
-
+  constructor(
+    private navService: NavigationService,
+    private http: HttpClient,
+    private authService: AuthService,
+  ) {
     localStorage.removeItem('loggeed_in_username');
     localStorage.removeItem('loggeed_in_password');
-
   }
 
   async doLogin() {
-
     if (this.formData.valid) {
-
       this.isLoading.set(true);
 
-      (await this.authService
-        .login(this.formData.controls.username.value!, this.formData.controls.password.value!)).subscribe({
-          next: (result: any) => {
+      (
+        await this.authService.login(
+          this.formData.controls.username.value!,
+          this.formData.controls.password.value!,
+        )
+      ).subscribe({
+        next: (result: any) => {
+          this.isLoading.set(false);
 
-            this.isLoading.set(false);
+          if (result.success) {
+            localStorage.setItem(
+              'logged_in_username',
+              this.formData.controls.username.value!,
+            );
+            localStorage.setItem(
+              'logged_in_password',
+              this.formData.controls.password.value!,
+            );
+            localStorage.setItem(
+              'log_in_remeber',
+              this.formData.controls.rememberMe ? 'true' : 'false',
+            );
 
-            if (result.success) {
+            console.log('Login details saved!');
 
-              localStorage.setItem('logged_in_username', this.formData.controls.username.value!);
-              localStorage.setItem('logged_in_password', this.formData.controls.password.value!);
-              localStorage.setItem('log_in_remeber', this.formData.controls.rememberMe ? 'true' : 'false');
+            this.navService.openPage(Params.PageNames.home);
+          } else {
+            switch (result.err_code) {
+              case 101:
+                let field: any = document.getElementById(
+                  this.usernameInputFieldId,
+                )!;
 
-              console.log("Login details saved!")
+                field.setCustomValidity('Email not found!');
 
-              this.navService.openPage(Params.PageNames.home)
+                field.reportValidity();
 
-            } else {
+                alert('Login failed : Email not found!');
 
-              switch (result.err_code) {
+                console.log('Authentication failed : Email not found!');
 
-                case 101:
+                break;
 
-                  let field: any = document.getElementById(this.usernameInputFieldId)!;
+              case 102:
+                alert('Login failed : Username not found!');
 
-                  field.setCustomValidity("Email not found!");
+                console.log('Authentication failed : Username not found!');
 
-                  field.reportValidity();
+                break;
 
-                  alert('Login failed : Email not found!');
+              case 103:
+                alert('Login failed : Please check you Username/Email');
 
-                  console.log("Authentication failed : Email not found!");
+                console.log(
+                  'Authentication failed : Username/Email not found!',
+                );
 
-                  break;
+                break;
 
-                case 102:
-
-                  alert('Login failed : Username not found!');
-
-                  console.log("Authentication failed : Username not found!");
-
-                  break;
-
-                case 103:
-
-
-                  alert('Login failed : Please check you Username/Email')
-
-                  console.log("Authentication failed : Username/Email not found!");
-
-                  break;
-
-                default:
-                  break;
-              }
-
+              default:
+                break;
             }
-
-            console.log(result);
-
-
-
-
-          }, error: (error: any) => {
-
-            this.isLoading.set(false);
-            console.log(error);
-
           }
-        });
 
-
+          console.log(result);
+        },
+        error: (error: any) => {
+          this.isLoading.set(false);
+          console.log(error);
+        },
+      });
     } else {
-
       if (this.formData.controls.username.invalid) {
-
-        let field: HTMLElement = document.getElementById(this.usernameInputFieldId)!;
+        let field: HTMLElement = document.getElementById(
+          this.usernameInputFieldId,
+        )!;
 
         field.classList.add('fieldError');
 
@@ -124,8 +123,9 @@ export class LoginComponent {
       }
 
       if (this.formData.controls.password.invalid) {
-
-        let field: HTMLElement = document.getElementById(this.passwordInputFieldId)!;
+        let field: HTMLElement = document.getElementById(
+          this.passwordInputFieldId,
+        )!;
 
         field.classList.add('fieldError');
 
@@ -135,23 +135,20 @@ export class LoginComponent {
 
         return;
       }
-
     }
-
   }
 
   tooglePasswordType() {
+    let element: HTMLElement = document.getElementById(
+      this.passwordInputFieldId,
+    )!;
 
-    let element: HTMLElement = document.getElementById(this.passwordInputFieldId)!;
-
-    if (element.getAttribute("type") == "password") {
-      element.setAttribute("type", "text");
-      this.passwordEyeIcon = "off"
+    if (element.getAttribute('type') == 'password') {
+      element.setAttribute('type', 'text');
+      this.passwordEyeIcon = 'off';
     } else {
-      element.setAttribute("type", "password");
-      this.passwordEyeIcon = "on"
+      element.setAttribute('type', 'password');
+      this.passwordEyeIcon = 'on';
     }
-
-  };
-
+  }
 }

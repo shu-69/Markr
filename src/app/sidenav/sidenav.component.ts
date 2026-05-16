@@ -1,4 +1,12 @@
-import { Component, EventEmitter, HostListener, OnInit, Output, signal, WritableSignal } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  OnInit,
+  Output,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { navData } from './nav-data';
 
 export interface SideNavToogle {
@@ -7,13 +15,12 @@ export interface SideNavToogle {
 }
 
 @Component({
-    selector: 'app-sidenav',
-    templateUrl: './sidenav.component.html',
-    styleUrls: ['./sidenav.component.scss'],
-    standalone: false
+  selector: 'app-sidenav',
+  templateUrl: './sidenav.component.html',
+  styleUrls: ['./sidenav.component.scss'],
+  standalone: false,
 })
-export class SidenavComponent implements OnInit{
-
+export class SidenavComponent implements OnInit {
   @Output() onToggleSideNav: EventEmitter<SideNavToogle> = new EventEmitter();
 
   collapsed: WritableSignal<boolean> = signal(false);
@@ -21,27 +28,34 @@ export class SidenavComponent implements OnInit{
   navData = navData;
 
   @HostListener('window:resize', ['$event'])
-  onResize(event: any){
+  onResize(event: any) {
     this.screenWidth = window.innerWidth;
-    if(this.screenWidth <= 768){
+    if (this.screenWidth <= 768) {
       this.collapsed.set(false);
-      this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
+      this.onToggleSideNav.emit({
+        collapsed: this.collapsed,
+        screenWidth: this.screenWidth,
+      });
     }
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.screenWidth = window.innerWidth;
   }
 
   toogleCollapse() {
     this.collapsed.set(!this.collapsed());
-    this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
+    this.onToggleSideNav.emit({
+      collapsed: this.collapsed,
+      screenWidth: this.screenWidth,
+    });
   }
-
 
   closeSideNav() {
     this.collapsed.set(false);
-    this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
+    this.onToggleSideNav.emit({
+      collapsed: this.collapsed,
+      screenWidth: this.screenWidth,
+    });
   }
-
 }

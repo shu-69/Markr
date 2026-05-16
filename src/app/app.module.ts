@@ -1,4 +1,9 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule, inject, provideAppInitializer } from '@angular/core';
+import {
+  CUSTOM_ELEMENTS_SCHEMA,
+  NgModule,
+  inject,
+  provideAppInitializer,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
@@ -21,10 +26,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatFormFieldModule } from '@angular/material/form-field'
-import { MAT_DATE_LOCALE } from '@angular/material/core'
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
@@ -48,45 +56,70 @@ export function playerFactory() {
   return player;
 }
 
-export function appInitializer(authenticationService: AuthService): () => Promise<Observable<any>>{
-  return async () => (await authenticationService.autoAuthUser())
-      .pipe(
-          // catch error to start app on success or failure
-          catchError(() => of())
-      );
+export function appInitializer(
+  authenticationService: AuthService,
+): () => Promise<Observable<any>> {
+  return async () =>
+    (await authenticationService.autoAuthUser()).pipe(
+      // catch error to start app on success or failure
+      catchError(() => of()),
+    );
 }
 
-@NgModule({ declarations: [
-        AppComponent,
-        LoginComponent,
-        LayoutComponent,
-        HomeComponent,
-        IndexPageComponent,
-        ContactUsComponent,
-        PageNotFoundComponent,
-        DashboardComponent,
-        RegisterComponent,
-        SidenavComponent,
-        AnnouncementComponent,
-        CoursesComponent,
-        TestsComponent,
-        PracticePapersComponent,
-        PencilLoaderComponent,
-        ExamPageComponent,
-        ViewresultComponent,
-    ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
-        AppRoutingModule,
-        FormsModule, MatDialogModule, MatBadgeModule, NgpImagePickerModule, FontAwesomeModule, MatDatepickerModule, MatNativeDateModule,
-        BrowserAnimationsModule, MatFormFieldModule, ReactiveFormsModule,
-        MatSidenavModule, MatTabsModule, MatIconModule, MatProgressSpinnerModule], providers: [GlobalVar, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, DatePipe, AuthService,
-        provideLottieOptions({ player: () => player }),
-        provideAppInitializer(() => {
-        const initializerFn = ((service: AuthService) => async function () { return service.autoAuthUser(); })(inject(AuthService));
-        return initializerFn();
-      }), provideHttpClient(withInterceptorsFromDi())],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
-  })
-export class AppModule { }
-
- 
+@NgModule({
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    LayoutComponent,
+    HomeComponent,
+    IndexPageComponent,
+    ContactUsComponent,
+    PageNotFoundComponent,
+    DashboardComponent,
+    RegisterComponent,
+    SidenavComponent,
+    AnnouncementComponent,
+    CoursesComponent,
+    TestsComponent,
+    PracticePapersComponent,
+    PencilLoaderComponent,
+    ExamPageComponent,
+    ViewresultComponent,
+  ],
+  bootstrap: [AppComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    MatDialogModule,
+    MatBadgeModule,
+    NgpImagePickerModule,
+    FontAwesomeModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    BrowserAnimationsModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatSidenavModule,
+    MatTabsModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+  ],
+  providers: [
+    GlobalVar,
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+    DatePipe,
+    AuthService,
+    provideLottieOptions({ player: () => player }),
+    provideAppInitializer(() => {
+      const initializerFn = ((service: AuthService) =>
+        async function () {
+          return service.autoAuthUser();
+        })(inject(AuthService));
+      return initializerFn();
+    }),
+    provideHttpClient(withInterceptorsFromDi()),
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+})
+export class AppModule {}

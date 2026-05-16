@@ -5,40 +5,40 @@ import { Params } from '../Params';
 import { UserDetails } from '../UserDetails';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
   isAuthenticate: boolean = false;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  async init() {
+  async init() {}
 
-  }
+  async login(username: string, password: string): Promise<Observable<any>> {
+    // : Observable<any>
 
-  async login(username: string, password: string): Promise<Observable<any>> { // : Observable<any>
+    console.log(username, password);
 
-    console.log(username, password)
-
-    const headers = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
+    const headers = {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    };
 
     const options: any = {
-
       headers: headers,
-      params: { 'username': username, 'password': password },
+      params: { username: username, password: password },
       // responseType: 'text'
+    };
 
-    }
-
-    let result = await this.http.get(Params.SERVICE_BASE_URL + Params.ACCOUNT_SERVICE_URL_SUFFIXS.LOGIN, options);
+    let result = await this.http.get(
+      Params.SERVICE_BASE_URL + Params.ACCOUNT_SERVICE_URL_SUFFIXS.LOGIN,
+      options,
+    );
 
     result.subscribe({
       next: (result: any) => {
-
         if (result.success) {
-
-          this.isAuthenticate = true
+          this.isAuthenticate = true;
 
           const responseResult = result.result;
 
@@ -46,38 +46,30 @@ export class AuthService {
           UserDetails.Username = responseResult.username;
           UserDetails.Email = responseResult.email;
           UserDetails.Password = password;
-          
+
           // Submissions will be loaded on-demand in the dashboard
         }
-
-      }, error: (error: any) => {
-
-        this.isAuthenticate = false
-
-      }
+      },
+      error: (error: any) => {
+        this.isAuthenticate = false;
+      },
     });
 
     return result;
-
   }
 
   async autoAuthUser() {
-
-    console.log("Auto Logging")
+    console.log('Auto Logging');
 
     let username = localStorage.getItem('logged_in_username');
     let password = localStorage.getItem('logged_in_password');
 
-    console.log(username, password)
+    console.log(username, password);
 
     if (username && password) {
-
       return await this.login(username, password);
-
     } else {
       return of(false);
     }
-
   }
-
 }

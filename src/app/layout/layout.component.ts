@@ -2,13 +2,12 @@ import { Component, signal, WritableSignal } from '@angular/core';
 import { SideNavToogle } from '../sidenav/sidenav.component';
 
 @Component({
-    selector: 'app-layout',
-    templateUrl: './layout.component.html',
-    styleUrls: ['./layout.component.scss'],
-    standalone: false
+  selector: 'app-layout',
+  templateUrl: './layout.component.html',
+  styleUrls: ['./layout.component.scss'],
+  standalone: false,
 })
 export class LayoutComponent {
-
   isSideNavCollapsed: WritableSignal<boolean> = signal(false);
   screenWidth = 0;
 
@@ -17,11 +16,7 @@ export class LayoutComponent {
     this.isSideNavCollapsed = data.collapsed;
   }
 
-  getBodyClass(): string{
-
+  getBodyClass(): string {
     return '';
-
   }
-
-
 }

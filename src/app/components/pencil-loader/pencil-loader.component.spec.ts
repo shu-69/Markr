@@ -8,9 +8,8 @@ describe('PencilLoaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PencilLoaderComponent ]
-    })
-    .compileComponents();
+      declarations: [PencilLoaderComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(PencilLoaderComponent);
     component = fixture.componentInstance;

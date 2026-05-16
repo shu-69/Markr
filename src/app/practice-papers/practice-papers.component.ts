@@ -1,5 +1,9 @@
 import { Component, Inject, signal, WritableSignal } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { NavigationService } from '../services/navigation.service';
 import { Test } from '../TestsParams';
@@ -8,238 +12,257 @@ import { NavigationExtras, Router } from '@angular/router';
 import { UserDetails } from '../UserDetails';
 
 export interface DialogData {
-  test: any
+  test: any;
 }
 @Component({
-    selector: 'app-practice-papers',
-    templateUrl: './practice-papers.component.html',
-    styleUrls: ['./practice-papers.component.scss'],
-    standalone: false
+  selector: 'app-practice-papers',
+  templateUrl: './practice-papers.component.html',
+  styleUrls: ['./practice-papers.component.scss'],
+  standalone: false,
 })
 export class PracticePapersComponent {
-
   isLoading: WritableSignal<boolean> = signal(false);
 
   isSearching: WritableSignal<boolean> = signal(false);
 
   showCompleted: WritableSignal<boolean> = signal(true);
 
-  tests: Test[] = []
+  tests: Test[] = [];
 
-  incomletedTests: Test[] = []
+  incomletedTests: Test[] = [];
 
-  searchResult: Test[] = []
+  searchResult: Test[] = [];
 
-  constructor(private dialog: MatDialog, private http: HttpClient, private router: Router) {
-
-    this.loadTests()
-
+  constructor(
+    private dialog: MatDialog,
+    private http: HttpClient,
+    private router: Router,
+  ) {
+    this.loadTests();
   }
 
   loadTests() {
-
     this.isLoading.set(true);
 
-    const headers = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
+    const headers = {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    };
 
     const options: any = {
-
       headers: headers,
       params: {},
       // responseType: 'text'
+    };
 
-    }
+    this.http
+      .get(
+        Params.SERVICE_BASE_URL +
+          Params.EXAM_SERVICE_URL_SUFFIXS.GET_ACTIVE_PRACTICE_PAPERS,
+        options,
+      )
+      .subscribe({
+        next: (result: any) => {
+          this.tests = result;
 
-    this.http.get(Params.SERVICE_BASE_URL + Params.EXAM_SERVICE_URL_SUFFIXS.GET_ACTIVE_PRACTICE_PAPERS, options).subscribe({
-      next: (result: any) => {
+          this.filterIncompletedTests();
 
-        this.tests = result;
+          this.isLoading.set(false);
+        },
+        error: (error: any) => {
+          this.isLoading.set(false);
 
-        this.filterIncompletedTests();
-
-        this.isLoading.set(false);
-
-      }, error: (error: any) => {
-
-        this.isLoading.set(false);
-
-        console.log(error);
-        alert("Can't load tests, please try again after sometime.");
-
-      }
-    });
-
+          console.log(error);
+          alert("Can't load tests, please try again after sometime.");
+        },
+      });
   }
 
   doSearch(e: any) {
-
     let searchValue = e.target.value;
 
     if (searchValue == '') {
-      this.searchResult = []
+      this.searchResult = [];
       this.isSearching.set(false);
-      return
+      return;
     }
 
     this.isSearching.set(true);
-    this.searchResult = this.tests.filter(element => element.title.toLowerCase().includes(searchValue.toLowerCase()))
-
+    this.searchResult = this.tests.filter((element) =>
+      element.title.toLowerCase().includes(searchValue.toLowerCase()),
+    );
   }
 
   filterIncompletedTests() {
-
-    this.incomletedTests = this.tests.filter((element: any) => this.checkIfTestCompleted(element._id) == false)
-    
+    this.incomletedTests = this.tests.filter(
+      (element: any) => this.checkIfTestCompleted(element._id) == false,
+    );
   }
 
   checkIfTestCompleted(testId: string): Boolean {
-
-    let tests = UserDetails.Submission?.filter((element: any) => (element.examDetails.examType == 'practice_paper'));
+    let tests = UserDetails.Submission?.filter(
+      (element: any) => element.examDetails.examType == 'practice_paper',
+    );
 
     for (let i = 0; i < tests?.length; i++) {
-
       if (tests[i].examDetails.examId == testId) {
-
         return true;
-
       }
-
     }
 
     return false;
-
   }
 
   getTestTime(withoutTime: Boolean, seconds: number): string {
-
-    if (withoutTime || seconds == 0)
-      return 'No time'
-    else
-      return this.changeSecondsToTime(seconds)
-
+    if (withoutTime || seconds == 0) return 'No time';
+    else return this.changeSecondsToTime(seconds);
   }
 
   changeSecondsToTime(seconds: number): string {
-
     seconds = Number(seconds);
 
     var h = Math.floor(seconds / 3600);
-    var m = Math.floor(seconds % 3600 / 60);
-    var s = Math.floor(seconds % 3600 % 60);
+    var m = Math.floor((seconds % 3600) / 60);
+    var s = Math.floor((seconds % 3600) % 60);
 
-    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours") : "0 hour, ";
-    var mDisplay = m > 0 ? m + (m == 1 ? " minute" : " minutes") : "";
+    var hDisplay = h > 0 ? h + (h == 1 ? ' hour, ' : ' hours') : '0 hour, ';
+    var mDisplay = m > 0 ? m + (m == 1 ? ' minute' : ' minutes') : '';
     //var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
 
     return hDisplay + mDisplay;
-
   }
 
   openTestDetails(test: Test) {
-
     let dialogRef = this.dialog.open(TestDetailsDialog, {
       width: '45%',
       height: 'fit-content',
       panelClass: ['dialog'],
 
       data: { test },
-
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-
-      console.log(result)
+      console.log(result);
 
       if (result && result.result) {
-
         let navigationExtras: NavigationExtras = {
           queryParams: {
+            examType: 'practice_paper',
+            id: test._id,
 
-            "examType": 'practice_paper',
-            "id": test._id,
-
-            'user_email': UserDetails.Email,
-            'user_password': UserDetails.Password,
-
-          }
+            user_email: UserDetails.Email,
+            user_password: UserDetails.Password,
+          },
         };
 
         this.router.navigate([Params.PageNames.exam], navigationExtras);
-
       }
-
     });
-
   }
-
 }
 
 @Component({
   selector: 'testdetailsdialog-dialog',
-  template: ` <div style="text-align: start; font-family: 'Poppins-Bold'; font-size: 24px; color: black; 
-              padding-left: 20px; padding-right: 20px; margin-top: 20px;" >{{data.test.title}}</div>
-              <div style="text-align: start; margin-top: 10px; font-family: Poppins-Regular; font-size: 14px;
-              padding-left: 20px; padding-right: 20px;">{{data.test.description}}</div>
-              <div style="display: flex; justify-content: center; flex-flow: column;">
-                <div style="text-align: center; margin-top: 20px; display: flex; flex-flow: column; width: fit-content; text-align: start; gap: 10px; background: #9b9b9b38;
-                             padding: 15px 15px; border-radius: 10px; margin-left: 15px; margin-right: 15px; overflow-x: auto; width: auto;">
-                  <span style="font-family: Poppins-Regular; font-size: 14px;"><span style="font-family: monospace; background: #cdcdcd;
-                   padding: 4px 8px; border-radius: 4px;">Questions count</span>&nbsp;&nbsp;{{data.test.questions.length}}&nbsp;questions</span>
-                  <span style="font-family: Poppins-Regular; font-size: 14px;"><span style="font-family: monospace; background: #cdcdcd;
-                   padding: 4px 8px; border-radius: 4px;">Time</span>&nbsp;&nbsp;{{getTestTime(data.test.is_without_time, data.test.time)}}</span>
-                   <span style="font-family: Poppins-Regular; font-size: 14px;"><span style="font-family: monospace; background: #cdcdcd;
-                   padding: 4px 8px; border-radius: 4px;">Marks</span>&nbsp;&nbsp;{{data.test.marks}}&nbsp;marks</span>
-                </div>
-              </div>
-              <div style="text-align: center;
+  template: `
+    <div
+      style="text-align: start; font-family: 'Poppins-Bold'; font-size: 24px; color: black; 
+              padding-left: 20px; padding-right: 20px; margin-top: 20px;"
+    >
+      {{ data.test.title }}
+    </div>
+    <div
+      style="text-align: start; margin-top: 10px; font-family: Poppins-Regular; font-size: 14px;
+              padding-left: 20px; padding-right: 20px;"
+    >
+      {{ data.test.description }}
+    </div>
+    <div style="display: flex; justify-content: center; flex-flow: column;">
+      <div
+        style="text-align: center; margin-top: 20px; display: flex; flex-flow: column; width: fit-content; text-align: start; gap: 10px; background: #9b9b9b38;
+                             padding: 15px 15px; border-radius: 10px; margin-left: 15px; margin-right: 15px; overflow-x: auto; width: auto;"
+      >
+        <span style="font-family: Poppins-Regular; font-size: 14px;"
+          ><span
+            style="font-family: monospace; background: #cdcdcd;
+                   padding: 4px 8px; border-radius: 4px;"
+            >Questions count</span
+          >&nbsp;&nbsp;{{ data.test.questions.length }}&nbsp;questions</span
+        >
+        <span style="font-family: Poppins-Regular; font-size: 14px;"
+          ><span
+            style="font-family: monospace; background: #cdcdcd;
+                   padding: 4px 8px; border-radius: 4px;"
+            >Time</span
+          >&nbsp;&nbsp;{{
+            getTestTime(data.test.is_without_time, data.test.time)
+          }}</span
+        >
+        <span style="font-family: Poppins-Regular; font-size: 14px;"
+          ><span
+            style="font-family: monospace; background: #cdcdcd;
+                   padding: 4px 8px; border-radius: 4px;"
+            >Marks</span
+          >&nbsp;&nbsp;{{ data.test.marks }}&nbsp;marks</span
+        >
+      </div>
+    </div>
+    <div
+      style="text-align: center;
                           padding: 15px;
                           margin-top: 25px;
-                          font-family: Poppins-Regular; color: white; display: flex; justify-content: space-around; gap: 15px;"  >
-                          <button style="width: 50%; height: 40px; border-radius: 10px; border: 1px solid black; font-family: 'Poppins-Medium';" (click)="close()">Close</button> 
-                          <button style="width: 50%; height: 40px; border-radius: 10px; border: 1px solid black; font-family: 'Poppins-Medium'; background: #68de79" (click)="done()">Start</button>  
-                        </div>
-              `,
-  standalone: true
+                          font-family: Poppins-Regular; color: white; display: flex; justify-content: space-around; gap: 15px;"
+    >
+      <button
+        style="width: 50%; height: 40px; border-radius: 10px; border: 1px solid black; font-family: 'Poppins-Medium';"
+        (click)="close()"
+      >
+        Close
+      </button>
+      <button
+        style="width: 50%; height: 40px; border-radius: 10px; border: 1px solid black; font-family: 'Poppins-Medium'; background: #68de79"
+        (click)="done()"
+      >
+        Start
+      </button>
+    </div>
+  `,
+  standalone: true,
 })
-
 export class TestDetailsDialog {
-  constructor(public dialogRef: MatDialogRef<TestDetailsDialog>, @Inject(MAT_DIALOG_DATA) public data: DialogData, private navigationService: NavigationService) { }
+  constructor(
+    public dialogRef: MatDialogRef<TestDetailsDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private navigationService: NavigationService,
+  ) {}
 
   close() {
     this.dialogRef.close({
-      result: false
+      result: false,
     });
   }
 
   done() {
     this.dialogRef.close({
-      result: true
+      result: true,
     });
   }
 
   getTestTime(withoutTime: Boolean, seconds: number): string {
-
-    if (withoutTime || seconds == 0)
-      return 'No time'
-    else
-      return this.changeSecondsToTime(seconds)
-
+    if (withoutTime || seconds == 0) return 'No time';
+    else return this.changeSecondsToTime(seconds);
   }
 
   changeSecondsToTime(seconds: number): string {
-
     seconds = Number(seconds);
 
     var h = Math.floor(seconds / 3600);
-    var m = Math.floor(seconds % 3600 / 60);
-    var s = Math.floor(seconds % 3600 % 60);
+    var m = Math.floor((seconds % 3600) / 60);
+    var s = Math.floor((seconds % 3600) % 60);
 
-    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours") : "0 hour, ";
-    var mDisplay = m > 0 ? m + (m == 1 ? " minute" : " minutes") : "";
+    var hDisplay = h > 0 ? h + (h == 1 ? ' hour, ' : ' hours') : '0 hour, ';
+    var mDisplay = m > 0 ? m + (m == 1 ? ' minute' : ' minutes') : '';
     //var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
 
     return hDisplay + mDisplay;
-
   }
-
 }
