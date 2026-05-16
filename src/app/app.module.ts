@@ -48,7 +48,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 // Third Party
-import { NgpImagePickerModule } from 'ngp-image-picker';
+
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { provideLottieOptions } from 'ngx-lottie';
 import player from 'lottie-web';
@@ -96,7 +96,7 @@ import { TransactionsComponent } from './transactions/transactions.component';
     MatButtonModule,
     MatSelectModule,
     MatSnackBarModule,
-    NgpImagePickerModule,
+
     FontAwesomeModule,
     ProfileComponent,
     TransactionsComponent,

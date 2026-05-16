@@ -28,7 +28,6 @@
     "bson-objectid": "^2.0.4",
     "font-awesome": "^4.7.0",
     "lottie-web": "^5.13.0",
-    "ngp-image-picker": "^2.4.4",
     "ngx-lottie": "^21.2.0",
     "os-browserify": "^0.3.0",
     "rxjs": "~7.5.0",

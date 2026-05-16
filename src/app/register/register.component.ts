@@ -12,7 +12,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { ImagePickerConf } from 'ngp-image-picker';
+
 import { Title } from '@angular/platform-browser';
 import { Params } from '../Params';
 import {
@@ -44,7 +44,7 @@ export class RegisterComponent implements OnInit {
   showProfileImageError: WritableSignal<boolean> = signal(false);
   imageErrorMessage = '';
 
-  selectedProfileImage: string | null = null; // Base64 data of selected profile image
+  selectedProfileImage: WritableSignal<string | null> = signal(null); // Base64 data of selected profile image
 
   isSubmitting: WritableSignal<boolean> = signal(false);
   submitButtonText: string = 'SUBMIT';
@@ -71,12 +71,7 @@ export class RegisterComponent implements OnInit {
     termsnconditions: new FormControl(false),
   });
 
-  imagePickerConf: ImagePickerConf = {
-    borderRadius: '100px',
-    language: 'en',
-    width: '20vh',
-    height: '20vh',
-  };
+
 
   constructor(
     private fb: FormBuilder,
@@ -100,9 +95,9 @@ export class RegisterComponent implements OnInit {
   submit() {
     if (this.formData.valid) {
       // Checking Profile image Size if selected
-      if (this.selectedProfileImage != null) {
+      if (this.selectedProfileImage() != null) {
         let imageSize = Math.round(
-          this.getImageSize(this.selectedProfileImage!),
+          this.getImageSize(this.selectedProfileImage()!),
         );
 
         if (imageSize > Params.MAX_PROFILE_IMAGE_SIZE_IN_KB) {
@@ -201,8 +196,8 @@ export class RegisterComponent implements OnInit {
                 body.address = this.formData.controls.address.value;
               }
 
-              if (this.selectedProfileImage != null) {
-                body.profile_img = this.selectedProfileImage;
+              if (this.selectedProfileImage() != null) {
+                body.profile_img = this.selectedProfileImage();
               }
 
               //console.log(body)
@@ -383,14 +378,10 @@ export class RegisterComponent implements OnInit {
 
   resetForm() {
     this.formData.reset();
-    this.selectedProfileImage = null;
+    this.selectedProfileImage.set(null);
     this.showProfileImageError.set(false);
 
-    try {
-      let imageDeleteButton: HTMLElement =
-        document.getElementById('delete-img')!;
-      imageDeleteButton.click();
-    } catch (e) {}
+
   }
 
   dataURItoBlob(dataURI: any) {
@@ -412,31 +403,41 @@ export class RegisterComponent implements OnInit {
     return new Blob([ia], { type: mimeString });
   }
 
-  onImageChange(event: any) {
-    console.log(event);
-
-    if (event != null) {
-      this.selectedProfileImage = event;
-
-      let imageSize = Math.round(this.getImageSize(this.selectedProfileImage!));
-
-      if (imageSize > Params.MAX_PROFILE_IMAGE_SIZE_IN_KB) {
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      // Validate size
+      const sizeInKb = file.size / 1024;
+      if (sizeInKb > Params.MAX_PROFILE_IMAGE_SIZE_IN_KB) {
         this.showProfileImageError.set(true);
         this.imageErrorMessage =
           'Maximum allowed image size is ' +
           Params.MAX_PROFILE_IMAGE_SIZE_IN_KB +
           'kb';
-      } else {
-        this.showProfileImageError.set(false);
-        this.imageErrorMessage = '';
+        this.selectedProfileImage.set(null);
+        return;
       }
 
-      console.log('Size = ' + imageSize);
-    } else {
       this.showProfileImageError.set(false);
       this.imageErrorMessage = '';
-      this.selectedProfileImage = null;
+
+      // Convert to Base64 for preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.selectedProfileImage.set(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      this.selectedProfileImage.set(null);
+      this.showProfileImageError.set(false);
+      this.imageErrorMessage = '';
     }
+  }
+
+  removeImage() {
+    this.selectedProfileImage.set(null);
+    this.showProfileImageError.set(false);
+    this.imageErrorMessage = '';
   }
 
   getImageSize(base64String: string): number {

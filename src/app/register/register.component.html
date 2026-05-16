@@ -88,8 +88,21 @@
       <div class="item">
         <label>Profile Image</label>
         <div class="imagePickerContainer">
-          <ngp-image-picker [_config]="imagePickerConf"
-          ($imageChanged)="onImageChange($event)"></ngp-image-picker>
+          <div class="native-image-picker" (click)="fileInput.click()">
+            <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+            
+            @if (selectedProfileImage()) {
+              <img [src]="selectedProfileImage()" alt="Profile Preview" class="profile-preview">
+              <button type="button" class="remove-image-btn" (click)="$event.stopPropagation(); removeImage()">
+                <mat-icon>close</mat-icon>
+              </button>
+            } @else {
+              <div class="placeholder">
+                <mat-icon>add_a_photo</mat-icon>
+                <span>Upload Photo</span>
+              </div>
+            }
+          </div>
         </div>
         @if (showProfileImageError()) {
           <label
