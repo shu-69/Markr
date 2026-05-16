@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, signal, WritableSignal } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Params } from '../Params';
 import { AuthService } from '../services/auth.service';
@@ -13,7 +13,7 @@ import { NavigationService } from '../services/navigation.service';
 })
 export class LoginComponent {
 
-  isLoading = false;
+  isLoading: WritableSignal<boolean> = signal(false);
   passwordEyeIcon = "on";
   usernameInputFieldId = "username_input"
   passwordInputFieldId = "password_input"
@@ -35,13 +35,13 @@ export class LoginComponent {
 
     if (this.formData.valid) {
 
-      this.isLoading = true;
+      this.isLoading.set(true);
 
       (await this.authService
         .login(this.formData.controls.username.value!, this.formData.controls.password.value!)).subscribe({
           next: (result: any) => {
 
-            this.isLoading = false;
+            this.isLoading.set(false);
 
             if (result.success) {
 
@@ -101,7 +101,7 @@ export class LoginComponent {
 
           }, error: (error: any) => {
 
-            this.isLoading = false;
+            this.isLoading.set(false);
             console.log(error);
 
           }

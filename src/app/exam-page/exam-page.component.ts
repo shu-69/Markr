@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Inject, signal, Signal, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Inject, signal, Signal, ViewChild, ViewEncapsulation, WritableSignal } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationExtras, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
@@ -29,12 +29,12 @@ export class ExamPageComponent  implements AfterViewInit {
   @ViewChild('timerProgressBar', { static: false }) timerProgressBar!: ElementRef;
 
   isLoading = signal<boolean>(false);
-  toShowInstructions = false;
-  isExaminationRunning = false;
-  isSubmitting = false;
-  isSubmitted = false;
-  isSubmitFailed = false;
-  timeOut = false;
+  toShowInstructions: WritableSignal<boolean> = signal(false);
+  isExaminationRunning: WritableSignal<boolean> = signal(false);
+  isSubmitting: WritableSignal<boolean> = signal(false);
+  isSubmitted: WritableSignal<boolean> = signal(false);
+  isSubmitFailed: WritableSignal<boolean> = signal(false);
+  timeOut: WritableSignal<boolean> = signal(false);
   examTimerSubscription: any;
   selectedQuestionIndex = 0;
 
@@ -93,7 +93,7 @@ export class ExamPageComponent  implements AfterViewInit {
 
   @HostListener('window:beforeunload', ['$event'])
   showMessage($event: any) {
-    if (this.isExaminationRunning) {
+    if (this.isExaminationRunning()) {
       $event.returnValue = 'Exam is in progress. Refreshing this page will result to loose your progress.';
     }
 
@@ -102,7 +102,7 @@ export class ExamPageComponent  implements AfterViewInit {
   constructor(private route: ActivatedRoute, private dialog: MatDialog, private http: HttpClient, private router: Router,
     private location: Location, private sharedService: SharedServiceService) {
 
-    this.sharedService.isExamRunning = this.isExaminationRunning;
+    this.sharedService.isExamRunning = this.isExaminationRunning();
 
   }
 
@@ -112,7 +112,7 @@ export class ExamPageComponent  implements AfterViewInit {
 
     console.log('checking')
 
-    return !this.isExaminationRunning;
+    return !this.isExaminationRunning();
 
   }
 
@@ -147,8 +147,8 @@ export class ExamPageComponent  implements AfterViewInit {
     if (!this.checkError())
       return
 
-    this.isExaminationRunning = true;
-    this.toShowInstructions = false;
+    this.isExaminationRunning.set(true);
+    this.toShowInstructions.set(false);
     if (!this.paperDetails!.is_without_time)
       this.startExamTimer(this.paperDetails!.time);
 
@@ -358,13 +358,13 @@ export class ExamPageComponent  implements AfterViewInit {
 
         this.instructions = result.result
 
-        this.toShowInstructions = true;
+        this.toShowInstructions.set(true);
 
       }, error: (error: any) => {
 
         this.isLoading.set(false);
 
-        this.toShowInstructions = true;
+        this.toShowInstructions.set(true);
 
         this.instructions = "Can't load Instructions";
 
@@ -386,10 +386,10 @@ export class ExamPageComponent  implements AfterViewInit {
 
   submitExam() {
 
-    this.isExaminationRunning = false;
-    this.isSubmitting = true;
-    this.isSubmitFailed = false;
-    this.sharedService.isExamRunning = this.isExaminationRunning;
+    this.isExaminationRunning.set(false);
+    this.isSubmitting.set(true);
+    this.isSubmitFailed.set(false);
+    this.sharedService.isExamRunning = this.isExaminationRunning();
 
     let options = {
 
@@ -434,15 +434,15 @@ export class ExamPageComponent  implements AfterViewInit {
 
         if (data.success) {
 
-          this.isSubmitting = false;
-          this.isSubmitted = true;
+          this.isSubmitting.set(false);
+          this.isSubmitted.set(true);
 
           this.submissionDetails.id = data.submissionId;
 
         } else {
 
-          this.isSubmitting = false;
-          this.isSubmitFailed = true;
+          this.isSubmitting.set(false);
+          this.isSubmitFailed.set(true);
 
         }
 
@@ -450,8 +450,8 @@ export class ExamPageComponent  implements AfterViewInit {
 
       }, error: (err) => {
 
-        this.isSubmitting = false;
-        this.isSubmitFailed = true;
+        this.isSubmitting.set(false);
+        this.isSubmitFailed.set(true);
 
         console.error(err)
 
@@ -678,8 +678,8 @@ export class ExamPageComponent  implements AfterViewInit {
       const remainingTime = endTime - currentTime;
 
       if (remainingTime <= 0) {
-        this.timeOut = true;
-        this.isExaminationRunning = false;
+        this.timeOut.set(true);
+        this.isExaminationRunning.set(false);
         this.examTimerSubscription.unsubscribe();
         console.log("Time Up!");
 

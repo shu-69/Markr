@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, Output, signal, WritableSignal } from '@angular/core';
 import { navData } from './nav-data';
 
 interface SideNavToogle {
@@ -16,7 +16,7 @@ export class SidenavComponent implements OnInit{
 
   @Output() onToggleSideNav: EventEmitter<SideNavToogle> = new EventEmitter();
 
-  collapsed = false;
+  collapsed: WritableSignal<boolean> = signal(false);
   screenWidth = 0;
   navData = navData;
 
@@ -24,7 +24,7 @@ export class SidenavComponent implements OnInit{
   onResize(event: any){
     this.screenWidth = window.innerWidth;
     if(this.screenWidth <= 768){
-      this.collapsed = false;
+      this.collapsed.set(false);
       this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
     }
   }
@@ -34,13 +34,13 @@ export class SidenavComponent implements OnInit{
   }
 
   toogleCollapse() {
-    this.collapsed = !this.collapsed;
+    this.collapsed.set(!this.collapsed());
     this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
   }
 
 
   closeSideNav() {
-    this.collapsed = false;
+    this.collapsed.set(false);
     this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
   }
 

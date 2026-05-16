@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ImagePickerConf } from 'ngp-image-picker';
 import { Title } from "@angular/platform-browser";
@@ -27,12 +27,12 @@ export interface DialogData {
 
 export class RegisterComponent implements OnInit {
 
-  showProfileImageError = false;
+  showProfileImageError: WritableSignal<boolean> = signal(false);
   imageErrorMessage = "";
 
   selectedProfileImage: string | null = null;   // Base64 data of selected profile image
 
-  isSubmitting: boolean = false;
+  isSubmitting: WritableSignal<boolean> = signal(false);
   submitButtonText: string = "SUBMIT";
 
   formData = new FormGroup({
@@ -115,13 +115,13 @@ export class RegisterComponent implements OnInit {
 
       // Checking email exists or not
 
-      this.isSubmitting = true;
+      this.isSubmitting.set(true);
       this.submitButtonText = "SUBMITTING";
 
       this.http.get(Params.SERVICE_BASE_URL + Params.ACCOUNT_SERVICE_URL_SUFFIXS.CHECK_EMAIL_EXISTS, options).subscribe({
         next: (emailExists: any) => {
 
-          // this.isSubmitting = true;
+          // this.isSubmitting.set(true);
           // this.submitButtonText = "SUBMITTING";
 
           let result: boolean = emailExists == "true";
@@ -162,11 +162,11 @@ export class RegisterComponent implements OnInit {
               next: data => {
                 console.log(data);
                 if (data.status) {
-                  this.isSubmitting = false;
+                  this.isSubmitting.set(false);
                   this.submitButtonText = "SUBMIT";
                   this.showSuccessDialog("Yay! Your account has been created!", { username: data.username, password: data.password });
                 } else {
-                  this.isSubmitting = false;
+                  this.isSubmitting.set(false);
                   this.submitButtonText = "SUBMIT";
                   this.showErrorDialog("OOPS!, That was not expected!", "Your account cannot be created at this time, please try after some time.");
                 }
@@ -178,13 +178,13 @@ export class RegisterComponent implements OnInit {
             });
 
           } else {
-            this.isSubmitting = false;
+            this.isSubmitting.set(false);
             this.submitButtonText = "SUBMIT";
             this.showErrorDialog("Email already exists!", "The email you entered is already exists, please use another email or do login insted.")
           }
 
         }, error: error => {
-          this.isSubmitting = false;
+          this.isSubmitting.set(false);
           this.submitButtonText = "SUBMIT";
           console.error('There was an error!', error);
           this.showErrorDialog("OOPS!, That was not expected!", "Some Internal server error occured, please try after some time.")
@@ -255,7 +255,7 @@ export class RegisterComponent implements OnInit {
   resetForm() {
     this.formData.reset();
     this.selectedProfileImage = null;
-    this.showProfileImageError = false;
+    this.showProfileImageError.set(false);
 
     try {
       let imageDeleteButton: HTMLElement = document.getElementById('delete-img')!;
@@ -297,10 +297,10 @@ export class RegisterComponent implements OnInit {
       let imageSize = Math.round(this.getImageSize(this.selectedProfileImage!));
 
       if (imageSize > Params.MAX_PROFILE_IMAGE_SIZE_IN_KB) {
-        this.showProfileImageError = true;
+        this.showProfileImageError.set(true);
         this.imageErrorMessage = "Maximum allowed image size is " + Params.MAX_PROFILE_IMAGE_SIZE_IN_KB + "kb";
       } else {
-        this.showProfileImageError = false;
+        this.showProfileImageError.set(false);
         this.imageErrorMessage = "";
       }
 
@@ -308,7 +308,7 @@ export class RegisterComponent implements OnInit {
 
     } else {
 
-      this.showProfileImageError = false;
+      this.showProfileImageError.set(false);
       this.imageErrorMessage = "";
       this.selectedProfileImage = null;
 

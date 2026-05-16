@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, signal, WritableSignal } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { NavigationService } from '../services/navigation.service';
@@ -18,11 +18,11 @@ export interface DialogData {
 })
 export class PracticePapersComponent {
 
-  isLoading: boolean = false;
+  isLoading: WritableSignal<boolean> = signal(false);
 
-  isSearching: boolean = false;
+  isSearching: WritableSignal<boolean> = signal(false);
 
-  showCompleted = true
+  showCompleted: WritableSignal<boolean> = signal(true);
 
   tests: Test[] = []
 
@@ -38,7 +38,7 @@ export class PracticePapersComponent {
 
   loadTests() {
 
-    this.isLoading = true;
+    this.isLoading.set(true);
 
     const headers = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
 
@@ -57,11 +57,11 @@ export class PracticePapersComponent {
 
         this.filterIncompletedTests();
 
-        this.isLoading = false;
+        this.isLoading.set(false);
 
       }, error: (error: any) => {
 
-        this.isLoading = false;
+        this.isLoading.set(false);
 
         console.log(error);
         alert("Can't load tests, please try again after sometime.");
@@ -77,11 +77,11 @@ export class PracticePapersComponent {
 
     if (searchValue == '') {
       this.searchResult = []
-      this.isSearching = false;
+      this.isSearching.set(false);
       return
     }
 
-    this.isSearching = true;
+    this.isSearching.set(true);
     this.searchResult = this.tests.filter(element => element.title.toLowerCase().includes(searchValue.toLowerCase()))
 
   }
