@@ -28,6 +28,7 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { provideLottieOptions } from 'ngx-lottie';
 import player from 'lottie-web';
@@ -78,7 +79,7 @@ export function appInitializer(authenticationService: AuthService): () => Promis
         AppRoutingModule,
         FormsModule, MatDialogModule, MatBadgeModule, NgpImagePickerModule, FontAwesomeModule, MatDatepickerModule, MatNativeDateModule,
         BrowserAnimationsModule, MatFormFieldModule, ReactiveFormsModule,
-        MatSidenavModule, MatTabsModule, MatIconModule], providers: [GlobalVar, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, DatePipe, AuthService,
+        MatSidenavModule, MatTabsModule, MatIconModule, MatProgressSpinnerModule], providers: [GlobalVar, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, DatePipe, AuthService,
         provideLottieOptions({ player: () => player }),
         provideAppInitializer(() => {
         const initializerFn = ((service: AuthService) => async function () { return service.autoAuthUser(); })(inject(AuthService));

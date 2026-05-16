@@ -45,10 +45,9 @@ export class AuthService {
           UserDetails.Name = responseResult.name;
           UserDetails.Username = responseResult.username;
           UserDetails.Email = responseResult.email;
-          UserDetails.Password = password
-
-          this.initSubmittions()
-
+          UserDetails.Password = password;
+          
+          // Submissions will be loaded on-demand in the dashboard
         }
 
       }, error: (error: any) => {
@@ -78,37 +77,6 @@ export class AuthService {
     } else {
       return of(false);
     }
-
-  }
-
-  async initSubmittions() {
-
-    let headers = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
-
-    const options: any = {
-
-      headers: headers,
-      params: { 'email': UserDetails.Email }
-
-    }
-
-    this.http.get(Params.SERVICE_BASE_URL + Params.USER_SERVICE_URL_SUFFIXS.GET_SUBMISSIONS, options).subscribe({
-
-      next: (value: any) => {
-
-        if(value && value.success){
-
-          UserDetails.Submission = value.result
-
-        }
-
-      },error : (error) => {
-          
-        console.error(error)
-
-      },
-
-    })
 
   }
 

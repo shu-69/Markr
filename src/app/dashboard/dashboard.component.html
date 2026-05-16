@@ -105,15 +105,19 @@
   <section class="contentSection examsTabsSection">
 
     <div class="sectionHeader">
-
       <span class="sectionLabel">Your Submissions</span>
-
-      <mat-icon class="toogleIcon"
-      (click)="toogleSection(examContentMatTabGroup._elementRef.nativeElement.classList, $event)">keyboard_arrow_up</mat-icon>
-
+      <mat-icon class="toogleIcon" (click)="toogleSubmissions()">
+        {{ isSubmissionsExpanded() ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+      </mat-icon>
     </div>
 
-    <mat-tab-group animationDuration="0ms" #examContentMatTabGroup>
+    @if (isSubmissionsExpanded()) {
+      @if (isLoadingSubmissions()) {
+        <div style="display: flex; justify-content: center; align-items: center; padding: 60px 0;">
+          <mat-spinner [diameter]="36"></mat-spinner>
+        </div>
+      } @else {
+        <mat-tab-group animationDuration="0ms">
 
       <mat-tab label="All">
 
@@ -193,6 +197,8 @@
       </mat-tab>
 
     </mat-tab-group>
+      }
+    }
 
   </section>
 

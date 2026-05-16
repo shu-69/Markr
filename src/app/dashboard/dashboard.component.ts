@@ -1,8 +1,9 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, WritableSignal, signal } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
 import { SharedServiceService } from '../services/shared-service.service';
 import { Params } from '../Params';
 import { NavigationExtras, Router } from '@angular/router';
+import { SubmissionService } from '../services/submission.service';
 import ObjectID from 'bson-objectid';
 
 @Component({
@@ -14,7 +15,7 @@ import ObjectID from 'bson-objectid';
 })
 export class DashboardComponent {
 
-  constructor(public sharedService: SharedServiceService, private router: Router) {
+  constructor(public sharedService: SharedServiceService, private router: Router, private submissionService: SubmissionService) {
 
 
 
@@ -44,22 +45,23 @@ export class DashboardComponent {
 
   }
 
-  toogleSection(elementClassList: any, e: any) {
+  isSubmissionsExpanded: WritableSignal<boolean> = signal(false);
+  isLoadingSubmissions: WritableSignal<boolean> = signal(false);
 
-    if (elementClassList.contains('inactive')) {
-
-      elementClassList.remove('inactive');
-
-      e.srcElement.innerText = 'keyboard_arrow_up';
-
-    } else {
-
-      elementClassList.add('inactive');
-
-      e.srcElement.innerText = 'keyboard_arrow_down';
-
+  async toogleSubmissions() {
+    this.isSubmissionsExpanded.set(!this.isSubmissionsExpanded());
+    
+    // Fetch data only when expanding and data isn't present
+    if (this.isSubmissionsExpanded() && !this.sharedService.getUsersSubmissions()) {
+      this.isLoadingSubmissions.set(true);
+      try {
+        await this.submissionService.initSubmittions();
+      } catch (err) {
+        console.error("Failed to load submissions", err);
+      } finally {
+        this.isLoadingSubmissions.set(false);
+      }
     }
-
   }
 
   getExamDateStr(date: any): string {
