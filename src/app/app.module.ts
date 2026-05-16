@@ -37,6 +37,10 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { provideLottieOptions } from 'ngx-lottie';
 import player from 'lottie-web';
@@ -51,6 +55,9 @@ import { PracticePapersComponent } from './practice-papers/practice-papers.compo
 import { PencilLoaderComponent } from './components/pencil-loader/pencil-loader.component';
 import { ExamPageComponent } from './exam-page/exam-page.component';
 import { ViewresultComponent } from './viewresult/viewresult.component';
+import { ProfileComponent } from './profile/profile.component';
+import { TransactionsComponent } from './transactions/transactions.component';
+import { SideSheetComponent } from './components/side-sheet/side-sheet.component';
 
 export function playerFactory() {
   return player;
@@ -85,6 +92,9 @@ export function appInitializer(
     PencilLoaderComponent,
     ExamPageComponent,
     ViewresultComponent,
+    ProfileComponent,
+    TransactionsComponent,
+    SideSheetComponent,
   ],
   bootstrap: [AppComponent],
   imports: [
@@ -104,6 +114,10 @@ export function appInitializer(
     MatTabsModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatSnackBarModule,
   ],
   providers: [
     GlobalVar,

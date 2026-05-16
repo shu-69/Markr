@@ -7,6 +7,7 @@ export class Params {
     CHECK_EMAIL_EXISTS: '/accounts/checkEmailExists',
     REGISTER: '/accounts/register',
     LOGIN: '/accounts/authenticate',
+    UPDATE_PROFILE: '/accounts/updateProfile',
   };
 
   public static EXAM_SERVICE_URL_SUFFIXS = {

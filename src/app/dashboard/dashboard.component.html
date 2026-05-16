@@ -23,18 +23,40 @@
           <i class="fa fa-solid fa-bell"></i>
         </div>
 
-        <div class="profileDetailsContainer">
+        <div class="profileDetailsContainer" [matMenuTriggerFor]="profileMenu" style="cursor: pointer;">
           <div class="profileAvatarContainer" style="">
             <img style="width: 25px; height: 25px; border-radius: 30px;"
-              src="../../assets/imgs/default_profile_img.png" />
+              [src]="sharedService.userProfileImg()" />
           </div>
           <div style="display: flex; flex-direction: column; justify-content: center;">
             <label
-            style="margin-left: 8px; font-family: 'Poppins-Medium'; font-size: 14px; color: white;">{{sharedService.getName(true)}}</label>
+            style="margin-left: 8px; font-family: 'Poppins-Medium'; font-size: 14px; color: white; cursor: pointer;">{{sharedService.getName(true)}}</label>
             <label
-            style="margin-left: 8px; font-family: 'Poppins-Regular'; font-size: 14px; color: gray;">{{sharedService.getUserName()}}</label>
+            style="margin-left: 8px; font-family: 'Poppins-Regular'; font-size: 14px; color: gray; cursor: pointer;">{{sharedService.getUserName()}}</label>
           </div>
         </div>
+
+        <mat-menu #profileMenu="matMenu" class="custom-profile-menu">
+          <div class="menu-header">
+            <span class="user-name">{{sharedService.getName(true)}}</span>
+            <span class="user-email">{{sharedService.getUserName()}}</span>
+          </div>
+          <div class="menu-items-container">
+            <button mat-menu-item (click)="onProfile()">
+              <mat-icon>account_circle</mat-icon>
+              <span>My Profile</span>
+            </button>
+            <button mat-menu-item (click)="onTransactions()">
+              <mat-icon>history</mat-icon>
+              <span>Transactions</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="onLogout()" class="logout-item">
+              <mat-icon>logout</mat-icon>
+              <span>Logout</span>
+            </button>
+          </div>
+        </mat-menu>
 
 
 

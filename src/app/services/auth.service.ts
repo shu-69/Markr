@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Params } from '../Params';
 import { UserDetails } from '../UserDetails';
+import { SharedServiceService } from './shared-service.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,10 @@ import { UserDetails } from '../UserDetails';
 export class AuthService {
   isAuthenticate: boolean = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private sharedService: SharedServiceService,
+  ) {}
 
   async init() {}
 
@@ -46,6 +50,16 @@ export class AuthService {
           UserDetails.Username = responseResult.username;
           UserDetails.Email = responseResult.email;
           UserDetails.Password = password;
+          UserDetails.ContactNo = responseResult.contact_no;
+          UserDetails.DOB = responseResult.dob;
+          UserDetails.Address = responseResult.address;
+          UserDetails.FatherName = responseResult.father_name;
+          UserDetails.Gender = responseResult.gender;
+          UserDetails.ProfileImg = responseResult.profile_img;
+          UserDetails.RegisteredOn = responseResult.registered_on;
+
+          // Notify shared service to update signals
+          this.sharedService.updateUserData();
 
           // Submissions will be loaded on-demand in the dashboard
         }
@@ -71,5 +85,16 @@ export class AuthService {
     } else {
       return of(false);
     }
+  }
+
+  logout() {
+    this.isAuthenticate = false;
+    UserDetails.Name = '';
+    UserDetails.Username = '';
+    UserDetails.Email = '';
+    UserDetails.Password = '';
+    localStorage.removeItem('logged_in_username');
+    localStorage.removeItem('logged_in_password');
+    window.location.reload();
   }
 }

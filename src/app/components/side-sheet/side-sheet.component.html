@@ -1,0 +1,12 @@
+<div class="side-sheet-backdrop" *ngIf="sideSheetService.isOpen()" (click)="sideSheetService.close()"></div>
+<div class="side-sheet-container" [class.open]="sideSheetService.isOpen()">
+    <div class="side-sheet-header">
+        <h2>{{sideSheetService.title()}}</h2>
+        <button mat-icon-button (click)="sideSheetService.close()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div class="side-sheet-content">
+        <ng-container *ngComponentOutlet="sideSheetService.component()"></ng-container>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { UserDetails } from '../UserDetails';
 
 @Injectable({
@@ -7,22 +7,40 @@ import { UserDetails } from '../UserDetails';
 export class SharedServiceService {
   isExamRunning = false;
 
+  // Signals for reactive user data
+  userDisplayName = signal('');
+  username = signal('');
+  userEmail = signal('');
+  userProfileImg = signal('../../assets/imgs/default_profile_img.png');
+
   constructor() {}
 
+  /**
+   * Updates the internal signals with the latest data from UserDetails.
+   * Call this after a successful login or profile update.
+   */
+  updateUserData() {
+    this.userDisplayName.set(UserDetails.Name || '');
+    this.username.set(UserDetails.Username || '');
+    this.userEmail.set(UserDetails.Email || '');
+    this.userProfileImg.set(UserDetails.ProfileImg || '../../assets/imgs/default_profile_img.png');
+  }
+
   getName(trimLastName?: boolean) {
+    const name = this.userDisplayName();
     if (trimLastName) {
-      if (UserDetails.Name.includes(' ')) {
-        return UserDetails.Name.substring(0, UserDetails.Name.indexOf(' '));
+      if (name.includes(' ')) {
+        return name.substring(0, name.indexOf(' '));
       } else {
-        return UserDetails.Name;
+        return name;
       }
     } else {
-      return UserDetails.Name;
+      return name;
     }
   }
 
   getUserName() {
-    return UserDetails.Username;
+    return this.username();
   }
 
   getUsersSubmissions() {

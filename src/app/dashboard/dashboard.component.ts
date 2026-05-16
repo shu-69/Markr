@@ -9,6 +9,10 @@ import { SharedServiceService } from '../services/shared-service.service';
 import { Params } from '../Params';
 import { NavigationExtras, Router } from '@angular/router';
 import { SubmissionService } from '../services/submission.service';
+import { AuthService } from '../services/auth.service';
+import { SideSheetService } from '../services/side-sheet.service';
+import { ProfileComponent } from '../profile/profile.component';
+import { TransactionsComponent } from '../transactions/transactions.component';
 import ObjectID from 'bson-objectid';
 
 @Component({
@@ -23,9 +27,23 @@ export class DashboardComponent {
     public sharedService: SharedServiceService,
     private router: Router,
     private submissionService: SubmissionService,
+    private authService: AuthService,
+    private sideSheetService: SideSheetService,
   ) {}
 
   ngOnInit() {}
+
+  onLogout() {
+    this.authService.logout();
+  }
+
+  onProfile() {
+    this.sideSheetService.open(ProfileComponent, 'My Profile');
+  }
+
+  onTransactions() {
+    this.sideSheetService.open(TransactionsComponent, 'Transactions');
+  }
 
   viewResult(examType: string, examId: string, submissionId: string) {
     let navigationExtras: NavigationExtras = {

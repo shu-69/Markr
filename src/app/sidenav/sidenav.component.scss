@@ -1,3 +1,5 @@
+@import '../../mixins.scss';
+
 .sidenav {
     background: white;
     transition: width 0.3s ease;
@@ -138,6 +140,71 @@
             color: #4b5563;
             font-size: 14px;
             transition: transform 0.3s ease;
+        }
+    }
+}
+
+@include mobile {
+    .sidenav {
+        width: 100vw !important;
+        height: 70px;
+        flex-direction: row;
+        padding: 0;
+        margin: 0;
+        border-top: 1px solid #e1e1e1;
+        border-right: none;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .logo-container, .sidenav-footer {
+        display: none !important;
+    }
+    
+    .sidenav-nav {
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+        margin-top: 0;
+        align-items: center;
+        
+        .sidenav-nav-item {
+            width: auto;
+            margin-bottom: 0;
+            padding: 0 !important;
+            
+            .sidenav-nav-link {
+                flex-direction: column;
+                justify-content: center;
+                height: 100%;
+                padding: 10px !important;
+                background-color: transparent !important; 
+                transition: none !important;
+                -webkit-tap-highlight-color: transparent;
+                outline: none !important;
+
+                &:hover, &:active, &:focus {
+                    background-color: transparent !important;
+                }
+                
+                .sidenav-link-icon {
+                    margin: 0 !important;
+                    font-size: 32px; // Bigger icons
+                    color: #64748b; 
+                }
+                
+                .sidenav-link-text {
+                    display: none !important;
+                }
+            }
+        }
+    }
+    
+    .active {
+        background-color: transparent !important;
+        padding: 0 !important;
+        
+        .sidenav-link-icon, i {
+            color: var(--theme-dark) !important; // Proper color (not white)
         }
     }
 }

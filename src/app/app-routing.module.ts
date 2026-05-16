@@ -17,6 +17,8 @@ import { ExamPageComponent } from './exam-page/exam-page.component';
 import { ViewresultComponent } from './viewresult/viewresult.component';
 import { ExamPageGuard } from './services/exam-page.guard';
 import { AnnouncementComponent } from './tabs/announcement/announcement.component';
+import { ProfileComponent } from './profile/profile.component';
+import { TransactionsComponent } from './transactions/transactions.component';
 
 const routes: Routes = [
   {
@@ -47,6 +49,14 @@ const routes: Routes = [
       {
         path: 'practice-papers',
         component: PracticePapersComponent,
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+      },
+      {
+        path: 'transactions',
+        component: TransactionsComponent,
       },
     ],
   },

@@ -1,19 +1,36 @@
+@import '../../mixins.scss';
+
 .parent {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
 
-    display: flex;
-    height: 100vh;
+  app-sidenav {
+    overflow: hidden;
+    border-right: 1px solid #e1e1e1;
+    width: fit-content;
+    transition: width 0.3s ease;
 
-    app-sidenav {
-        overflow: hidden;
-        border-right: 1px solid #e1e1e1;
-        width: fit-content;
-        transition: width 0.3s ease;
+    @include mobile {
+      border-right: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
     }
+  }
 
-    .body {
-        flex: 1;
-        width: auto;
-        overflow-y: auto;
+  .body {
+    flex: 1;
+    width: auto;
+    overflow-y: auto;
+
+    @include mobile {
+      width: 100%;
+      height: calc(100vh - 70px);
+      padding-bottom: 70px;
     }
-
+  }
 }

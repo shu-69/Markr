@@ -1,3 +1,5 @@
+@import '../../mixins.scss';
+
 .parent {
     width: 100%;
     height: 100%;
@@ -10,6 +12,11 @@
     background: var(--theme-dark);
     height: 320px;
 
+    @include mobile-and-tablet {
+        height: auto;
+        padding-bottom: 30px;
+    }
+
     .header {
 
         display: flex;
@@ -18,10 +25,20 @@
         align-items: center;
         border-bottom: 1px solid white;
         padding: 0 40px 0 40px;
-
+        
+        @include mobile {
+            flex-direction: column;
+            height: auto;
+            padding: 15px 20px;
+            gap: 15px;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
 
         .headerSubContainerStart {
-
+            @include mobile {
+                width: 100%;
+            }
 
             .searchContainer {
 
@@ -41,6 +58,10 @@
                     width: 35vw;
                     color: white;
                     font-size: 16px;
+                    
+                    @include mobile {
+                        width: 100%;
+                    }
                 }
 
                 input:focus {
@@ -60,6 +81,12 @@
             justify-content: flex-end;
             margin-right: 15px;
             align-items: center;
+
+            @include mobile {
+                width: 100%;
+                justify-content: space-between;
+                margin-right: 0;
+            }
 
             .profileDetailsContainer {
 
@@ -110,6 +137,13 @@
         justify-content: space-between;
         gap: 15px;
 
+        @include mobile-and-tablet {
+            flex-direction: column;
+            margin: 20px;
+            font-size: 16px;
+            gap: 30px;
+        }
+
         .welcomeMessage {
 
             width: fit-content;
@@ -139,6 +173,13 @@
             flex-direction: row;
             width: 70%;
             justify-content: space-around;
+
+            @include mobile-and-tablet {
+                width: 100%;
+                flex-direction: column;
+                gap: 20px;
+                justify-content: flex-start;
+            }
 
             .report {
                 display: flex;
@@ -266,8 +307,13 @@
 
     background: white;
     border-radius: 20px;
-    padding: 40px;
-    margin: 40px;
+    padding: 30px;
+    margin: 24px;
+
+    @include mobile {
+        margin: 20px;
+        padding: 20px;
+    }
 
     mat-tab-group {
 
@@ -346,10 +392,19 @@
         flex-flow: column;
         gap: 10px;
 
+        @include mobile {
+            padding: 15px;
+            gap: 5px;
+        }
+
         .examTitle {
 
             font-family: 'Poppins-SemiBold';
             font-size: 18px;
+
+            @include mobile {
+                font-size: 16px;
+            }
 
         }
 
@@ -361,6 +416,12 @@
                 gap: 20px;
                 font-family: 'Poppins-Regular', sans-serif;
                 font-size: 15px;
+
+                @include mobile {
+                    font-size: 12px;
+                    gap: 5px;
+                    flex-direction: column;
+                }
 
                 .bold {
 
@@ -387,6 +448,13 @@
                 margin-top: -30px;
                 background: white;
                 border: none;
+                
+                @include mobile {
+                    float: none;
+                    margin-top: 10px;
+                    width: 100%;
+                    font-size: 14px;
+                }
 
             }
 
@@ -408,4 +476,14 @@
 
 ::ng-deep .black-spinner circle {
     stroke: black !important;
+}
+
+.profileDetailsContainer {
+    padding: 6px 12px;
+    border-radius: 40px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
 }

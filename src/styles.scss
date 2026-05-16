@@ -48,6 +48,82 @@ body {
   padding-bottom: 24px;
 }
 
+/* Global Profile Menu Styling */
+.custom-profile-menu.mat-mdc-menu-panel {
+  border-radius: 20px !important;
+  padding: 0 !important;
+  min-width: 260px !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important;
+  overflow: hidden !important;
+  border: 1px solid #eeeeee !important;
+  background-color: white !important;
+  margin-top: 8px !important;
+
+  .mat-mdc-menu-content {
+      padding: 0 !important;
+  }
+
+  .menu-header {
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #f1f1f1;
+
+      .user-name {
+          font-family: 'Poppins-SemiBold' !important;
+          font-size: 16px;
+          color: #111111;
+          display: block;
+          margin: 0;
+      }
+
+      .user-email {
+          font-family: 'Poppins-Regular' !important;
+          font-size: 13px;
+          color: #666666;
+          display: block;
+          margin: 0;
+      }
+  }
+
+  .menu-items-container {
+      padding: 8px 0;
+  }
+
+  button.mat-mdc-menu-item {
+      height: 54px !important;
+      padding: 0 20px !important;
+      
+      .mdc-list-item__primary-text {
+          font-family: 'Poppins-Medium' !important;
+          font-size: 14px !important;
+          color: #333333 !important;
+          display: flex !important;
+          align-items: center !important;
+      }
+
+      mat-icon {
+          margin-right: 12px !important;
+          color: #555555 !important;
+          font-size: 20px !important;
+          width: 20px !important;
+          height: 20px !important;
+      }
+
+      &:hover {
+          background-color: #f4f5f7 !important;
+      }
+
+      &.logout-item {
+          .mdc-list-item__primary-text, mat-icon {
+              color: #e53e3e !important;
+          }
+      }
+  }
+}
+
 // ::ng-deep.dialog{
 //   background: red;
 //   border-radius: 20px;
@@ -141,4 +217,31 @@ body {
 @font-face {
   font-family: Poppins-Light;
   src: url(./assets/fonts/Poppins/Poppins-Light.ttf);
+}
+
+/* Snackbar Styles */
+::ng-deep .success-snackbar {
+    .mdc-snackbar__surface {
+        background-color: #10b981 !important;
+    }
+    .mdc-snackbar__label {
+        color: white !important;
+        font-family: 'Poppins-Medium' !important;
+    }
+    .mat-mdc-snack-bar-action {
+        color: white !important;
+    }
+}
+
+::ng-deep .error-snackbar {
+    .mdc-snackbar__surface {
+        background-color: #ef4444 !important;
+    }
+    .mdc-snackbar__label {
+        color: white !important;
+        font-family: 'Poppins-Medium' !important;
+    }
+    .mat-mdc-snack-bar-action {
+        color: white !important;
+    }
 }

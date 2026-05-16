@@ -1,0 +1,44 @@
+.transactions-drawer-container {
+    padding: 24px;
+
+    h1 {
+        display: none; // Title is already in side sheet header
+    }
+
+    .subtitle {
+        font-family: 'Poppins-Regular';
+        color: #71717a;
+        margin: 0 0 24px;
+        font-size: 14px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: #f8fafc;
+        border-radius: 16px;
+        border: 2px dashed #e2e8f0;
+
+        mat-icon {
+            font-size: 48px;
+            width: 48px;
+            height: 48px;
+            color: #cbd5e1;
+            margin-bottom: 16px;
+        }
+
+        h3 {
+            font-family: 'Poppins-Medium';
+            font-size: 18px;
+            margin: 0 0 8px;
+            color: #334155;
+        }
+
+        p {
+            font-family: 'Poppins-Regular';
+            color: #64748b;
+            font-size: 13px;
+            margin: 0 auto;
+        }
+    }
+}
