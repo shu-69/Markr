@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: markr-admin
+    name: markr
     env: static
     buildCommand: npm install --legacy-peer-deps && npm run build
     staticPublishPath: dist/markr/browser
