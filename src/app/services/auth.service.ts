@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 import { Params } from '../Params';
 import { UserDetails } from '../UserDetails';
 import { SharedServiceService } from './shared-service.service';
@@ -18,55 +19,41 @@ export class AuthService {
 
   async init() {}
 
-  async login(username: string, password: string): Promise<Observable<any>> {
-    // : Observable<any>
-
-    console.log(username, password);
+  async login(username: string, password: string, rememberMe: boolean = false): Promise<Observable<any>> {
+    console.log('Initiating secure login...');
 
     const headers = {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
     };
 
-    const options: any = {
-      headers: headers,
-      params: { username: username, password: password },
-      // responseType: 'text'
-    };
+    const payload = { username, password };
 
-    let result = await this.http.get(
+    // Migrate from GET to POST for securely sending credentials in the body
+    let result = await this.http.post(
       Params.SERVICE_BASE_URL + Params.ACCOUNT_SERVICE_URL_SUFFIXS.LOGIN,
-      options,
+      payload,
+      { headers }
     );
 
     result.subscribe({
       next: (result: any) => {
-        if (result.success) {
+        if (result.success && result.token) {
           this.isAuthenticate = true;
 
-          const responseResult = result.result;
+          // Secure token storage based on "Remember Me"
+          if (rememberMe) {
+            localStorage.setItem('auth_token', result.token);
+          } else {
+            sessionStorage.setItem('auth_token', result.token);
+          }
 
-          UserDetails._id = responseResult._id;
-          UserDetails.Name = responseResult.name;
-          UserDetails.Username = responseResult.username;
-          UserDetails.Email = responseResult.email;
-          UserDetails.Password = password;
-          UserDetails.ContactNo = responseResult.contact_no;
-          UserDetails.DOB = responseResult.dob;
-          UserDetails.Address = responseResult.address;
-          UserDetails.FatherName = responseResult.father_name;
-          UserDetails.Gender = responseResult.gender;
-          UserDetails.ProfileImg = responseResult.profile_img;
-          UserDetails.RegisteredOn = responseResult.registered_on;
-
-          // Notify shared service to update signals
-          this.sharedService.updateUserData();
-
-          // Submissions will be loaded on-demand in the dashboard
+          this.populateUserDetails(result.result);
         }
       },
       error: (error: any) => {
         this.isAuthenticate = false;
+        console.error('Login error:', error);
       },
     });
 
@@ -74,18 +61,58 @@ export class AuthService {
   }
 
   async autoAuthUser() {
-    console.log('Auto Logging');
+    console.log('Auto Authenticating Session...');
 
-    let username = localStorage.getItem('logged_in_username');
-    let password = localStorage.getItem('logged_in_password');
+    // Check for tokens in either session or local storage
+    const token = sessionStorage.getItem('auth_token') || localStorage.getItem('auth_token');
 
-    console.log(username, password);
+    if (token) {
+      const headers = {
+        'Authorization': `Bearer ${token}`
+      };
 
-    if (username && password) {
-      return await this.login(username, password);
+      return this.http.get(
+        Params.SERVICE_BASE_URL + Params.ACCOUNT_SERVICE_URL_SUFFIXS.GET_ME,
+        { headers }
+      ).pipe(
+        tap({
+          next: (result: any) => {
+            if (result.success) {
+              this.isAuthenticate = true;
+              this.populateUserDetails(result.result);
+            } else {
+              this.logout();
+            }
+          },
+          error: () => {
+            this.logout();
+          }
+        }),
+        catchError(() => of({ success: false }))
+      );
     } else {
-      return of(false);
+      return of({ success: false });
     }
+  }
+
+  private populateUserDetails(responseResult: any) {
+    UserDetails._id = responseResult._id;
+    UserDetails.Name = responseResult.name;
+    UserDetails.Username = responseResult.username;
+    UserDetails.Email = responseResult.email;
+    UserDetails.ContactNo = responseResult.contact_no;
+    UserDetails.DOB = responseResult.dob;
+    UserDetails.Address = responseResult.address;
+    UserDetails.FatherName = responseResult.father_name;
+    UserDetails.Gender = responseResult.gender;
+    UserDetails.ProfileImg = responseResult.profile_img;
+    UserDetails.RegisteredOn = responseResult.registered_on;
+
+    // Never store plaintext password back into UserDetails!
+    UserDetails.Password = ''; 
+
+    // Notify shared service to update signals
+    this.sharedService.updateUserData();
   }
 
   logout() {
@@ -94,8 +121,16 @@ export class AuthService {
     UserDetails.Username = '';
     UserDetails.Email = '';
     UserDetails.Password = '';
+    
+    // Clear all token traces securely
+    localStorage.removeItem('auth_token');
+    sessionStorage.removeItem('auth_token');
+    
+    // Legacy cleanup
     localStorage.removeItem('logged_in_username');
     localStorage.removeItem('logged_in_password');
+    localStorage.removeItem('log_in_remeber');
+
     window.location.reload();
   }
 }

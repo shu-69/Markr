@@ -27,10 +27,7 @@ export class LoginComponent {
     private navService: NavigationService,
     private http: HttpClient,
     private authService: AuthService,
-  ) {
-    localStorage.removeItem('loggeed_in_username');
-    localStorage.removeItem('loggeed_in_password');
-  }
+  ) {}
 
   async doLogin() {
     if (this.formData.valid) {
@@ -40,27 +37,14 @@ export class LoginComponent {
         await this.authService.login(
           this.formData.controls.username.value!,
           this.formData.controls.password.value!,
+          this.formData.controls.rememberMe.value || false
         )
       ).subscribe({
         next: (result: any) => {
           this.isLoading.set(false);
 
           if (result.success) {
-            localStorage.setItem(
-              'logged_in_username',
-              this.formData.controls.username.value!,
-            );
-            localStorage.setItem(
-              'logged_in_password',
-              this.formData.controls.password.value!,
-            );
-            localStorage.setItem(
-              'log_in_remeber',
-              this.formData.controls.rememberMe ? 'true' : 'false',
-            );
-
-            console.log('Login details saved!');
-
+            console.log('Login successful & Token stored securely!');
             this.navService.openPage(Params.PageNames.home);
           } else {
             switch (result.err_code) {

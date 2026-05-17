@@ -12,6 +12,7 @@ export class Params {
     UPDATE_PROFILE: '/accounts/updateProfile',
     SAVE_TRANSACTION: '/accounts/saveTransaction',
     GET_TRANSACTIONS: '/accounts/getTransactions',
+    GET_ME: '/accounts/me',
   };
 
   public static EXAM_SERVICE_URL_SUFFIXS = {
