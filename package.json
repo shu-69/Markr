@@ -25,6 +25,8 @@
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/free-regular-svg-icons": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
+    "@ng-icons/core": "^33.2.2",
+    "@ng-icons/lucide": "^33.2.2",
     "bson-objectid": "^2.0.4",
     "font-awesome": "^4.7.0",
     "lottie-web": "^5.13.0",
