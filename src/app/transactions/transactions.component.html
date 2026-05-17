@@ -2,11 +2,91 @@
     <div class="transactions-card">
         <h1>Transactions</h1>
         <p class="subtitle">Keep track of your study history and course enrollments</p>
-        
-        <div class="empty-state">
-            <mat-icon>receipt_long</mat-icon>
-            <h3>No transactions found</h3>
-            <p>Your recent activities will appear here once you start taking tests or enrolling in courses.</p>
-        </div>
+
+        <!-- Secure checkout launching overlay -->
+        @if (isLoading()) {
+            <div class="loading-overlay">
+                <mat-icon class="rotating">sync</mat-icon>
+                <p>Opening Razorpay Secure Checkout...</p>
+            </div>
+        }
+
+        <!-- Active Transactions List -->
+        @if (transactions().length > 0) {
+            <div class="actions-header">
+                <button mat-flat-button class="pay-btn-primary" (click)="initiateTestPayment(499)">
+                    <mat-icon>add_shopping_cart</mat-icon>
+                    Quick Test Pay (₹499)
+                </button>
+            </div>
+
+            <div class="transaction-list">
+                @for (tx of transactions(); track tx.razorpay_payment_id) {
+                    <div class="transaction-item">
+                        <div class="tx-icon">
+                            <mat-icon>receipt</mat-icon>
+                        </div>
+                        <div class="tx-details">
+                            <h4 class="tx-title">{{ tx.description }}</h4>
+                            <p class="tx-id">ID: <span>{{ tx.razorpay_payment_id }}</span></p>
+                            <p class="tx-date">{{ tx.date | date:'medium' }}</p>
+                        </div>
+                        <div class="tx-meta">
+                            <span class="tx-amount">{{ tx.amount | currency:'INR':'symbol':'1.0-0' }}</span>
+                            <span class="tx-badge success">
+                                <mat-icon>check_circle</mat-icon>
+                                Paid
+                            </span>
+                        </div>
+                    </div>
+                }
+            </div>
+        } @else {
+            <!-- Empty State & Pricing Grid -->
+            <div class="empty-state">
+                <mat-icon class="receipt-icon">receipt_long</mat-icon>
+                <h3>No transactions found</h3>
+                <p class="empty-desc">Your recent activities will appear here once you make a simulated payment. Select a package below to initiate a test transaction.</p>
+            </div>
+
+            <div class="pricing-plans-section">
+                <h3>Select a Study Package to Test</h3>
+                <div class="pricing-grid">
+                    <div class="plan-card">
+                        <div class="plan-header">
+                            <span class="plan-title">Starter Plan</span>
+                            <span class="plan-price">₹299</span>
+                        </div>
+                        <p class="plan-desc">Access to 10 Premium Mock Tests & Practice Sheets.</p>
+                        <button mat-flat-button class="plan-action-btn" (click)="initiateTestPayment(299)">
+                            Select Starter
+                        </button>
+                    </div>
+
+                    <div class="plan-card recommended">
+                        <div class="badge-recommended">POPULAR</div>
+                        <div class="plan-header">
+                            <span class="plan-title">Pro Study Pass</span>
+                            <span class="plan-price">₹499</span>
+                        </div>
+                        <p class="plan-desc">Unlimited tests, comprehensive analytics, and priority feedback.</p>
+                        <button mat-flat-button class="plan-action-btn primary" (click)="initiateTestPayment(499)">
+                            Select Pro Pass
+                        </button>
+                    </div>
+
+                    <div class="plan-card">
+                        <div class="plan-header">
+                            <span class="plan-title">Elite Access</span>
+                            <span class="plan-price">₹999</span>
+                        </div>
+                        <p class="plan-desc">Lifetime platform access, 1-on-1 mentorship sessions, and exclusive webinars.</p>
+                        <button mat-flat-button class="plan-action-btn" (click)="initiateTestPayment(999)">
+                            Select Elite
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 </div>

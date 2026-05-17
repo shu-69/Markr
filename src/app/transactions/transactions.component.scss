@@ -1,5 +1,6 @@
 .transactions-drawer-container {
     padding: 24px;
+    font-family: 'Poppins-Regular', sans-serif;
 
     h1 {
         display: none; // Title is already in side sheet header
@@ -12,33 +13,357 @@
         font-size: 14px;
     }
 
-    .empty-state {
-        text-align: center;
-        padding: 60px 20px;
-        background: #f8fafc;
-        border-radius: 16px;
-        border: 2px dashed #e2e8f0;
+    // Loading & secure spinner overlay
+    .loading-overlay {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        margin-bottom: 24px;
+        background: rgba(23, 23, 23, 0.04);
+        border-radius: 12px;
+        border: 1px solid rgba(23, 23, 23, 0.08);
 
         mat-icon {
-            font-size: 48px;
-            width: 48px;
-            height: 48px;
-            color: #cbd5e1;
-            margin-bottom: 16px;
+            color: #171717;
+            font-size: 28px;
+            width: 28px;
+            height: 28px;
+            margin-bottom: 8px;
+        }
+
+        p {
+            margin: 0;
+            font-family: 'Poppins-Medium';
+            font-size: 13px;
+            color: #171717;
+        }
+
+        .rotating {
+            animation: rotate 1.5s linear infinite;
+        }
+    }
+
+    // List Header Actions
+    .actions-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        gap: 12px;
+
+        .pay-btn-primary {
+            background-color: #171717 !important;
+            color: white !important;
+            font-family: 'Poppins-Medium';
+            font-size: 13px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            height: 42px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+
+            mat-icon {
+                font-size: 18px;
+                width: 18px;
+                height: 18px;
+            }
+
+            &:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
+        }
+
+        .clear-btn {
+            color: #ef4444 !important;
+            border-color: #fca5a5 !important;
+            font-family: 'Poppins-Medium';
+            font-size: 13px;
+            height: 42px;
+            border-radius: 8px;
+            padding: 8px 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+
+            mat-icon {
+                font-size: 18px;
+                width: 18px;
+                height: 18px;
+            }
+
+            &:hover {
+                background-color: #fef2f2;
+                border-color: #ef4444 !important;
+            }
+        }
+    }
+
+    // Transaction History list
+    .transaction-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: white;
+            border: 1px solid #e4e4e7;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+
+            &:hover {
+                border-color: #a1a1aa;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            }
+
+            .tx-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 42px;
+                height: 42px;
+                background-color: #f4f4f5;
+                color: #27272a;
+                border-radius: 10px;
+                margin-right: 14px;
+
+                mat-icon {
+                    font-size: 20px;
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+
+            .tx-details {
+                flex-grow: 1;
+
+                .tx-title {
+                    font-family: 'Poppins-Medium';
+                    font-size: 13px;
+                    margin: 0 0 4px;
+                    color: #18181b;
+                    line-height: 1.4;
+                }
+
+                .tx-id {
+                    font-size: 11px;
+                    color: #71717a;
+                    margin: 0 0 2px;
+
+                    span {
+                        font-family: monospace;
+                        font-weight: 600;
+                        color: #27272a;
+                    }
+                }
+
+                .tx-date {
+                    font-size: 11px;
+                    color: #a1a1aa;
+                    margin: 0;
+                }
+            }
+
+            .tx-meta {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 6px;
+                margin-left: 14px;
+
+                .tx-amount {
+                    font-family: 'Poppins-SemiBold';
+                    font-size: 15px;
+                    color: #18181b;
+                }
+
+                .tx-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 4px;
+                    font-size: 10px;
+                    font-family: 'Poppins-Medium';
+                    padding: 2px 8px;
+                    border-radius: 20px;
+
+                    mat-icon {
+                        font-size: 12px;
+                        width: 12px;
+                        height: 12px;
+                    }
+
+                    &.success {
+                        background-color: #ecfdf5;
+                        color: #059669;
+                        border: 1px solid #a7f3d0;
+                    }
+                }
+            }
+        }
+    }
+
+    // Empty state
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        background: #f8fafc;
+        border-radius: 16px;
+        border: 2px dashed #cbd5e1;
+        margin-bottom: 32px;
+
+        .receipt-icon {
+            font-size: 44px;
+            width: 44px;
+            height: 44px;
+            color: #94a3b8;
+            margin-bottom: 12px;
         }
 
         h3 {
             font-family: 'Poppins-Medium';
-            font-size: 18px;
-            margin: 0 0 8px;
-            color: #334155;
+            font-size: 16px;
+            margin: 0 0 6px;
+            color: #1e293b;
         }
 
-        p {
+        .empty-desc {
             font-family: 'Poppins-Regular';
             color: #64748b;
-            font-size: 13px;
+            font-size: 12px;
+            max-width: 320px;
             margin: 0 auto;
+            line-height: 1.5;
         }
+    }
+
+    // Pricing/Selectable Plans Grid
+    .pricing-plans-section {
+        h3 {
+            font-family: 'Poppins-Medium';
+            font-size: 15px;
+            color: #1e293b;
+            margin: 0 0 16px;
+            text-align: center;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 16px;
+
+            @media(min-width: 576px) {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .plan-card {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                padding: 20px;
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    transform: translateY(-2px);
+                    border-color: #cbd5e1;
+                    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+                }
+
+                &.recommended {
+                    border: 2px solid #171717;
+                    background: #fafafa;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+
+                    &:hover {
+                        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+                    }
+
+                    .badge-recommended {
+                        position: absolute;
+                        top: -10px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background: #171717;
+                        color: white;
+                        font-size: 9px;
+                        font-family: 'Poppins-Bold';
+                        padding: 2px 8px;
+                        border-radius: 20px;
+                        letter-spacing: 0.5px;
+                    }
+                }
+
+                .plan-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: baseline;
+                    margin-bottom: 10px;
+
+                    .plan-title {
+                        font-family: 'Poppins-SemiBold';
+                        font-size: 13px;
+                        color: #1e293b;
+                    }
+
+                    .plan-price {
+                        font-family: 'Poppins-Bold';
+                        font-size: 18px;
+                        color: #171717;
+                    }
+                }
+
+                .plan-desc {
+                    font-size: 11px;
+                    color: #64748b;
+                    margin: 0 0 20px;
+                    line-height: 1.5;
+                    flex-grow: 1;
+                }
+
+                .plan-action-btn {
+                    width: 100% !important;
+                    background-color: #f1f5f9 !important;
+                    color: #334155 !important;
+                    font-family: 'Poppins-Medium';
+                    font-size: 11px;
+                    border-radius: 6px;
+                    padding: 6px 12px;
+                    transition: all 0.2s ease;
+
+                    &:hover {
+                        background-color: #e2e8f0 !important;
+                    }
+
+                    &.primary {
+                        background-color: #171717 !important;
+                        color: white !important;
+
+                        &:hover {
+                            background-color: #2e2e2e !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Rotation keyframes
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
     }
 }

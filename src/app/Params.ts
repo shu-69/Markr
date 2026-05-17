@@ -3,11 +3,15 @@ export class Params {
 
   public static SERVICE_BASE_URL = 'https://markr-api.onrender.com';
 
+  public static RAZORPAY_KEY = 'rzp_live_UFkoWsGcg8ZqWp'; // Swap this with your rzp_live_... key for Live Mode
+
   public static ACCOUNT_SERVICE_URL_SUFFIXS = {
     CHECK_EMAIL_EXISTS: '/accounts/checkEmailExists',
     REGISTER: '/accounts/register',
     LOGIN: '/accounts/authenticate',
     UPDATE_PROFILE: '/accounts/updateProfile',
+    SAVE_TRANSACTION: '/accounts/saveTransaction',
+    GET_TRANSACTIONS: '/accounts/getTransactions',
   };
 
   public static EXAM_SERVICE_URL_SUFFIXS = {
