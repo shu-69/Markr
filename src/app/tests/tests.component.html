@@ -161,4 +161,14 @@
     </div>
   }
 
+  <div class="paginationContainer" style="display: flex; justify-content: center; gap: 10px; margin-top: 20px; align-items: center; font-family: 'Poppins-Regular', sans-serif;">
+    <button (click)="prevPage()" [disabled]="currentPage() === 1" style="padding: 5px 10px; border-radius: 5px; border: 1px solid gray; cursor: pointer; background: #fff; disabled: background: #ccc;">
+      Previous
+    </button>
+    <span>Page {{currentPage()}} of {{totalPages()}}</span>
+    <button (click)="nextPage()" [disabled]="currentPage() === totalPages()" style="padding: 5px 10px; border-radius: 5px; border: 1px solid gray; cursor: pointer; background: #fff; disabled: background: #ccc;">
+      Next
+    </button>
+  </div>
+
 </section>

@@ -29,6 +29,10 @@ export interface DialogData {
 export class TestsComponent {
   isLoading: WritableSignal<boolean> = signal(false);
   isGridView = signal(true);
+  currentPage = signal(1);
+  pageSize = signal(10);
+  totalItems = signal(0);
+  totalPages = signal(0);
 
   isSearching: WritableSignal<boolean> = signal(false);
 
@@ -58,8 +62,10 @@ export class TestsComponent {
 
     const options: any = {
       headers: headers,
-      params: {},
-      // responseType: 'text'
+      params: {
+        page: this.currentPage(),
+        limit: this.pageSize()
+      },
     };
 
     this.http
@@ -70,7 +76,9 @@ export class TestsComponent {
       )
       .subscribe({
         next: (result: any) => {
-          this.tests = result;
+          this.tests = result.result;
+          this.totalItems.set(result.pagination.total);
+          this.totalPages.set(result.pagination.pages);
 
           this.filterIncompletedTests();
 
@@ -83,6 +91,20 @@ export class TestsComponent {
           alert("Can't load tests, please try again after sometime.");
         },
       });
+  }
+
+  nextPage() {
+    if (this.currentPage() < this.totalPages()) {
+      this.currentPage.update(p => p + 1);
+      this.loadTests();
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage() > 1) {
+      this.currentPage.update(p => p - 1);
+      this.loadTests();
+    }
   }
 
   doSearch(e: any) {
