@@ -14,6 +14,7 @@ import { SideSheetService } from '../services/side-sheet.service';
 import { ProfileComponent } from '../profile/profile.component';
 import { TransactionsComponent } from '../transactions/transactions.component';
 import ObjectID from 'bson-objectid';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,6 +30,7 @@ export class DashboardComponent {
     private submissionService: SubmissionService,
     private authService: AuthService,
     private sideSheetService: SideSheetService,
+    public notificationService: NotificationService,
   ) {}
 
   ngOnInit() {}

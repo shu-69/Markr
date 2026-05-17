@@ -79,7 +79,6 @@
             gap: 20px;
             flex-direction: row;
             justify-content: flex-end;
-            margin-right: 15px;
             align-items: center;
 
             @include mobile {
@@ -480,6 +479,8 @@
 
 .profileDetailsContainer {
     padding: 6px 12px;
+    padding-left: 6px;
+    margin-left: -6px;
     border-radius: 40px;
     transition: background-color 0.3s ease;
 

@@ -3,6 +3,7 @@ import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AuthService } from './services/auth.service';
+import { FcmService } from './services/fcm.service';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private auth: AuthService,
+    private fcmService: FcmService,
   ) {
     // Listener for browser refreshed
     // this.subscription = router.events.subscribe((event) => {
@@ -29,5 +31,7 @@ export class AppComponent implements OnInit {
   }
   ngOnInit(): void {
     //this.auth.autoAuthUser();
+    this.fcmService.init();
+    this.fcmService.requestPermission();
   }
 }

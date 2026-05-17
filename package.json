@@ -28,6 +28,7 @@
     "@ng-icons/core": "^33.2.2",
     "@ng-icons/lucide": "^33.2.2",
     "bson-objectid": "^2.0.4",
+    "firebase": "^12.13.0",
     "font-awesome": "^4.7.0",
     "lottie-web": "^5.13.0",
     "ngx-lottie": "^21.2.0",
