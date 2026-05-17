@@ -1,5 +1,4 @@
 <section class="parent scrollable padded">
-
   @if (isLoading()) {
     <div class="loaderContainer">
       <app-pencil-loader></app-pencil-loader>
@@ -7,41 +6,105 @@
   }
 
   <div class="header">
-
-    <div style="display: flex; gap: 5px;">
-
-      <img src="../../assets/iconsaxicons/twotone/note-1.svg">
+    <div style="display: flex; gap: 5px">
+      <img src="../../assets/iconsaxicons/twotone/note-1.svg" />
       <span class="headerTitle">Tests</span>
-
     </div>
 
-    <div style="display: flex; gap: 10px; align-items: center;">
-
+    <div style="display: flex; gap: 10px; align-items: center">
       <span class="searchContainer">
-
-        <img src="../../assets/iconsaxicons/outline/search-normal-1.svg">
-        <input type="text" placeholder="Search tests..." (input)="doSearch($event)">
-
+        <img src="../../assets/iconsaxicons/outline/search-normal-1.svg" />
+        <input
+          type="text"
+          placeholder="Search tests..."
+          (input)="doSearch($event)"
+        />
       </span>
 
-      <button (click)="isGridView.set(!isGridView())" style="background: none; border: none; cursor: pointer; display: flex; align-items: center;" title="Toggle Grid/List View">
-        <ng-icon [name]="isGridView() ? 'lucideList' : 'lucideGrid'" style="font-size: 20px; color: #171717;"></ng-icon>
+      <button
+        (click)="isGridView.set(!isGridView())"
+        style="
+          background: none;
+          border: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+        "
+        title="Toggle Grid/List View"
+      >
+        <ng-icon
+          [name]="isGridView() ? 'lucideList' : 'lucideGrid'"
+          style="font-size: 20px; color: #171717"
+        ></ng-icon>
       </button>
 
       <span class="seperator"></span>
 
       <span
-        style="display: flex; align-items: center; gap: 10px; font-family: 'Poppins-Regular', sans-serif; font-size: 14px;">
-        <label>Show Completed</label>
+        style="
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          font-family: &quot;Poppins-Regular&quot;, sans-serif;
+          font-size: 14px;
+        "
+      >
+        <label style="color: #555">Sort by:</label>
+        <button
+          [matMenuTriggerFor]="sortMenu"
+          style="
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 4px 12px;
+            font-family: &quot;Poppins-Regular&quot;, sans-serif;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+          "
+        >
+          <span>{{ getSortLabel() }}</span>
+          <ng-icon
+            name="lucideChevronDown"
+            style="font-size: 14px; color: #555"
+          ></ng-icon>
+        </button>
+        <mat-menu #sortMenu="matMenu">
+          <button mat-menu-item (click)="setSort('date')">Date Added</button>
+          <button mat-menu-item (click)="setSort('title')">Title</button>
+          <button mat-menu-item (click)="setSort('marks')">
+            Highest Marks
+          </button>
+          <button mat-menu-item (click)="setSort('time')">Time Limit</button>
+        </mat-menu>
+      </span>
+
+      <span class="seperator"></span>
+
+      <span
+        style="
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-family: &quot;Poppins-Regular&quot;, sans-serif;
+          font-size: 14px;
+        "
+      >
+        <label style="color: #555">Show Completed</label>
         <label class="switch">
-          <input type="checkbox" [checked]="showCompleted()" (click)="showCompleted.set(!showCompleted()); showCompleted() ? null : filterIncompletedTests()">
+          <input
+            type="checkbox"
+            [checked]="showCompleted()"
+            (click)="
+              showCompleted.set(!showCompleted()); updateDisplayedTests()
+            "
+          />
           <span class="slider"></span>
         </label>
       </span>
-
     </div>
-
-
   </div>
 
   @if (!isSearching() && showCompleted()) {
@@ -50,31 +113,33 @@
         <div class="testDetailsContainer" (click)="openTestDetails(test)">
           <div class="containerHeader">
             <span class="title">
-              {{test.title}}
+              {{ test.title }}
             </span>
             @if (checkIfTestCompleted(test._id)) {
-              <span class="completed">
-                Completed
-              </span>
+              <span class="completed"> Completed </span>
             }
           </div>
           <div class="content">
             <div class="labels">
               <div>
                 <i class="fa fa-list-ul"></i>
-                <label>{{test.questions.length}}&nbsp;questions</label>
+                <label>{{ test.questions.length }}&nbsp;questions</label>
               </div>
               <div>
                 <i class="fa fa-clock-o"></i>
-                <label>{{getTestTime(test.is_without_time, test.time)}}</label>
+                <label>{{
+                  getTestTime(test.is_without_time, test.time)
+                }}</label>
               </div>
               <div>
                 <i class="fa fa-graduation-cap"></i>
-                <label>{{test.marks}}&nbsp;marks</label>
+                <label>{{ test.marks }}&nbsp;marks</label>
               </div>
             </div>
             <span class="next">
-              <img src="../../assets/iconsaxicons/bulk/arrow-square-right.svg">
+              <img
+                src="../../assets/iconsaxicons/bulk/arrow-square-right.svg"
+              />
             </span>
           </div>
         </div>
@@ -88,35 +153,43 @@
         <div class="testDetailsContainer" (click)="openTestDetails(test)">
           <div class="containerHeader">
             <span class="title">
-              {{test.title}}
+              {{ test.title }}
             </span>
-            <span class="completed">
-              Completed
-            </span>
+            <span class="completed"> Completed </span>
           </div>
           <div class="content">
             <div class="labels">
               <div>
                 <i class="fa fa-list-ul"></i>
-                <label>{{test.questions.length}}&nbsp;questions</label>
+                <label>{{ test.questions.length }}&nbsp;questions</label>
               </div>
               <div>
                 <i class="fa fa-clock-o"></i>
-                <label>{{getTestTime(test.is_without_time, test.time)}}</label>
+                <label>{{
+                  getTestTime(test.is_without_time, test.time)
+                }}</label>
               </div>
               <div>
                 <i class="fa fa-graduation-cap"></i>
-                <label>{{test.marks}}&nbsp;marks</label>
+                <label>{{ test.marks }}&nbsp;marks</label>
               </div>
             </div>
             <span class="next">
-              <img src="../../assets/iconsaxicons/bulk/arrow-square-right.svg">
+              <img
+                src="../../assets/iconsaxicons/bulk/arrow-square-right.svg"
+              />
             </span>
           </div>
         </div>
       }
       @if (searchResult.length == 0) {
-        <div style="text-align: center; width: 100%; font-family: 'Poppins-Regular';">
+        <div
+          style="
+            text-align: center;
+            width: 100%;
+            font-family: &quot;Poppins-Regular&quot;;
+          "
+        >
           0 Search Result
         </div>
       }
@@ -129,31 +202,33 @@
         <div class="testDetailsContainer" (click)="openTestDetails(test)">
           <div class="containerHeader">
             <span class="title">
-              {{test.title}}
+              {{ test.title }}
             </span>
             @if (checkIfTestCompleted(test._id)) {
-              <span class="completed">
-                Completed
-              </span>
+              <span class="completed"> Completed </span>
             }
           </div>
           <div class="content">
             <div class="labels">
               <div>
                 <i class="fa fa-list-ul"></i>
-                <label>{{test.questions.length}}&nbsp;questions</label>
+                <label>{{ test.questions.length }}&nbsp;questions</label>
               </div>
               <div>
                 <i class="fa fa-clock-o"></i>
-                <label>{{getTestTime(test.is_without_time, test.time)}}</label>
+                <label>{{
+                  getTestTime(test.is_without_time, test.time)
+                }}</label>
               </div>
               <div>
                 <i class="fa fa-graduation-cap"></i>
-                <label>{{test.marks}}&nbsp;marks</label>
+                <label>{{ test.marks }}&nbsp;marks</label>
               </div>
             </div>
             <span class="next">
-              <img src="../../assets/iconsaxicons/bulk/arrow-square-right.svg">
+              <img
+                src="../../assets/iconsaxicons/bulk/arrow-square-right.svg"
+              />
             </span>
           </div>
         </div>
@@ -161,14 +236,43 @@
     </div>
   }
 
-  <div class="paginationContainer" style="display: flex; justify-content: center; gap: 10px; margin-top: 20px; align-items: center; font-family: 'Poppins-Regular', sans-serif;">
-    <button (click)="prevPage()" [disabled]="currentPage() === 1" style="padding: 5px 10px; border-radius: 5px; border: 1px solid gray; cursor: pointer; background: #fff; disabled: background: #ccc;">
+  <div class="paginationContainer">
+    <button
+      (click)="prevPage()"
+      [disabled]="currentPage() === 1"
+      [style.color]="currentPage() === 1 ? '#ccc' : '#171717'"
+      style="
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+        background: transparent;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      "
+    >
+      <ng-icon name="lucideChevronLeft"></ng-icon>
       Previous
     </button>
-    <span>Page {{currentPage()}} of {{totalPages()}}</span>
-    <button (click)="nextPage()" [disabled]="currentPage() === totalPages()" style="padding: 5px 10px; border-radius: 5px; border: 1px solid gray; cursor: pointer; background: #fff; disabled: background: #ccc;">
+    <span>Page {{ currentPage() }} of {{ totalPages() }}</span>
+    <button
+      (click)="nextPage()"
+      [disabled]="currentPage() === totalPages()"
+      [style.color]="currentPage() === totalPages() ? '#ccc' : '#171717'"
+      style="
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+        background: transparent;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      "
+    >
       Next
+      <ng-icon name="lucideChevronRight"></ng-icon>
     </button>
   </div>
-
 </section>

@@ -11,7 +11,7 @@ import { Params } from '../Params';
 import { NavigationExtras, Router } from '@angular/router';
 import { UserDetails } from '../UserDetails';
 import { provideIcons } from '@ng-icons/core';
-import { lucideGrid, lucideList } from '@ng-icons/lucide';
+import { lucideGrid, lucideList, lucideChevronLeft, lucideChevronRight, lucideChevronDown } from '@ng-icons/lucide';
 
 export interface DialogData {
   test: any;
@@ -23,7 +23,7 @@ export interface DialogData {
   styleUrls: ['./tests.component.scss'],
   standalone: false,
   providers: [
-    provideIcons({ lucideGrid, lucideList })
+    provideIcons({ lucideGrid, lucideList, lucideChevronLeft, lucideChevronRight, lucideChevronDown })
   ]
 })
 export class TestsComponent {
@@ -33,12 +33,15 @@ export class TestsComponent {
   pageSize = signal(10);
   totalItems = signal(0);
   totalPages = signal(0);
+  searchTerm = signal('');
+  sortBy = signal('date');
 
   isSearching: WritableSignal<boolean> = signal(false);
 
   showCompleted: WritableSignal<boolean> = signal(true);
 
   tests: Test[] = [];
+  allTests: Test[] = [];
 
   incomletedTests: Test[] = [];
 
@@ -62,10 +65,6 @@ export class TestsComponent {
 
     const options: any = {
       headers: headers,
-      params: {
-        page: this.currentPage(),
-        limit: this.pageSize()
-      },
     };
 
     this.http
@@ -76,11 +75,9 @@ export class TestsComponent {
       )
       .subscribe({
         next: (result: any) => {
-          this.tests = result.result;
-          this.totalItems.set(result.pagination.total);
-          this.totalPages.set(result.pagination.pages);
-
-          this.filterIncompletedTests();
+          this.allTests = result.result;
+          
+          this.updateDisplayedTests();
 
           this.isLoading.set(false);
         },
@@ -93,33 +90,113 @@ export class TestsComponent {
       });
   }
 
+  updateDisplayedTests() {
+    let sourceList = this.allTests;
+
+    // 1. Handle Filtering (Show Completed or not)
+    if (!this.showCompleted()) {
+      sourceList = sourceList.filter(
+        (element: any) => this.checkIfTestCompleted(element._id) == false
+      );
+    }
+
+    // 2. Handle Search
+    if (this.searchTerm() !== '') {
+      sourceList = sourceList.filter((element) =>
+        element.title.toLowerCase().includes(this.searchTerm().toLowerCase())
+      );
+    }
+
+    // 3. Handle Sorting
+    sourceList = [...sourceList].sort((a, b) => {
+      if (this.sortBy() === 'title') {
+        return a.title.localeCompare(b.title);
+      } else if (this.sortBy() === 'marks') {
+        return b.marks - a.marks; // High to low
+      } else if (this.sortBy() === 'time') {
+        return a.time - b.time; // Short to long
+      } else if (this.sortBy() === 'date') {
+        const dateA = a.details?.added_on ? new Date(a.details.added_on).getTime() : 0;
+        const dateB = b.details?.added_on ? new Date(b.details.added_on).getTime() : 0;
+        return dateB - dateA; // Newest first
+      }
+      return 0;
+    });
+
+    // 4. Update Pagination Stats
+    this.totalItems.set(sourceList.length);
+    this.totalPages.set(Math.ceil(sourceList.length / this.pageSize()));
+    
+    // Ensure current page is valid
+    if (this.currentPage() > this.totalPages() && this.totalPages() > 0) {
+      this.currentPage.set(this.totalPages());
+    }
+
+    // 5. Handle Pagination
+    const startIndex = (this.currentPage() - 1) * this.pageSize();
+    const endIndex = startIndex + this.pageSize();
+    
+    const paginatedList = sourceList.slice(startIndex, endIndex);
+    
+    this.tests = paginatedList;
+
+    if (this.searchTerm() !== '') {
+      this.searchResult = paginatedList;
+    } else {
+      this.searchResult = [];
+    }
+
+    if (!this.showCompleted()) {
+      this.incomletedTests = paginatedList;
+    }
+  }
+
   nextPage() {
     if (this.currentPage() < this.totalPages()) {
       this.currentPage.update(p => p + 1);
-      this.loadTests();
+      this.updateDisplayedTests();
     }
   }
 
   prevPage() {
     if (this.currentPage() > 1) {
       this.currentPage.update(p => p - 1);
-      this.loadTests();
+      this.updateDisplayedTests();
     }
   }
 
   doSearch(e: any) {
     let searchValue = e.target.value;
-
+    this.searchTerm.set(searchValue);
+    this.currentPage.set(1); // Reset to page 1 on search
+    
     if (searchValue == '') {
-      this.searchResult = [];
       this.isSearching.set(false);
-      return;
+    } else {
+      this.isSearching.set(true);
     }
+    
+    this.updateDisplayedTests();
+  }
 
-    this.isSearching.set(true);
-    this.searchResult = this.tests.filter((element) =>
-      element.title.toLowerCase().includes(searchValue.toLowerCase()),
-    );
+  onSortChange(e: any) {
+    this.sortBy.set(e.target.value);
+    this.updateDisplayedTests();
+  }
+
+  getSortLabel() {
+    switch(this.sortBy()) {
+      case 'date': return 'Date Added';
+      case 'title': return 'Title';
+      case 'marks': return 'Highest Marks';
+      case 'time': return 'Time Limit';
+      default: return 'Date Added';
+    }
+  }
+
+  setSort(val: string) {
+    this.sortBy.set(val);
+    this.updateDisplayedTests();
   }
 
   filterIncompletedTests() {
