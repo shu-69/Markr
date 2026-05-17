@@ -1,0 +1,259 @@
+.courses-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #171717;
+  font-family: 'Inter', sans-serif;
+  height: 100%;
+  overflow-y: auto;
+
+  .header-section {
+    text-align: center;
+    margin-bottom: 3rem;
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: #64748b;
+    }
+  }
+
+  /* Overlay Styles */
+  .loader-container, .processing-overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    margin: 2rem auto;
+    max-width: 400px;
+
+    mat-icon.rotating {
+      font-size: 3rem;
+      height: 3rem;
+      width: 3rem;
+      color: #2563eb;
+      animation: spin 1.5s linear infinite;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #334155;
+    }
+  }
+
+  /* Grid Layout */
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  /* Course Card */
+  .course-card {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    &.enrolled {
+      border: 2px solid #10b981;
+      .card-header {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      }
+    }
+
+    .card-header {
+      padding: 1.5rem;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e2e8f0;
+
+      .category-badge {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #475569;
+        background: #e2e8f0;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+      }
+
+      .price-badge {
+        font-weight: 800;
+        font-size: 1.1rem;
+
+        &.free {
+          color: #10b981;
+        }
+
+        &.paid {
+          color: #0f172a;
+        }
+      }
+    }
+
+    .card-body {
+      padding: 1.5rem;
+      flex-grow: 1;
+
+      h3 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin: 0 0 0.5rem 0;
+        line-height: 1.3;
+      }
+
+      .desc {
+        font-size: 0.95rem;
+        color: #64748b;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+      }
+
+      .meta-row {
+        display: flex;
+        gap: 1rem;
+
+        .meta-item {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+          font-size: 0.85rem;
+          color: #475569;
+          font-weight: 500;
+
+          mat-icon {
+            font-size: 1.1rem;
+            height: 1.1rem;
+            width: 1.1rem;
+            color: #94a3b8;
+          }
+        }
+      }
+    }
+
+    .card-footer {
+      padding: 1.5rem;
+      background: #ffffff;
+      border-top: 1px solid #f1f5f9;
+
+      button {
+        width: 100%;
+        border-radius: 12px;
+        padding: 0.8rem;
+        font-weight: 600;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: all 0.2s ease;
+
+        &.btn-enroll-free {
+          background-color: #f1f5f9;
+          color: #0f172a;
+          border: 1px solid #e2e8f0;
+
+          &:hover {
+            background-color: #e2e8f0;
+          }
+        }
+
+        &.btn-enroll-paid {
+          background-color: #0f172a;
+          color: #ffffff;
+
+          &:hover {
+            background-color: #1e293b;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+          }
+        }
+
+        &.btn-enrolled {
+          background-color: #10b981;
+          color: #ffffff;
+          opacity: 1 !important;
+          
+          mat-icon {
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+
+    mat-icon {
+      font-size: 4rem;
+      height: 4rem;
+      width: 4rem;
+      color: #94a3b8;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: #64748b;
+      font-size: 1.1rem;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Global specific styles override */
+::ng-deep .premium-snackbar {
+  background: #0f172a !important;
+  color: white !important;
+  border-radius: 8px !important;
+  font-weight: 500;
+  
+  button {
+    color: #38bdf8 !important;
+  }
+}

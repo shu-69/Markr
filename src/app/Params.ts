@@ -34,6 +34,12 @@ export class Params {
     GET_SUBMISSIONS: '/users/getSubmissions',
   };
 
+  public static COURSES_SERVICE_URL_SUFFIXS = {
+    GET_COURSES: '/courses/getCourses',
+    ENROLL_IN_COURSE: '/courses/enroll',
+    GET_ENROLLED_COURSES: '/courses/getEnrolled',
+  };
+
   public static PageTitles = {
     register: 'CrecomOnline Registration',
   };

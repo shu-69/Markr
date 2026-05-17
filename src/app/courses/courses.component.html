@@ -1,7 +1,80 @@
-<div style="height: 100%; overflow: hidden; display: flex;
-align-items: center;
-justify-content: center;">
+<div class="courses-container">
+    <div class="header-section">
+        <h1>Explore Premium Study Packages</h1>
+        <p class="subtitle">Upskill and practice with our curated free and premium courses.</p>
+    </div>
 
-    <ng-lottie width="280px" [options]="comingSoonOptions"></ng-lottie>
+    <!-- Loading Overlay for API -->
+    @if (isLoading()) {
+        <div class="loader-container">
+            <mat-icon class="rotating">sync</mat-icon>
+            <p>Loading courses...</p>
+        </div>
+    }
 
+    <!-- Payment Processing Overlay -->
+    @if (isProcessingPayment()) {
+        <div class="processing-overlay">
+            <mat-icon class="rotating">sync</mat-icon>
+            <p>Processing your request securely...</p>
+        </div>
+    }
+
+    <!-- Courses Grid -->
+    @if (!isLoading() && courses().length > 0) {
+        <div class="courses-grid">
+            @for (course of courses(); track course._id) {
+                <div class="course-card" [class.enrolled]="isEnrolled(course._id)">
+                    <!-- Image / Header -->
+                    <div class="card-header">
+                        <div class="category-badge">{{ course.category || 'General' }}</div>
+                        @if (course.isFree) {
+                            <div class="price-badge free">Free</div>
+                        } @else {
+                            <div class="price-badge paid">{{ course.price | currency:'INR':'symbol':'1.0-0' }}</div>
+                        }
+                    </div>
+
+                    <!-- Body -->
+                    <div class="card-body">
+                        <h3>{{ course.title }}</h3>
+                        <p class="desc">{{ course.description }}</p>
+                        
+                        <div class="meta-row">
+                            <span class="meta-item">
+                                <mat-icon>schedule</mat-icon>
+                                {{ course.duration || 'Self-paced' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Footer Actions -->
+                    <div class="card-footer">
+                        @if (isEnrolled(course._id)) {
+                            <button mat-flat-button class="btn-enrolled" disabled>
+                                <mat-icon>check_circle</mat-icon> Enrolled
+                            </button>
+                        } @else if (course.isFree) {
+                            <button mat-flat-button class="btn-enroll-free" (click)="enrollFree(course._id)">
+                                Enroll for Free
+                            </button>
+                        } @else {
+                            <button mat-flat-button class="btn-enroll-paid" (click)="enrollPaid(course)">
+                                <mat-icon>shopping_cart</mat-icon> Buy Now
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Empty State -->
+    @if (!isLoading() && courses().length === 0) {
+        <div class="empty-state">
+            <mat-icon>school</mat-icon>
+            <h3>No courses available yet</h3>
+            <p>Check back soon for new premium content and study materials.</p>
+        </div>
+    }
 </div>
