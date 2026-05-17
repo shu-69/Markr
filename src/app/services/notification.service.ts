@@ -29,10 +29,19 @@ export class NotificationService {
         // Convert date strings back to Date objects
         return parsed.map((n: any) => ({ ...n, date: new Date(n.date) }));
       } catch (e) {
-        return this.getDefaultNotifications();
+        return [];
       }
     }
-    return this.getDefaultNotifications();
+    return [];
+  }
+
+  public addWelcomeNotification() {
+    const welcome = this.getDefaultNotifications()[0];
+    this.addNotification({
+      title: welcome.title,
+      message: welcome.message,
+      type: welcome.type
+    });
   }
 
   private saveToStorage(notifications: Notification[]) {

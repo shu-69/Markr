@@ -26,6 +26,7 @@ import { HttpClient } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { DatePipe } from '@angular/common';
 import { NavigationService } from '../services/navigation.service';
+import { NotificationService } from '../services/notification.service';
 
 export interface DialogData {
   title: string;
@@ -80,6 +81,7 @@ export class RegisterComponent implements OnInit {
     private http: HttpClient,
     private sanitizer: DomSanitizer,
     private datePipe: DatePipe,
+    private notificationService: NotificationService,
   ) {
     this.titleService.setTitle(Params.PageTitles.register);
     // this.formData = this.fb.group({
@@ -215,6 +217,7 @@ export class RegisterComponent implements OnInit {
                     if (data.status) {
                       this.isSubmitting.set(false);
                       this.submitButtonText = 'SUBMIT';
+                      this.notificationService.addWelcomeNotification();
                       this.showSuccessDialog(
                         'Yay! Your account has been created!',
                         { username: data.username, password: data.password },

@@ -15,6 +15,8 @@ import { ProfileComponent } from '../profile/profile.component';
 import { TransactionsComponent } from '../transactions/transactions.component';
 import ObjectID from 'bson-objectid';
 import { NotificationService } from '../services/notification.service';
+import { provideIcons } from '@ng-icons/core';
+import { lucideBellOff, lucideCheckCircle, lucideAlertTriangle, lucideInfo } from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,6 +24,9 @@ import { NotificationService } from '../services/notification.service';
   styleUrls: ['./dashboard.component.scss'],
   encapsulation: ViewEncapsulation.None,
   standalone: false,
+  providers: [
+    provideIcons({ lucideBellOff, lucideCheckCircle, lucideAlertTriangle, lucideInfo })
+  ]
 })
 export class DashboardComponent {
   constructor(
@@ -106,4 +111,5 @@ export class DashboardComponent {
       hour12: true,
     });
   }
+
 }

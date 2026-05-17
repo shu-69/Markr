@@ -18,7 +18,7 @@
           <i class="fa fa-solid fa-envelope"></i>
         </div>
 
-        <div class="headerOptionsIconContainer" [matMenuTriggerFor]="notificationMenu" 
+        <div #bellTrigger class="headerOptionsIconContainer" [matMenuTriggerFor]="notificationMenu" 
              [matBadge]="notificationService.unreadCount()" 
              [matBadgeHidden]="notificationService.unreadCount() === 0" 
              matBadgePosition="after" matBadgeOverlap="true">
@@ -60,28 +60,26 @@
           </div>
         </mat-menu>
 
-        <mat-menu #notificationMenu="matMenu" class="custom-notification-menu">
+        <mat-menu #notificationMenu="matMenu" class="custom-notification-menu" xPosition="before">
           <div class="menu-header">
             <span class="user-name">Notifications</span>
-            <button mat-button class="mark-all-btn" (click)="notificationService.markAllAsRead(); $event.stopPropagation()">
-              Mark all as read
-            </button>
+            @if (notificationService.notifications().length > 0) {
+              <button mat-button class="mark-all-btn" (click)="notificationService.markAllAsRead(); $event.stopPropagation()">
+                Mark all as read
+              </button>
+            }
           </div>
           <div class="menu-items-container">
             @if (notificationService.notifications().length === 0) {
               <div class="empty-notification-state">
-                <mat-icon>notifications_off</mat-icon>
+                <ng-icon name="lucideBellOff"></ng-icon>
                 <p>No new notifications</p>
               </div>
             }
             @for (notif of notificationService.notifications(); track notif.id) {
               <div class="notification-item" [class.unread]="!notif.read" (click)="notificationService.markAsRead(notif.id)">
                 <div class="notif-icon" [ngClass]="notif.type">
-                  <mat-icon>
-                    @if (notif.type === 'success') { check_circle }
-                    @else if (notif.type === 'warning') { warning }
-                    @else { info }
-                  </mat-icon>
+                  <ng-icon [name]="notif.type === 'success' ? 'lucideCheckCircle' : (notif.type === 'warning' ? 'lucideAlertTriangle' : 'lucideInfo')"></ng-icon>
                 </div>
                 <div class="notif-content">
                   <span class="notif-title">{{ notif.title }}</span>

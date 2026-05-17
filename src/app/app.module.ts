@@ -28,6 +28,7 @@ import { TestsComponent } from './tests/tests.component';
 import { PracticePapersComponent } from './practice-papers/practice-papers.component';
 import { PencilLoaderComponent } from './components/pencil-loader/pencil-loader.component';
 import { ExamPageComponent } from './exam-page/exam-page.component';
+import { NgIcon } from '@ng-icons/core';
 import { ViewresultComponent } from './viewresult/viewresult.component';
 import { SideSheetComponent } from './components/side-sheet/side-sheet.component';
 import { AuthService } from './services/auth.service';
@@ -96,7 +97,7 @@ import { TransactionsComponent } from './transactions/transactions.component';
     MatButtonModule,
     MatSelectModule,
     MatSnackBarModule,
-
+    NgIcon,
     FontAwesomeModule,
     ProfileComponent,
     TransactionsComponent,
