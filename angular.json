@@ -27,7 +27,7 @@
           "builder": "@angular/build:application",
           "options": {
             "outputPath": {
-              "base": "dist/crecom-students"
+              "base": "dist/markr"
             },
             "index": "src/index.html",
             "polyfills": [
@@ -45,7 +45,7 @@
               "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
             ],
             "scripts": [
-              "src/app/index-page/js/jquery.js",  
+              "src/app/index-page/js/jquery.js",
               "src/app/index-page/js/nicepage.js"
             ],
             "browser": "src/main.ts"
