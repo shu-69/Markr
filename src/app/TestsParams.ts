@@ -28,6 +28,7 @@ export interface Question {
 
 export interface Test {
   _id: string;
+  instituteId?: string; // Reference to Institute
   title: string;
   description: string;
   pass_marks: number;
@@ -45,6 +46,7 @@ export interface Test {
 
 export interface PracticePaper {
   _id: string;
+  instituteId?: string; // Reference to Institute
   title: string;
   description: string;
   time: number;

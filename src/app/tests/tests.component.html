@@ -24,6 +24,10 @@
 
       </span>
 
+      <button (click)="isGridView.set(!isGridView())" style="background: none; border: none; cursor: pointer; display: flex; align-items: center;" title="Toggle Grid/List View">
+        <ng-icon [name]="isGridView() ? 'lucideList' : 'lucideGrid'" style="font-size: 20px; color: #171717;"></ng-icon>
+      </button>
+
       <span class="seperator"></span>
 
       <span
@@ -41,7 +45,7 @@
   </div>
 
   @if (!isSearching() && showCompleted()) {
-    <div class="testsContainer">
+    <div class="testsContainer" [class.list-view]="!isGridView()">
       @for (test of tests; track test) {
         <div class="testDetailsContainer" (click)="openTestDetails(test)">
           <div class="containerHeader">
@@ -79,7 +83,7 @@
   }
 
   @if (isSearching()) {
-    <div class="testsContainer">
+    <div class="testsContainer" [class.list-view]="!isGridView()">
       @for (test of searchResult; track test) {
         <div class="testDetailsContainer" (click)="openTestDetails(test)">
           <div class="containerHeader">
@@ -120,7 +124,7 @@
   }
 
   @if (!isSearching() && !showCompleted()) {
-    <div class="testsContainer">
+    <div class="testsContainer" [class.list-view]="!isGridView()">
       @for (test of incomletedTests; track test) {
         <div class="testDetailsContainer" (click)="openTestDetails(test)">
           <div class="containerHeader">

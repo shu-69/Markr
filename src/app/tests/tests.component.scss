@@ -113,8 +113,66 @@
     flex-flow: wrap;
     gap: 20px;
 
+    &.list-view {
+        flex-direction: column;
+        gap: 10px;
+        
+        .testDetailsContainer {
+            width: 100%;
+            max-width: 100%;
+            flex: none !important;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border: none !important;
+            border-bottom: 1px solid #e0e0e0 !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            
+            .containerHeader {
+                flex: 1;
+                min-width: 0;
+                
+                .title {
+                    font-size: 15px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+            
+            .content {
+                margin-top: 0;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 30px;
+                
+                .labels {
+                    flex-direction: row;
+                    gap: 20px;
+                    
+                    div {
+                        display: flex;
+                        align-items: center;
+                    }
+                }
+                
+                .next {
+                    display: flex;
+                    align-items: center;
+                }
+            }
+        }
+    }
+
     .testDetailsContainer {
-        width: 240px;
+        width: auto;
+        flex: 1 1 240px;
+        max-width: 350px;
         height: fit-content;
         border: 1.5px solid gray;
         border-radius: 10px;
@@ -122,7 +180,7 @@
         cursor: pointer;
         
         @include mobile {
-            width: 100%;
+            max-width: 100%;
         }
 
         .containerHeader {
@@ -135,9 +193,15 @@
             .title {
                 font-family: 'Poppins-SemiBold', sans-serif;
                 font-size: 18px;
+                flex: 1;
+                min-width: 0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
 
             .completed {
+                flex-shrink: 0;
                 background: #44e444;
                 padding: 5px 10px 5px 10px;
                 border-radius: 6px;

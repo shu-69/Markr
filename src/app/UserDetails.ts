@@ -1,5 +1,6 @@
 export class UserDetails {
   static _id = ''
+  static InstituteId = ''; // Reference to Institute
   static Name = '';
   static Username = '';
   static Password = '';

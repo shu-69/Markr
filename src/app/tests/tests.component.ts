@@ -10,6 +10,8 @@ import { Test } from '../TestsParams';
 import { Params } from '../Params';
 import { NavigationExtras, Router } from '@angular/router';
 import { UserDetails } from '../UserDetails';
+import { provideIcons } from '@ng-icons/core';
+import { lucideGrid, lucideList } from '@ng-icons/lucide';
 
 export interface DialogData {
   test: any;
@@ -20,9 +22,13 @@ export interface DialogData {
   templateUrl: './tests.component.html',
   styleUrls: ['./tests.component.scss'],
   standalone: false,
+  providers: [
+    provideIcons({ lucideGrid, lucideList })
+  ]
 })
 export class TestsComponent {
   isLoading: WritableSignal<boolean> = signal(false);
+  isGridView = signal(true);
 
   isSearching: WritableSignal<boolean> = signal(false);
 
