@@ -34,7 +34,7 @@ export class TestsComponent {
   totalItems = signal(0);
   totalPages = signal(0);
   searchTerm = signal('');
-  sortBy = signal('date');
+  sortBy = signal('');
 
   isSearching: WritableSignal<boolean> = signal(false);
 
@@ -65,6 +65,12 @@ export class TestsComponent {
 
     const options: any = {
       headers: headers,
+      params: {
+        page: this.currentPage(),
+        limit: this.pageSize(),
+        search: this.searchTerm(),
+        sort: this.sortBy()
+      }
     };
 
     this.http
@@ -75,9 +81,26 @@ export class TestsComponent {
       )
       .subscribe({
         next: (result: any) => {
-          this.allTests = result.result;
-          
-          this.updateDisplayedTests();
+          this.tests = result.result;
+          this.totalItems.set(result.pagination.total);
+          this.totalPages.set(result.pagination.pages);
+
+          // Handle "Show Completed" filter on the current page
+          if (!this.showCompleted()) {
+            this.tests = this.tests.filter(
+              (element: any) => this.checkIfTestCompleted(element._id) == false
+            );
+          }
+
+          if (this.searchTerm() !== '') {
+            this.searchResult = this.tests;
+          } else {
+            this.searchResult = [];
+          }
+
+          if (!this.showCompleted()) {
+            this.incomletedTests = this.tests;
+          }
 
           this.isLoading.set(false);
         },
@@ -90,78 +113,19 @@ export class TestsComponent {
       });
   }
 
-  updateDisplayedTests() {
-    let sourceList = this.allTests;
 
-    // 1. Handle Filtering (Show Completed or not)
-    if (!this.showCompleted()) {
-      sourceList = sourceList.filter(
-        (element: any) => this.checkIfTestCompleted(element._id) == false
-      );
-    }
-
-    // 2. Handle Search
-    if (this.searchTerm() !== '') {
-      sourceList = sourceList.filter((element) =>
-        element.title.toLowerCase().includes(this.searchTerm().toLowerCase())
-      );
-    }
-
-    // 3. Handle Sorting
-    sourceList = [...sourceList].sort((a, b) => {
-      if (this.sortBy() === 'title') {
-        return a.title.localeCompare(b.title);
-      } else if (this.sortBy() === 'marks') {
-        return b.marks - a.marks; // High to low
-      } else if (this.sortBy() === 'time') {
-        return a.time - b.time; // Short to long
-      } else if (this.sortBy() === 'date') {
-        const dateA = a.details?.added_on ? new Date(a.details.added_on).getTime() : 0;
-        const dateB = b.details?.added_on ? new Date(b.details.added_on).getTime() : 0;
-        return dateB - dateA; // Newest first
-      }
-      return 0;
-    });
-
-    // 4. Update Pagination Stats
-    this.totalItems.set(sourceList.length);
-    this.totalPages.set(Math.ceil(sourceList.length / this.pageSize()));
-    
-    // Ensure current page is valid
-    if (this.currentPage() > this.totalPages() && this.totalPages() > 0) {
-      this.currentPage.set(this.totalPages());
-    }
-
-    // 5. Handle Pagination
-    const startIndex = (this.currentPage() - 1) * this.pageSize();
-    const endIndex = startIndex + this.pageSize();
-    
-    const paginatedList = sourceList.slice(startIndex, endIndex);
-    
-    this.tests = paginatedList;
-
-    if (this.searchTerm() !== '') {
-      this.searchResult = paginatedList;
-    } else {
-      this.searchResult = [];
-    }
-
-    if (!this.showCompleted()) {
-      this.incomletedTests = paginatedList;
-    }
-  }
 
   nextPage() {
     if (this.currentPage() < this.totalPages()) {
       this.currentPage.update(p => p + 1);
-      this.updateDisplayedTests();
+      this.loadTests();
     }
   }
 
   prevPage() {
     if (this.currentPage() > 1) {
       this.currentPage.update(p => p - 1);
-      this.updateDisplayedTests();
+      this.loadTests();
     }
   }
 
@@ -176,12 +140,12 @@ export class TestsComponent {
       this.isSearching.set(true);
     }
     
-    this.updateDisplayedTests();
+    this.loadTests();
   }
 
   onSortChange(e: any) {
     this.sortBy.set(e.target.value);
-    this.updateDisplayedTests();
+    this.loadTests();
   }
 
   getSortLabel() {
@@ -190,13 +154,13 @@ export class TestsComponent {
       case 'title': return 'Title';
       case 'marks': return 'Highest Marks';
       case 'time': return 'Time Limit';
-      default: return 'Date Added';
+      default: return 'Default';
     }
   }
 
   setSort(val: string) {
     this.sortBy.set(val);
-    this.updateDisplayedTests();
+    this.loadTests();
   }
 
   filterIncompletedTests() {

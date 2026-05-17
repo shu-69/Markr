@@ -72,11 +72,10 @@
           ></ng-icon>
         </button>
         <mat-menu #sortMenu="matMenu">
+          <button mat-menu-item (click)="setSort('')">Default</button>
           <button mat-menu-item (click)="setSort('date')">Date Added</button>
           <button mat-menu-item (click)="setSort('title')">Title</button>
-          <button mat-menu-item (click)="setSort('marks')">
-            Highest Marks
-          </button>
+          <button mat-menu-item (click)="setSort('marks')">Highest Marks</button>
           <button mat-menu-item (click)="setSort('time')">Time Limit</button>
         </mat-menu>
       </span>
@@ -98,7 +97,7 @@
             type="checkbox"
             [checked]="showCompleted()"
             (click)="
-              showCompleted.set(!showCompleted()); updateDisplayedTests()
+              showCompleted.set(!showCompleted()); loadTests()
             "
           />
           <span class="slider"></span>
