@@ -3,27 +3,27 @@ import { Params } from '../Params';
 export const navData = [
   {
     routerLink: Params.PageNames.dashboard,
-    icon: 'fa fa-th-large',
+    icon: 'lucideLayoutDashboard',
     label: 'Dashboard',
   },
   {
     routerLink: 'announcement',
-    icon: 'fa fa-bullhorn',
+    icon: 'lucideMegaphone',
     label: 'Announcement',
   },
   {
     routerLink: Params.PageNames.courses,
-    icon: 'fa fa-book',
+    icon: 'lucideBookOpen',
     label: 'Courses',
   },
   {
     routerLink: Params.PageNames.tests,
-    icon: 'fa fa-pencil-square-o',
+    icon: 'lucideSquarePen',
     label: 'Tests',
   },
   {
     routerLink: Params.PageNames.practice_papers,
-    icon: 'fa fa-file-text',
+    icon: 'lucideFileText',
     label: 'Practice Papers',
   },
 ];

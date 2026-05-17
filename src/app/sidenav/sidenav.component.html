@@ -14,7 +14,7 @@
            [routerLink]="[data.routerLink]"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{ exact: true }">
-          <i class="sidenav-link-icon" [classList]="data.icon"></i>
+          <ng-icon [name]="data.icon" class="sidenav-link-icon"></ng-icon>
           @if (!collapsed()) {
             <span class="sidenav-link-text">{{ data.label }}</span>
           }
@@ -25,7 +25,7 @@
 
   <div class="sidenav-footer">
     <button class="toggle-btn" (click)="toogleCollapse()">
-      <i class="fa" [ngClass]="collapsed() ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
+      <ng-icon [name]="collapsed() ? 'lucideChevronRight' : 'lucideChevronLeft'"></ng-icon>
     </button>
   </div>
 </div>

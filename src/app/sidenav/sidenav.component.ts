@@ -10,6 +10,18 @@ import {
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { navData } from './nav-data';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideLayoutDashboard,
+  lucideMegaphone,
+  lucideBookOpen,
+  lucideSquarePen,
+  lucideFileText,
+  lucideChevronRight,
+  lucideChevronLeft
+} from '@ng-icons/lucide';
+
+// https://lucide.dev/icons/categories
 
 export interface SideNavToogle {
   screenWidth: number;
@@ -23,7 +35,19 @@ export interface SideNavToogle {
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    NgIcon
+  ],
+  providers: [
+    provideIcons({
+      lucideLayoutDashboard,
+      lucideMegaphone,
+      lucideBookOpen,
+      lucideSquarePen,
+      lucideFileText,
+      lucideChevronRight,
+      lucideChevronLeft
+    })
   ]
 })
 export class SidenavComponent implements OnInit {
