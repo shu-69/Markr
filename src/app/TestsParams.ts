@@ -41,6 +41,9 @@ export interface Test {
     added_by: string;
     added_on: string;
   };
+  proctoring?: {
+    enabled: boolean;
+  };
   questions: Question[];
 }
 
@@ -56,6 +59,9 @@ export interface PracticePaper {
   details: {
     added_by: string;
     added_on: string;
+  };
+  proctoring?: {
+    enabled: boolean;
   };
   questions: Question[];
 }

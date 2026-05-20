@@ -41,6 +41,17 @@ export class Params {
     GET_ENROLLED_COURSES: '/courses/getEnrolled',
   };
 
+  public static FORUM_SERVICE_URL_SUFFIXS = {
+    GET_ALL: '/forums',
+    GET_ONE: '/forums/',
+    CREATE: '/forums/create',
+    REPLY: '/forums/{id}/reply',
+  };
+
+  public static LEADERBOARD_SERVICE_URL_SUFFIXS = {
+    GET: '/leaderboard',
+  };
+
   public static PageTitles = {
     register: 'CrecomOnline Registration',
   };

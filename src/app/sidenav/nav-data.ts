@@ -26,4 +26,14 @@ export const navData = [
     icon: 'lucideFileText',
     label: 'Practice Papers',
   },
+  {
+    routerLink: 'forums',
+    icon: 'lucideMessageCircle',
+    label: 'Forums',
+  },
+  {
+    routerLink: 'leaderboard',
+    icon: 'lucideTrophy',
+    label: 'Leaderboard',
+  },
 ];

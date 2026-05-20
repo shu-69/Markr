@@ -57,6 +57,9 @@ import player from 'lottie-web';
 // Standalone Components
 import { ProfileComponent } from './profile/profile.component';
 import { TransactionsComponent } from './transactions/transactions.component';
+import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { ForumsComponent } from './forums/forums.component';
+import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 
 @NgModule({
   declarations: [
@@ -103,6 +106,9 @@ import { TransactionsComponent } from './transactions/transactions.component';
     TransactionsComponent,
     SidenavComponent,
     SideSheetComponent,
+    BaseChartDirective,
+    ForumsComponent,
+    LeaderboardComponent,
   ],
   providers: [
     GlobalVar,
@@ -110,6 +116,7 @@ import { TransactionsComponent } from './transactions/transactions.component';
     DatePipe,
     AuthService,
     provideLottieOptions({ player: () => player }),
+    provideCharts(withDefaultRegisterables()),
     provideAppInitializer(() => {
       const authService = inject(AuthService);
       return authService.autoAuthUser();

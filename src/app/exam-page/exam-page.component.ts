@@ -58,6 +58,8 @@ export class ExamPageComponent implements AfterViewInit {
   examTimerSubscription: any;
   selectedQuestionIndex = 0;
 
+  proctoringLogs: { type: string, timestamp: Date }[] = [];
+
   rxTime: any = new Date();
   timesubscription!: Subscription;
   examTimer = '';
@@ -108,6 +110,24 @@ export class ExamPageComponent implements AfterViewInit {
     if (this.isExaminationRunning()) {
       $event.returnValue =
         'Exam is in progress. Refreshing this page will result to loose your progress.';
+    }
+  }
+
+  @HostListener('window:blur', ['$event'])
+  onBlur(event: any) {
+    if (this.isExaminationRunning() && this.paperDetails?.proctoring?.enabled) {
+      this.proctoringLogs.push({
+        type: 'TAB_SWITCH',
+        timestamp: new Date()
+      });
+      console.log('Proctoring Alert: Tab switched or window minimized');
+    }
+  }
+
+  @HostListener('window:focus', ['$event'])
+  onFocus(event: any) {
+    if (this.isExaminationRunning() && this.paperDetails?.proctoring?.enabled) {
+      alert('Proctoring Warning: Switching tabs or minimizing the window is recorded as a violation. Avoid doing this.');
     }
   }
 
@@ -424,7 +444,9 @@ export class ExamPageComponent implements AfterViewInit {
         totalMarks: this.paperDetails?.marks,
         passMarks: this.paperDetails?.pass_marks,
         negativeMarking: this.paperDetails?.negativeMarking,
+        proctoringEnabled: this.paperDetails?.proctoring?.enabled || false
       },
+      proctoringLogs: this.proctoringLogs
     };
 
     console.log('sending data', body);

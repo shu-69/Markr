@@ -38,6 +38,47 @@
 
     <section class="seg1" id="seg1">
 
+      <!-- Performance Analytics -->
+      <div class="analytics-container" style="display: flex; gap: 20px; padding: 20px; background: white; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        
+        <!-- Chart -->
+        <div class="chart-wrapper" style="flex: 1; min-width: 300px; max-width: 400px;">
+          <h2 style="font-family: Poppins-SemiBold; margin-bottom: 10px;">Performance Overview</h2>
+          <canvas baseChart
+                  [labels]="chartLabels"
+                  [datasets]="chartData"
+                  [options]="chartOptions"
+                  [type]="'doughnut'">
+          </canvas>
+        </div>
+
+        <!-- Proctoring Report -->
+        <div class="proctoring-wrapper" style="flex: 1; padding: 15px; border-left: 1px solid #eee;">
+          <h2 style="font-family: Poppins-SemiBold; margin-bottom: 10px; color: #c91717;">Proctoring Report</h2>
+          @if (submission?.examDetails?.proctoringEnabled) {
+            @if (proctoringViolations.length > 0) {
+              <div style="background: #ffebe9; padding: 10px; border-radius: 5px; color: #a10f0f; font-family: Poppins-Regular;">
+                <p><strong><i class="fa fa-exclamation-triangle"></i> Violations Detected: {{proctoringViolations.length}}</strong></p>
+                <ul style="margin-top: 10px; padding-left: 20px; max-height: 200px; overflow-y: auto;">
+                  @for (log of proctoringViolations; track log; let i = $index) {
+                    <li>{{log.type}} at {{log.timestamp | date:'mediumTime'}}</li>
+                  }
+                </ul>
+              </div>
+            } @else {
+              <div style="background: #e6ffed; padding: 10px; border-radius: 5px; color: #1e7025; font-family: Poppins-Regular;">
+                <p><i class="fa fa-check-circle"></i> Clean Session. No proctoring violations detected.</p>
+              </div>
+            }
+          } @else {
+            <div style="background: #f5f5f5; padding: 10px; border-radius: 5px; color: #666; font-family: Poppins-Regular;">
+              <p><i class="fa fa-info-circle"></i> Proctoring was disabled for this exam.</p>
+            </div>
+          }
+        </div>
+
+      </div>
+
       <div class="questionsContainer">
 
         @for (question of submission?.questions; track question; let i = $index) {

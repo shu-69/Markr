@@ -19,6 +19,8 @@ import { ExamPageGuard } from './services/exam-page.guard';
 import { AnnouncementComponent } from './tabs/announcement/announcement.component';
 import { ProfileComponent } from './profile/profile.component';
 import { TransactionsComponent } from './transactions/transactions.component';
+import { ForumsComponent } from './forums/forums.component';
+import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 
 const routes: Routes = [
   {
@@ -57,6 +59,14 @@ const routes: Routes = [
       {
         path: 'transactions',
         component: TransactionsComponent,
+      },
+      {
+        path: 'forums',
+        component: ForumsComponent,
+      },
+      {
+        path: 'leaderboard',
+        component: LeaderboardComponent,
       },
     ],
   },

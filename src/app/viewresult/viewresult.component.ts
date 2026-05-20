@@ -16,6 +16,20 @@ export class ViewresultComponent {
 
   resultColor = 'black';
 
+  // Analytics
+  public chartLabels: string[] = ['Correct', 'Incorrect', 'Unattempted'];
+  public chartData: any[] = [
+    { data: [0, 0, 0], backgroundColor: ['#51a41c', '#c91717', '#aaaaaa'] }
+  ];
+  public chartOptions: any = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom' }
+    }
+  };
+
+  proctoringViolations: any[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
@@ -55,6 +69,7 @@ export class ViewresultComponent {
           console.log(value);
 
           this.submission = value.result;
+          this.processAnalytics();
         },
         error: (err) => {
           alert("Can't get submission details!");
@@ -124,6 +139,42 @@ export class ViewresultComponent {
     });
 
     return marks;
+  }
+
+  processAnalytics() {
+    let correct = 0;
+    let incorrect = 0;
+    let unattempted = 0;
+
+    this.submission?.questions.forEach((element: any) => {
+      if (!element.user_ans || element.user_ans === '') {
+        unattempted++;
+      } else {
+        let isCorrect = false;
+        switch (element.answer_type) {
+          case 'options':
+            isCorrect = (element.user_ans == element.answer_content.correct_answer);
+            break;
+          case 'boolean':
+            isCorrect = (element.user_ans == element.answer_content.correct_answer.toString().toLowerCase());
+            break;
+          case 'oneword':
+            isCorrect = (element.user_ans.toLowerCase() == element.answer_content.correct_answer.toLowerCase());
+            break;
+        }
+
+        if (isCorrect) correct++;
+        else incorrect++;
+      }
+    });
+
+    this.chartData = [
+      { data: [correct, incorrect, unattempted], backgroundColor: ['#51a41c', '#c91717', '#aaaaaa'] }
+    ];
+
+    if (this.submission?.proctoringLogs) {
+      this.proctoringViolations = this.submission.proctoringLogs;
+    }
   }
 
   getResult() {

@@ -18,7 +18,9 @@ import {
   lucideSquarePen,
   lucideFileText,
   lucideChevronRight,
-  lucideChevronLeft
+  lucideChevronLeft,
+  lucideMessageCircle,
+  lucideTrophy
 } from '@ng-icons/lucide';
 
 // https://lucide.dev/icons/categories
@@ -46,7 +48,9 @@ export interface SideNavToogle {
       lucideSquarePen,
       lucideFileText,
       lucideChevronRight,
-      lucideChevronLeft
+      lucideChevronLeft,
+      lucideMessageCircle,
+      lucideTrophy
     })
   ]
 })

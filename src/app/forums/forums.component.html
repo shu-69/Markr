@@ -1,0 +1,116 @@
+<div class="forums-container">
+
+  <!-- List View -->
+  @if (!selectedForum) {
+    <div class="forums-header">
+      <div>
+        <h1 class="page-title">💬 Discussion Forums</h1>
+        <p class="page-subtitle">Ask questions, share knowledge, and learn together.</p>
+      </div>
+      <button class="btn-new-thread" (click)="showCreateForm.set(!showCreateForm())">
+        {{ showCreateForm() ? '✕ Cancel' : '+ New Thread' }}
+      </button>
+    </div>
+
+    <!-- Create Form -->
+    @if (showCreateForm()) {
+      <div class="create-form-card">
+        <h3>Create a New Thread</h3>
+        <input class="input-field" placeholder="Thread title..." [(ngModel)]="newThread.title" />
+        <textarea class="input-field textarea" placeholder="Describe your question or topic..." [(ngModel)]="newThread.description" rows="4"></textarea>
+        <button class="btn-submit" (click)="createThread()" [disabled]="isCreating()">
+          {{ isCreating() ? 'Posting...' : 'Post Thread' }}
+        </button>
+      </div>
+    }
+
+    <!-- Loading -->
+    @if (isLoading()) {
+      <div class="loading-state">Loading threads...</div>
+    }
+
+    <!-- Thread List -->
+    @if (!isLoading()) {
+      @if (forums.length === 0) {
+        <div class="empty-state">
+          <span class="empty-icon">🗒️</span>
+          <p>No threads yet. Be the first to start a discussion!</p>
+        </div>
+      }
+      <div class="forum-list">
+        @for (forum of forums; track forum._id) {
+          <div class="forum-card" (click)="openForum(forum)">
+            <div class="forum-card-left">
+              <div class="avatar">{{ forum.author?.charAt(0) | uppercase }}</div>
+            </div>
+            <div class="forum-card-body">
+              <h3 class="forum-title">{{ forum.title }}</h3>
+              <p class="forum-desc">{{ forum.description }}</p>
+              <div class="forum-meta">
+                <span class="meta-author">👤 {{ forum.author }}</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-time">🕐 {{ getTimeAgo(forum.createdAt) }}</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-replies">💬 {{ forum.replies?.length || 0 }} replies</span>
+              </div>
+            </div>
+            <div class="forum-card-arrow">›</div>
+          </div>
+        }
+      </div>
+    }
+  }
+
+  <!-- Thread Detail View -->
+  @if (selectedForum) {
+    <div class="thread-view">
+      <button class="btn-back" (click)="backToList()">← Back to Forums</button>
+
+      <div class="thread-header-card">
+        <div class="thread-author-badge">{{ selectedForum.author?.charAt(0) | uppercase }}</div>
+        <div>
+          <h2 class="thread-title">{{ selectedForum.title }}</h2>
+          <div class="thread-meta">
+            <span>👤 {{ selectedForum.author }}</span>
+            <span class="meta-sep">·</span>
+            <span>🕐 {{ getTimeAgo(selectedForum.createdAt) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="thread-description-card">
+        <p>{{ selectedForum.description }}</p>
+      </div>
+
+      <!-- Replies -->
+      <div class="replies-section">
+        <h3>💬 Replies ({{ selectedForum.replies?.length || 0 }})</h3>
+
+        @if (!selectedForum.replies || selectedForum.replies.length === 0) {
+          <div class="empty-replies">No replies yet. Be the first to reply!</div>
+        }
+
+        @for (reply of selectedForum.replies; track reply._id) {
+          <div class="reply-card">
+            <div class="reply-avatar">{{ reply.author?.charAt(0) | uppercase }}</div>
+            <div class="reply-body">
+              <div class="reply-header">
+                <span class="reply-author">{{ reply.author }}</span>
+                <span class="reply-time">{{ getTimeAgo(reply.createdAt) }}</span>
+              </div>
+              <p class="reply-content">{{ reply.content }}</p>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Post Reply -->
+      <div class="reply-input-section">
+        <h4>Post a Reply</h4>
+        <textarea class="input-field textarea" placeholder="Write your reply..." [(ngModel)]="newReply" rows="3"></textarea>
+        <button class="btn-submit" (click)="postReply()" [disabled]="!newReply.trim()">Post Reply</button>
+      </div>
+    </div>
+  }
+
+</div>
